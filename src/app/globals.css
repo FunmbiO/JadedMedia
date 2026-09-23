@@ -16,6 +16,8 @@
   --color-beige-deep: #ece3d1;
   --color-gold: #b6904c;
   --color-gold-soft: #cba86a;
+  /* Darker gold for small text on paper — plain --color-gold fails 4.5:1 there. */
+  --color-gold-deep: #8a6a2e;
   --color-sage: #7c8768;
   --color-muted-on-ink: #a7a297;
   --color-muted-on-paper: #716c60;
@@ -32,6 +34,7 @@
   --color-beige-deep: var(--color-beige-deep);
   --color-gold: var(--color-gold);
   --color-gold-soft: var(--color-gold-soft);
+  --color-gold-deep: var(--color-gold-deep);
   --color-sage: var(--color-sage);
   --color-muted-on-ink: var(--color-muted-on-ink);
   --color-muted-on-paper: var(--color-muted-on-paper);
