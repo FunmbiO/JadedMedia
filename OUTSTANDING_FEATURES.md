@@ -6,13 +6,6 @@ never silently dropped.
 
 ## Phase 1 — Foundation & Design System
 
-- [ ] **Real logo asset missing.** The header/footer currently render a
-      text-only "JM" placeholder badge instead of the actual logo file —
-      copying the uploaded logo image into this repo was blocked by a
-      session permission policy (cross-directory file copy). Add the
-      real logo file to `public/logo.webp` (or `.svg`/`.png`) and swap
-      the placeholder `<span>JM</span>` in `site-header.tsx` and
-      `site-footer.tsx` for a real `<Image>`.
 - [ ] **No mobile nav.** `SiteHeader`'s primary links are hidden below
       the `md` breakpoint (`hidden md:flex`) with no hamburger menu to
       replace them — mobile visitors currently can't reach Work/
@@ -42,4 +35,8 @@ never silently dropped.
 
 ## Resolved
 
-*(nothing yet — this is phase 1)*
+- [x] **Real logo asset.** Added at `public/logo.png` (a 5834x5834 PNG,
+      no alpha channel) and wired into `site-header.tsx` and
+      `site-footer.tsx` via `next/image`, replacing the "JM" text
+      placeholder. Served inside a paper-colored badge, so a non-
+      transparent white background blends in without a visible seam.
