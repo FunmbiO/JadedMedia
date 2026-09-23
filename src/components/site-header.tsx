@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const NAV_LINKS = [
@@ -15,9 +16,16 @@ export function SiteHeader() {
         <Link href="/" className="flex items-center gap-3.5">
           <span
             aria-hidden
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-paper font-display text-lg italic text-ink"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-paper p-1.5"
           >
-            JM
+            <Image
+              src="/logo.png"
+              alt=""
+              width={28}
+              height={28}
+              className="h-full w-full object-contain"
+              priority
+            />
           </span>
           <span className="flex flex-col leading-none">
             <span className="font-sans text-[15px] font-bold tracking-[0.06em] text-paper">
