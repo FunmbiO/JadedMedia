@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jaded Media
 
-## Getting Started
+Marketing site and (eventually) content admin for Jaded Media, a
+photography & videography studio covering weddings, automotive, and
+business/brand work.
 
-First, run the development server:
+## Stack
+
+- **Framework:** Next.js 16 (App Router) + TypeScript
+- **Styling:** Tailwind CSS v4, brand tokens in `src/app/globals.css`
+- **Fonts:** Fraunces (display) + Manrope (body/UI) via `next/font`
+- **Backend:** Supabase (Postgres + Auth + Storage) — client helpers in
+  `src/lib/supabase/`
+- **Hosting (planned):** Vercel
+
+## Getting started
 
 ```bash
+npm install
+cp .env.example .env.local   # then fill in your Supabase project's values
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Script              | What it does                        |
+| -------------------- | ------------------------------------ |
+| `npm run dev`         | Local dev server                     |
+| `npm run build`       | Production build                     |
+| `npm run start`       | Serve the production build           |
+| `npm run lint`        | ESLint                               |
+| `npm run typecheck`   | `tsc --noEmit`, no build output      |
 
-## Learn More
+## Environment variables
 
-To learn more about Next.js, take a look at the following resources:
+See `.env.example`. All three are Supabase project values from
+Project Settings > API. `SUPABASE_SERVICE_ROLE_KEY` is server-only —
+never expose it to the browser or commit it.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project status
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This repo is being built in phases (`phase-N-*` branches). See
+`OUTSTANDING_FEATURES.md` for what's deferred, simplified, or still
+needs real credentials/content before it works end to end.
