@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const EXPLORE_LINKS = [
@@ -23,9 +24,15 @@ export function SiteFooter() {
             <Link href="/" className="flex items-center gap-3">
               <span
                 aria-hidden
-                className="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-lg bg-paper font-display text-sm italic text-ink"
+                className="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-lg bg-paper p-1"
               >
-                JM
+                <Image
+                  src="/logo.png"
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="h-full w-full object-contain"
+                />
               </span>
               <span className="font-sans text-sm font-bold tracking-[0.06em] text-paper">
                 JADED MEDIA
