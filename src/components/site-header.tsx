@@ -37,7 +37,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-11 md:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-11 lg:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -51,7 +51,7 @@ export function SiteHeader() {
 
         <Link
           href="/contact"
-          className="rounded-full border border-gold px-6 py-2.5 text-[12px] font-semibold tracking-[0.08em] text-gold-soft uppercase transition-colors hover:bg-gold hover:text-ink"
+          className="shrink-0 rounded-full border border-gold px-4 py-2.5 text-[12px] font-semibold tracking-[0.08em] whitespace-nowrap text-gold-soft uppercase transition-colors hover:bg-gold hover:text-ink sm:px-6"
         >
           Book a Call
         </Link>
