@@ -3,6 +3,8 @@ import { PressStrip } from "@/components/home/press-strip";
 import { FeaturedWork } from "@/components/home/featured-work";
 import { ServicesTeaser } from "@/components/home/services-teaser";
 import { Philosophy } from "@/components/home/philosophy";
+import { Process } from "@/components/home/process";
+import { Testimonial } from "@/components/home/testimonial";
 
 export default function Home() {
   return (
@@ -12,6 +14,8 @@ export default function Home() {
       <FeaturedWork />
       <ServicesTeaser />
       <Philosophy />
+      <Process />
+      <Testimonial />
     </>
   );
 }
