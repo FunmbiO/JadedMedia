@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { SITE_CONFIG } from "@/lib/site-config";
 
 const EXPLORE_LINKS = [
   { href: "/work", label: "Work" },
@@ -79,13 +80,13 @@ export function SiteFooter() {
               Contact
             </span>
             <span className="font-sans text-[13.5px] text-paper/80">
-              [Add studio email]
+              {SITE_CONFIG.email}
             </span>
             <span className="font-sans text-[13.5px] text-paper/80">
-              [Add studio phone number]
+              {SITE_CONFIG.phone}
             </span>
             <span className="font-sans text-[13.5px] text-paper/80">
-              [Add studio city]
+              {SITE_CONFIG.city}
             </span>
           </div>
         </div>
