@@ -72,3 +72,41 @@ export async function getPortfolioItemBySlug(
   }
   return data ? mapPortfolioRow(data as PortfolioItemRow) : null;
 }
+
+/**
+ * Every portfolio item — published and draft alike. Relies on the
+ * authenticated-role RLS policy (0005); returns nothing useful for a
+ * logged-out caller, since the anon policy only exposes published rows.
+ */
+export async function getAllPortfolioItemsForAdmin(): Promise<PortfolioItem[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("portfolio_items")
+    .select(SELECT_COLUMNS)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("getAllPortfolioItemsForAdmin failed:", error.message);
+    return [];
+  }
+  return (data as PortfolioItemRow[]).map(mapPortfolioRow);
+}
+
+/** A single item by id, published or not — for the admin edit form. */
+export async function getPortfolioItemById(
+  id: string,
+): Promise<PortfolioItem | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("portfolio_items")
+    .select(SELECT_COLUMNS)
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    console.error("getPortfolioItemById failed:", error.message);
+    return null;
+  }
+  return data ? mapPortfolioRow(data as PortfolioItemRow) : null;
+}

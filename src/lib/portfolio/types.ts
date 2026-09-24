@@ -15,6 +15,7 @@ export type PortfolioItem = {
   galleryUrls: string[];
   videoUrl: string | null;
   featured: boolean;
+  published: boolean;
   sortOrder: number;
 };
 
@@ -54,6 +55,7 @@ export function mapPortfolioRow(row: PortfolioItemRow): PortfolioItem {
     galleryUrls: row.gallery_urls,
     videoUrl: row.video_url,
     featured: row.featured,
+    published: row.published,
     sortOrder: row.sort_order,
   };
 }
