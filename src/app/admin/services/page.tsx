@@ -41,7 +41,7 @@ export default async function AdminServicesPage() {
                   {service.title}
                 </span>
                 <span className="font-sans text-xs text-muted-on-ink">
-                  /contact?type={service.slug}
+                  {service.slug}
                 </span>
               </div>
 

@@ -1,12 +1,12 @@
-import Link from "next/link";
 import { ServiceIcon } from "@/components/services/service-icon";
+import { QuoteRequestModal } from "@/components/services/quote-request-modal";
 
 type ServiceDetailProps = {
   number: string;
   title: string;
   description: string;
   bullets: string[];
-  slug: string;
+  serviceId: string;
   reverse?: boolean;
 };
 
@@ -15,7 +15,7 @@ export function ServiceDetail({
   title,
   description,
   bullets,
-  slug,
+  serviceId,
   reverse,
 }: ServiceDetailProps) {
   return (
@@ -33,12 +33,12 @@ export function ServiceDetail({
         <p className="max-w-md font-sans text-base leading-relaxed font-light text-muted-on-ink">
           {description}
         </p>
-        <Link
-          href={`/contact?type=${slug}`}
-          className="w-fit rounded-full border border-gold px-6 py-2.5 font-sans text-[12.5px] font-semibold tracking-[0.06em] text-gold-soft uppercase transition-colors hover:bg-gold hover:text-ink"
-        >
-          Get a Custom Quote &rarr;
-        </Link>
+        <QuoteRequestModal
+          serviceId={serviceId}
+          title={title}
+          description={description}
+          bullets={bullets}
+        />
       </div>
 
       <ul className="flex flex-col gap-4 self-start">

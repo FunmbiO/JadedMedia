@@ -45,7 +45,7 @@ export default async function ServicesPage() {
             <ServiceDetail
               key={service.id}
               number={String(index + 1).padStart(2, "0")}
-              slug={service.slug}
+              serviceId={service.id}
               title={service.title}
               description={service.description}
               bullets={service.bullets}
