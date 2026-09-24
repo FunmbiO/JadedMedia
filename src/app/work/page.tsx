@@ -37,6 +37,13 @@ export default async function WorkPage({ searchParams }: PageProps) {
 
   return (
     <div className="flex flex-col gap-12 px-6 py-20 md:px-16 md:py-28">
+      <Link
+        href="/"
+        className="w-fit font-sans text-[13px] font-semibold text-gold-soft transition-opacity hover:opacity-75"
+      >
+        &larr; Back to Home
+      </Link>
+
       <div className="flex flex-col gap-4">
         <span className="font-sans text-xs font-semibold tracking-[0.2em] text-gold uppercase">
           Portfolio
