@@ -152,6 +152,32 @@ back a phase.)*
       but there's no `/admin/leads` page — submissions are only
       visible via the Supabase Table Editor for now.
 
+## Phase 6 — Services Admin CMS
+
+- [ ] **⚠️ Migrations 0007 and 0008 not applied yet — action needed
+      from you.** `supabase/migrations/0007_services.sql` (table + RLS)
+      and `0008_seed_services.sql` (backfills the three existing
+      services) exist in the repo but haven't been run. Until they are,
+      `/services` and the homepage teaser will both show their empty
+      state instead of your services, and the admin's Services tab
+      will show nothing to manage.
+- [ ] **Per-service custom icons were dropped.** Each service used to
+      have its own hand-drawn SVG icon; those can't reasonably be
+      edited from a text-only admin form, so every service now shares
+      one generic camera icon instead. If you want distinct icons back
+      per service, that'd need a small fixed icon picker (a dropdown of
+      a few preset icons) — say the word.
+- [ ] **No pricing field.** Services CRUD covers title, slug,
+      description, the bullet list, display order, and
+      published/draft — matching the earlier decision not to make
+      pricing public yet. If that changes, a price field is a small
+      add.
+- [ ] **Can't test the admin services flow live from this sandbox.**
+      Same `*.supabase.co` network block as every other admin feature.
+      Please run through it yourself once 0007/0008 are applied:
+      create a service, edit one, delete one, toggle published/draft,
+      and confirm both `/services` and the homepage teaser update.
+
 ## Resolved
 
 - [x] **Real logo asset.** Added at `public/logo.png` (a 5834x5834 PNG,
