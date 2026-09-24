@@ -33,7 +33,7 @@ export function SiteHeader() {
               JADED MEDIA
             </span>
             <span className="mt-[3px] font-sans text-[10px] font-normal tracking-[0.22em] text-gold">
-              PHOTO &amp; FILM STUDIO
+              PHOTO &amp; FILM
             </span>
           </span>
         </Link>

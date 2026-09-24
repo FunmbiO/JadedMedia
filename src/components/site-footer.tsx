@@ -9,10 +9,9 @@ const EXPLORE_LINKS = [
   { href: "/journal", label: "Journal" },
 ] as const;
 
-const STUDIO_LINKS = [
-  { href: "/about#process", label: "Our Process" },
+const INFO_LINKS = [
+  { href: "/about#process", label: "My Process" },
   { href: "/faq", label: "FAQ" },
-  { href: "/careers", label: "Careers" },
   { href: "/press", label: "Press" },
 ] as const;
 
@@ -41,7 +40,7 @@ export function SiteFooter() {
               </span>
             </Link>
             <p className="max-w-64 font-sans text-[13.5px] leading-relaxed font-light text-muted-on-ink">
-              A photography &amp; videography studio for weddings, cars, and
+              One photographer &amp; filmmaker, shooting weddings, cars, and
               brands worth remembering.
             </p>
           </div>
@@ -61,11 +60,11 @@ export function SiteFooter() {
             ))}
           </nav>
 
-          <nav aria-label="Studio" className="flex flex-col gap-3.5">
+          <nav aria-label="Info" className="flex flex-col gap-3.5">
             <span className="mb-1.5 font-sans text-[11px] tracking-[0.14em] text-muted-on-ink/80 uppercase">
-              Studio
+              Info
             </span>
-            {STUDIO_LINKS.map((link) => (
+            {INFO_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
