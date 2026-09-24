@@ -1,13 +1,11 @@
 /**
- * Real business details, filled in as they're supplied — every value here
- * is a deliberate placeholder, not a guess. Replace before launch. Used
- * anywhere contact/social info repeats (footer, CTA banner, social strip)
- * so there's one place to update instead of several.
+ * Real business details. Used anywhere contact info repeats (footer, CTA
+ * banner, contact page) so there's one place to update instead of several.
  */
 export const SITE_CONFIG = {
-  email: "[Add studio email]",
-  phone: "[Add studio phone number]",
-  city: "[Add studio city]",
-  instagramHandle: "[@yourhandle]",
-  instagramUrl: "#",
+  email: "funmbiolajubu@gmail.com",
+  phone: "(506) 588-6081",
+  city: "New Brunswick, Canada",
+  travelNote:
+    "Based in New Brunswick — available to travel for the right project (travel costs may apply).",
 } as const;

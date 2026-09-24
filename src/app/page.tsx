@@ -5,7 +5,6 @@ import { ServicesTeaser } from "@/components/home/services-teaser";
 import { Philosophy } from "@/components/home/philosophy";
 import { Process } from "@/components/home/process";
 import { Testimonial } from "@/components/home/testimonial";
-import { SocialStrip } from "@/components/home/social-strip";
 import { CtaBanner } from "@/components/home/cta-banner";
 
 export default function Home() {
@@ -18,7 +17,6 @@ export default function Home() {
       <Philosophy />
       <Process />
       <Testimonial />
-      <SocialStrip />
       <CtaBanner />
     </>
   );
