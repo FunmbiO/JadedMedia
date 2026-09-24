@@ -5,14 +5,14 @@ import { CtaBanner } from "@/components/home/cta-banner";
 export const metadata: Metadata = {
   title: "About | Jaded Media",
   description:
-    "The studio behind Jaded Media — photography and film for weddings, automotive, and business & brand.",
+    "The person behind Jaded Media — photography and film for weddings, automotive, and business & brand.",
 };
 
 const VALUES = [
   {
     title: "Unscripted",
     description:
-      "We shoot what's actually happening, not a staged version of it. The best moments are the ones nobody planned.",
+      "I shoot what's actually happening, not a staged version of it. The best moments are the ones nobody planned.",
   },
   {
     title: "Editorial",
@@ -22,7 +22,7 @@ const VALUES = [
   {
     title: "Built to Last",
     description:
-      "Trends fade. We shoot and edit for how a photo or film will feel in twenty years, not just this season.",
+      "Trends fade. I shoot and edit for how a photo or film will feel in twenty years, not just this season.",
   },
 ];
 
@@ -35,12 +35,11 @@ export default function AboutPage() {
             About
           </span>
           <h1 className="font-display text-4xl font-normal text-paper sm:text-5xl">
-            The studio behind the work.
+            The person behind the work.
           </h1>
           <p className="font-sans text-base leading-relaxed font-light text-muted-on-ink">
-            Jaded Media is a photography &amp; videography studio built
-            around one belief: the best work isn&apos;t staged, it&apos;s
-            noticed.
+            Jaded Media is one person, one camera, and a belief that the
+            best work isn&apos;t staged &mdash; it&apos;s noticed.
           </p>
         </div>
 
@@ -92,42 +91,15 @@ export default function AboutPage() {
             <div className="flex items-center gap-4">
               <div className="h-px w-10 bg-gold" />
               <span className="font-display text-base text-paper italic">
-                Olufunmbi Olajubu, Founder &amp; Lead Storyteller
+                Olufunmbi Olajubu &mdash; Photographer &amp; Filmmaker
               </span>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-x-8 gap-y-12 border-t border-paper/15 pt-14 sm:grid-cols-3">
-          <div className="flex flex-col gap-2">
-            <span className="font-display text-4xl text-gold-soft">
-              [ # ]
-            </span>
-            <span className="font-sans text-sm text-muted-on-ink">
-              [Add years in business]
-            </span>
-          </div>
-          <div className="flex flex-col gap-2">
-            <span className="font-display text-4xl text-gold-soft">
-              [ # ]
-            </span>
-            <span className="font-sans text-sm text-muted-on-ink">
-              [Add projects delivered]
-            </span>
-          </div>
-          <div className="flex flex-col gap-2">
-            <span className="font-display text-4xl text-gold-soft">
-              [ # ]
-            </span>
-            <span className="font-sans text-sm text-muted-on-ink">
-              [Add another stat worth sharing]
-            </span>
-          </div>
-        </div>
-
         <div className="flex flex-col gap-10">
           <h2 className="font-display text-2xl font-normal text-paper sm:text-3xl">
-            How we work.
+            How I work.
           </h2>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
             {VALUES.map((value) => (
