@@ -91,19 +91,19 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-10 flex flex-col gap-4 border-t border-paper/8 pt-7 sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-sans text-xs text-muted-on-ink/70">
+          <span className="font-sans text-xs text-muted-on-ink/80">
             © {new Date().getFullYear()} Jaded Media. All rights reserved.
           </span>
           <div className="flex items-center gap-6">
             <Link
               href="/privacy"
-              className="font-sans text-xs text-muted-on-ink/70 transition-opacity hover:opacity-70"
+              className="font-sans text-xs text-muted-on-ink/80 transition-opacity hover:opacity-70"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="font-sans text-xs text-muted-on-ink/70 transition-opacity hover:opacity-70"
+              className="font-sans text-xs text-muted-on-ink/80 transition-opacity hover:opacity-70"
             >
               Terms of Service
             </Link>

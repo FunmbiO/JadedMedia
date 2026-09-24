@@ -44,7 +44,10 @@ export function Process() {
               key={step.number}
               className="flex flex-col gap-4 border-t border-paper/15 pt-7"
             >
-              <span className="font-display text-4xl font-light text-paper/20 sm:text-5xl">
+              <span
+                aria-hidden
+                className="font-display text-4xl font-light text-paper/40 sm:text-5xl"
+              >
                 {step.number}
               </span>
               <h3 className="font-sans text-[15px] font-semibold text-paper">

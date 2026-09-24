@@ -18,9 +18,12 @@
   --color-gold-soft: #cba86a;
   /* Darker gold for small text on paper — plain --color-gold fails 4.5:1 there. */
   --color-gold-deep: #8a6a2e;
-  --color-sage: #7c8768;
+  /* Both darkened from their original values to clear 4.5:1 against the
+     backgrounds they're actually used on (bg-paper / bg-beige-deep) —
+     caught by a Lighthouse accessibility audit. */
+  --color-sage: #5f6a52;
   --color-muted-on-ink: #a7a297;
-  --color-muted-on-paper: #716c60;
+  --color-muted-on-paper: #5f5a4f;
 }
 
 @theme inline {
