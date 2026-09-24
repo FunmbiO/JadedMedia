@@ -6,7 +6,6 @@ const EXPLORE_LINKS = [
   { href: "/work", label: "Work" },
   { href: "/services", label: "Services" },
   { href: "/about", label: "About" },
-  { href: "/journal", label: "Journal" },
 ] as const;
 
 const INFO_LINKS = [

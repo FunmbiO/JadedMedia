@@ -19,15 +19,16 @@ export function Philosophy() {
           My Philosophy
         </span>
         <h2 className="font-display max-w-[480px] text-2xl leading-snug font-light text-ink italic sm:text-3xl md:text-[38px]">
-          &ldquo;I don&apos;t just document moments — I translate feeling
-          into photo and film.&rdquo;
+          &ldquo;I don&apos;t believe in having a niche. If it&apos;s worth
+          capturing, I&apos;m there.&rdquo;
         </h2>
         <p className="max-w-[440px] font-sans text-[15.5px] leading-relaxed font-light text-muted-on-paper">
-          Founded in 2019, Jaded Media began with one belief: that the best
-          work isn&apos;t staged, it&apos;s noticed. Whether I&apos;m
-          behind a camera or a lens on a car, an aisle, or a boardroom, I
-          shoot quietly, edit patiently, and hand you something
-          you&apos;ll pass down.
+          Founded in 2019, Jaded Media has never been about picking a
+          lane. I don&apos;t believe &ldquo;worth capturing&rdquo; is a
+          genre — it&apos;s a wedding, a car, a boardroom, or an ordinary
+          afternoon that means everything to the person living it.
+          That&apos;s not my call to make. You decide what&apos;s worth
+          it; I just show up and make sure it&apos;s done right.
         </p>
         <div className="mt-2 flex items-center gap-4">
           <div className="h-px w-10 bg-gold" />

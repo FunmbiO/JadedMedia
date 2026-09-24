@@ -9,14 +9,16 @@ never silently dropped.
 - [ ] **No mobile nav.** `SiteHeader`'s primary links are hidden below
       the `lg` breakpoint (1024px) with no hamburger menu to replace
       them — below that, visitors can only reach the logo and the
-      Book a Call button, not Work/Services/About/Journal/Contact.
+      Book a Call button, not Work/Services/About/Contact.
       Needs a client component with a toggle. (Breakpoint moved from
       `md` to `lg` in phase 2 — see Resolved below for why.)
-- [ ] **Some footer links still 404.** `/journal`, `/faq`, `/press`,
-      `/privacy`, `/terms` — none were in the original build plan as
-      their own pages; decide if/when any of these are worth building,
-      or drop the links. (`/careers` was removed in phase 7 — doesn't
-      make sense for a one-person business.)
+- [ ] **Some footer links still 404.** `/faq`, `/press`, `/privacy`,
+      `/terms` — none were in the original build plan as their own
+      pages; decide if/when any of these are worth building, or drop
+      the links. (`/careers` was removed in phase 7 — doesn't make
+      sense for a one-person business. `/journal` was removed in
+      phase 8 at your request — say the word if you want it back once
+      there's something to put there.)
 - [ ] **No Vercel project/deployment.** This phase only prepares the
       codebase to be deployed — no live URL exists yet. Creating the
       Vercel project and connecting the repo needs your Vercel account;
