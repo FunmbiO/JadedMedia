@@ -46,7 +46,7 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-16">
           <div className="relative aspect-[4/3] overflow-hidden bg-beige">
             <Image
-              src="/founder.jpg"
+              src="/founder.avif"
               alt="Olufunmbi Olajubu, founder of Jaded Media"
               fill
               sizes="(min-width: 768px) 50vw, 100vw"

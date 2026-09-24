@@ -127,13 +127,15 @@ back a phase.)*
       "Get a Custom Quote" rather than listed price tiers — a real
       business decision I didn't make on your behalf. Say the word if
       you want actual prices public.
-- [ ] **⚠️ `/about` founder photo missing — action needed from you.**
-      The bio section now renders your real copy next to an `<Image>`
-      pointed at `public/founder.jpg`, but that file doesn't exist in
-      the repo yet, so it'll show as a broken image until you add one.
-      Drop a photo in at `public/founder.jpg` (same way `logo.png` got
-      added) — replacing that file any time swaps the photo, no code
-      change needed.
+- [x] **`/about` founder photo added.** Lives at `public/founder.avif`
+      (you uploaded it in phase 8, originally as `Founder.avif` then
+      renamed to `.jpg` — I renamed it back to `.avif` since the file
+      is genuinely AVIF-encoded and the `.jpg` extension didn't match
+      the actual bytes, plus fixed the casing: Vercel runs Linux, and
+      a case mismatch between `Founder.jpg` and the code's lowercase
+      `/founder.jpg` reference would have 404'd in production even
+      though it worked fine locally). Swap the photo any time by
+      replacing that same file — no code change needed.
 - [ ] **Can't test the contact form or emails live from this
       sandbox.** Same `*.supabase.co` network block as everything
       else. Please submit a real test inquiry once 0006 is applied,
@@ -309,7 +311,7 @@ back a phase.)*
       request.
 - [x] **Homepage Philosophy section's placeholder image replaced**
       with the same real founder photo used on `/about`
-      (`public/founder.jpg`) instead of a "[ Studio / behind-the-scenes
+      (`public/founder.avif`) instead of a "[ Studio / behind-the-scenes
       photo ]" placeholder box.
 - [x] **"Get a Custom Quote" now opens a popup instead of linking to
       `/contact`.** Each service card's button opens a modal showing
