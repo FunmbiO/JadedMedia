@@ -27,10 +27,10 @@ export function Hero() {
         </h1>
 
         <p className="max-w-[540px] font-sans text-base leading-relaxed font-light text-paper/80 sm:text-[17px]">
-          Jaded Media is a photography &amp; videography studio for people
-          who don&apos;t want an ordinary shot. From weddings to build
-          sheets to boardrooms, we turn real, unscripted moments into
-          something you&apos;ll still feel a decade from now.
+          Jaded Media is one photographer&apos;s take on photography &amp;
+          film, for people who don&apos;t want an ordinary shot. From
+          weddings to build sheets to boardrooms, I turn real, unscripted
+          moments into something you&apos;ll still feel a decade from now.
         </p>
 
         <div className="mt-2 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-7">
@@ -38,7 +38,7 @@ export function Hero() {
             href="/work"
             className="rounded-full bg-paper px-8 py-4 font-sans text-[13px] font-bold tracking-[0.06em] text-ink uppercase transition-colors hover:bg-beige"
           >
-            View Our Work
+            View My Work
           </Link>
           <Link
             href="/contact"

@@ -3,7 +3,7 @@ const STEPS = [
     number: "01",
     title: "Discovery Call",
     description:
-      "We learn your story, your day, and what “unforgettable” means to you.",
+      "I learn your story, your day, and what “unforgettable” means to you.",
   },
   {
     number: "02",
@@ -15,7 +15,7 @@ const STEPS = [
     number: "03",
     title: "The Shoot",
     description:
-      "We move quietly through your day, capturing what's real, not staged.",
+      "I move quietly through your day, capturing what's real, not staged.",
   },
   {
     number: "04",
@@ -31,7 +31,7 @@ export function Process() {
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-14 md:gap-18">
         <div className="flex max-w-[560px] flex-col items-center gap-4 text-center">
           <span className="font-sans text-xs font-semibold tracking-[0.2em] text-gold uppercase">
-            How We Work
+            How I Work
           </span>
           <h2 className="font-display text-3xl font-normal text-paper sm:text-4xl md:text-[44px]">
             From first hello to final film.

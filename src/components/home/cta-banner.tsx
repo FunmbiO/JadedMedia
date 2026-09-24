@@ -10,7 +10,7 @@ export function CtaBanner() {
         </h2>
         <p className="max-w-[480px] font-sans text-base leading-relaxed font-light text-muted-on-ink">
           Dates fill quickly &mdash; reach out and let&apos;s talk about your
-          story before your calendar fills without us.
+          story before my calendar fills without you.
         </p>
         <Link
           href="/contact"
