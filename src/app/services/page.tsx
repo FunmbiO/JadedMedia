@@ -19,7 +19,7 @@ export default async function ServicesPage() {
       <div className="flex flex-col gap-16 px-6 py-20 md:px-16 md:py-28">
         <div className="flex max-w-2xl flex-col gap-4">
           <span className="font-sans text-xs font-semibold tracking-[0.2em] text-gold uppercase">
-            What We Offer
+            What I Offer
           </span>
           <h1 className="font-display text-4xl font-normal text-paper sm:text-5xl">
             Services built for every story.

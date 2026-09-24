@@ -9,7 +9,7 @@ export async function ServicesTeaser() {
       <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-18">
         <div className="flex max-w-[640px] flex-col gap-4">
           <span className="font-sans text-xs font-semibold tracking-[0.2em] text-gold uppercase">
-            What We Offer
+            What I Offer
           </span>
           <h2 className="font-display text-3xl font-normal text-paper sm:text-4xl md:text-[46px]">
             Services built around your story.

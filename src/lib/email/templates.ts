@@ -36,14 +36,14 @@ export function studioNotificationEmail(payload: LeadFormPayload) {
 
 export function clientConfirmationEmail(payload: LeadFormPayload) {
   return {
-    subject: "We received your message — Jaded Media",
+    subject: "I received your message — Jaded Media",
     html: `
       <div style="${WRAPPER_STYLE}">
         <div style="${CARD_STYLE}">
           <h1 style="font-size: 22px; font-style: italic; margin: 0 0 16px; color: #f6f4ef;">Thank you, ${payload.name}.</h1>
           <p style="font-size: 15px; line-height: 1.6; color: #c9c5b9; margin: 0 0 20px;">
-            We've received your message and will get back to you shortly.
-            Here's a copy of what you sent us:
+            I've received your message and will get back to you shortly.
+            Here's a copy of what you sent:
           </p>
           ${row("Inquiry type", EVENT_TYPE_LABELS[payload.eventType])}
           ${row("Event date", payload.eventDate)}

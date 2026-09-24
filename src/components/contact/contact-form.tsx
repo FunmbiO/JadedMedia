@@ -60,8 +60,8 @@ export function ContactForm({
           Thank you &mdash; message sent.
         </span>
         <p className="font-sans text-sm font-light text-muted-on-ink">
-          We&apos;ll get back to you soon. In the meantime, feel free to
-          browse more of our work.
+          I&apos;ll get back to you soon. In the meantime, feel free to
+          browse more of my work.
         </p>
       </div>
     );
@@ -160,7 +160,7 @@ export function ContactForm({
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Tell us about your story — date, location, what you're looking for."
+          placeholder="Tell me about your story — date, location, what you're looking for."
           className={inputClass}
         />
       </label>

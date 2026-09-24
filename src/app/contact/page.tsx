@@ -29,13 +29,17 @@ export default async function ContactPage({ searchParams }: PageProps) {
           Let&apos;s talk about your story.
         </h1>
         <p className="font-sans text-base leading-relaxed font-light text-muted-on-ink">
-          Fill out the form below and we&apos;ll get back to you shortly. Or
+          Fill out the form below and I&apos;ll get back to you shortly. Or
           reach out directly:
         </p>
         <div className="flex flex-col gap-1 font-sans text-sm text-paper/80">
           <span>{SITE_CONFIG.email}</span>
           <span>{SITE_CONFIG.phone}</span>
+          <span>{SITE_CONFIG.city}</span>
         </div>
+        <p className="max-w-md font-sans text-sm font-light text-muted-on-ink">
+          {SITE_CONFIG.travelNote}
+        </p>
       </div>
 
       <div className="max-w-2xl">
