@@ -33,6 +33,7 @@ export function SiteFooter() {
                   width={24}
                   height={24}
                   className="h-full w-full object-contain"
+                  quality={100}
                 />
               </span>
               <span className="font-sans text-sm font-bold tracking-[0.06em] text-paper">

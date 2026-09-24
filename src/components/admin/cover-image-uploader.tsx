@@ -35,7 +35,7 @@ export function CoverImageUploader({
 
       {value ? (
         <div className="relative aspect-video w-full max-w-sm overflow-hidden rounded bg-stone">
-          <Image src={value} alt="" fill sizes="384px" className="object-cover" />
+          <Image src={value} alt="" fill sizes="384px" className="object-cover" quality={90} />
           <button
             type="button"
             onClick={() => onChange("")}

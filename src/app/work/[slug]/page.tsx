@@ -54,6 +54,7 @@ export default async function PortfolioDetailPage({ params }: PageProps) {
               fill
               sizes="(min-width: 1100px) 1100px, 100vw"
               className="object-cover"
+              quality={90}
               priority
             />
           ) : (
@@ -102,6 +103,7 @@ export default async function PortfolioDetailPage({ params }: PageProps) {
                   fill
                   sizes="(min-width: 640px) 33vw, 50vw"
                   className="object-cover"
+                  quality={90}
                 />
               </div>
             ))}

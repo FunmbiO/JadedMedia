@@ -22,6 +22,7 @@ export function WorkCard({
           fill
           sizes="(min-width: 640px) 50vw, 100vw"
           className="object-cover transition-[filter] duration-200 group-hover:brightness-[0.82]"
+          quality={90}
         />
       ) : (
         <div className="absolute inset-0 flex items-start justify-end p-4 sm:p-5">
