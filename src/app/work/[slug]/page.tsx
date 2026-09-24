@@ -39,32 +39,34 @@ export default async function PortfolioDetailPage({ params }: PageProps) {
 
   return (
     <article className="flex flex-col">
-      <div className="relative aspect-video w-full bg-stone">
-        {item.videoUrl ? (
-          <VideoPlayer
-            src={item.videoUrl}
-            posterUrl={item.coverImageUrl}
-            title={item.title}
-          />
-        ) : item.coverImageUrl ? (
-          <Image
-            src={item.coverImageUrl}
-            alt={item.title}
-            fill
-            sizes="100vw"
-            className="object-cover"
-            priority
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <span className="font-sans text-[11px] tracking-[0.1em] text-paper/40 uppercase">
-              [ Add cover media for this project ]
-            </span>
-          </div>
-        )}
+      <div className="mx-auto w-full max-w-[1100px] px-6 pt-12 md:px-16 md:pt-20">
+        <div className="relative aspect-video w-full overflow-hidden rounded-md bg-stone">
+          {item.videoUrl ? (
+            <VideoPlayer
+              src={item.videoUrl}
+              posterUrl={item.coverImageUrl}
+              title={item.title}
+            />
+          ) : item.coverImageUrl ? (
+            <Image
+              src={item.coverImageUrl}
+              alt={item.title}
+              fill
+              sizes="(min-width: 1100px) 1100px, 100vw"
+              className="object-cover"
+              priority
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <span className="font-sans text-[11px] tracking-[0.1em] text-paper/40 uppercase">
+                [ Add cover media for this project ]
+              </span>
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="mx-auto flex w-full max-w-[860px] flex-col gap-8 px-6 py-16 md:px-16 md:py-24">
+      <div className="mx-auto flex w-full max-w-[860px] flex-col gap-8 px-6 pt-10 pb-16 md:px-16 md:pt-14 md:pb-24">
         <Link
           href="/work"
           className="w-fit font-sans text-[13px] font-semibold text-gold-soft transition-opacity hover:opacity-75"
