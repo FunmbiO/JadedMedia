@@ -63,28 +63,48 @@ never silently dropped.
       the video player render against real data. Please verify by
       running `npm run dev` locally or checking the Vercel deploy once
       one exists.
-- [ ] **No cover image for the D1 Autotech entry yet.** It's
-      video-only right now — the homepage/work grid cards show a
-      labelled placeholder ("[ Film still ]") instead of a thumbnail
-      until a cover image is added. To add one: upload an image to
-      Supabase Storage (create a public bucket if you haven't, e.g.
-      `portfolio-images`) and update the row's `cover_image_url` in
-      the Table Editor — same manual pattern as the R2 video upload,
-      no code change needed.
-- [ ] **No upload UI yet — everything is manual via each dashboard.**
-      Adding a new portfolio entry today means: upload media to R2
-      (video) or Supabase Storage (images) by hand, then add/edit the
-      row in Supabase's Table Editor. Sprint 5 builds a real admin UI
-      for this; until then it's a two-dashboard, no-code-change
-      workflow.
-- [ ] **`SUPABASE_SERVICE_ROLE_KEY` still not set.** Not needed for
-      anything built so far (all reads go through the anon key +
-      RLS) — only becomes necessary for Sprint 5's admin dashboard.
 - [ ] **R2 image/video domains are hardcoded to `*.r2.dev` in
       `next.config.ts`.** If you switch the bucket to a custom domain
       later, that remotePatterns entry needs updating or `next/image`
       will refuse to load from it (videos aren't affected — the native
       `<video>` element doesn't have this restriction).
+
+## Phase 4 — Admin & Content CMS
+
+*(Pulled forward from the original plan's Sprint 5 — you asked for it
+now rather than after Services/About/Contact, so those are pushed
+back a phase.)*
+
+- [ ] **⚠️ Migration 0005 not applied yet — action needed from you.**
+      `supabase/migrations/0005_admin_write_policies.sql` exists in
+      the repo but hasn't been run. Without it, logging into `/admin`
+      works, but every create/edit/delete/upload will fail with an RLS
+      permission error. Paste it into the Supabase SQL Editor and run
+      it (after 0001–0004, which you've already applied).
+- [ ] **⚠️ Admin login user — confirm you've created it.** I asked for
+      this while building in parallel (Supabase dashboard →
+      Authentication → Users → Add user). If you haven't yet, `/admin`
+      has nothing to log into.
+- [ ] **Can't test the admin flow live from this sandbox.** Same
+      `*.supabase.co` network block as before — I have not personally
+      logged in, created an entry, uploaded an image, or deleted
+      anything against your real project. Typecheck/lint/build pass,
+      but please run through the whole flow yourself (login → new
+      entry → upload a photo → edit → delete) before trusting it.
+- [ ] **No password reset flow.** If you forget your admin password,
+      recovery is via the Supabase dashboard (Authentication → Users →
+      reset), not through the site itself.
+- [ ] **Deleting an item, or removing an image in the form, doesn't
+      delete the underlying file from Storage.** The database row (or
+      that gallery entry) is gone, but the image file stays in the
+      `Portfolio Images` bucket. Low cost at your current scale (a
+      handful of images), but worth a cleanup pass eventually.
+- [ ] **Slug conflicts surface as a raw Postgres error.** Creating an
+      entry with a slug that already exists fails with the database's
+      own error message in the error banner, not a friendly
+      "that slug is taken" message.
+- [ ] **No pagination on `/admin`.** Fine at a handful of entries,
+      will need it eventually.
 
 ## Resolved
 
@@ -113,8 +133,8 @@ never silently dropped.
       degrades gracefully at any width instead of relying on one exact
       breakpoint fitting.
 - [x] **Real Supabase project connected.** URL + anon key are in
-      `.env.local` (gitignored). Service-role key still pending — see
-      Phase 3 above.
+      `.env.local` (gitignored). Turns out the service-role key was
+      never needed — see below.
 - [x] **Featured Work grid wired to real data.** No longer five
       hardcoded sample entries — `FeaturedWork` now queries Supabase
       for featured+published portfolio items and lays them out based
@@ -123,3 +143,19 @@ never silently dropped.
       — an automotive film hosted on Cloudflare R2, seeded via
       `0002_seed_d1_autotech.sql` (pending the migration actually being
       run — see the ⚠️ item in Phase 3).
+- [x] **D1 Autotech cover image + second entry added.** Cover image
+      set via `0003`; "Professional Headshots" (business/photo, 1
+      cover + 3-photo gallery) added via `0004`.
+- [x] **Video-player sizing fixed.** Was full-bleed edge-to-edge; now
+      capped at `max-w-[1100px]`, centered, rounded corners.
+- [x] **Back-to-Home link added on `/work`.**
+- [x] **Admin CMS built.** Login (Supabase Auth), `/admin` dashboard
+      (list/edit/delete), create/edit form, and direct-to-Storage image
+      upload for cover + gallery images — see Phase 4. Manual
+      dashboard uploads are no longer needed for photos; only video
+      stays manual (R2 + paste URL), by your explicit choice.
+- [x] **`SUPABASE_SERVICE_ROLE_KEY` turned out not to be needed at
+      all.** The admin uses authenticated-role RLS policies (0005)
+      instead of a service-role key — no god-mode key anywhere in the
+      deployed app. That env var line can stay empty permanently
+      unless a future feature genuinely needs to bypass RLS.
