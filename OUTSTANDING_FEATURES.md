@@ -12,10 +12,10 @@ never silently dropped.
       Book a Call button, not Work/Services/About/Journal/Contact.
       Needs a client component with a toggle. (Breakpoint moved from
       `md` to `lg` in phase 2 — see Resolved below for why.)
-- [ ] **Nav/footer link targets don't exist yet.** `/work`, `/services`,
-      `/about`, `/journal`, `/contact`, `/faq`, `/careers`, `/press`,
-      `/privacy`, `/terms` all 404 until their respective sprints build
-      the pages (Sprints 3–6 per the build plan). Expected, not a bug.
+- [ ] **Some footer links still 404.** `/journal`, `/faq`, `/careers`,
+      `/press`, `/privacy`, `/terms` — none were in the original build
+      plan as their own pages; decide if/when any of these are worth
+      building, or drop the links.
 - [ ] **No Vercel project/deployment.** This phase only prepares the
       codebase to be deployed — no live URL exists yet. Creating the
       Vercel project and connecting the repo needs your Vercel account;
@@ -105,18 +105,46 @@ back a phase.)*
       "that slug is taken" message.
 - [ ] **No pagination on `/admin`.** Fine at a handful of entries,
       will need it eventually.
-- [ ] **⚠️ Video upload untested end to end.** `.env.local` now has
-      real R2 credentials (Account ID, Access Key, bucket name), but
-      the bucket's CORS policy needs to be enabled before a browser
-      upload will succeed (instructions given separately) — and I
-      can't test any of it myself, same network block as everything
-      else Supabase/R2. Please try uploading a real video from
-      `/admin/portfolio/new` once the migration is run and your login
-      exists.
 - [ ] **Single presigned PUT, not chunked multipart.** A dropped
       connection mid-upload means starting that file over, not
       resuming. Deliberate simplification given realistic file sizes
       here — revisit if it becomes a real problem.
+
+## Phase 5 — Services, About & Contact/Booking
+
+- [ ] **⚠️ Migration 0006 not applied yet — action needed from you.**
+      `supabase/migrations/0006_leads.sql` exists in the repo but
+      hasn't been run. Until it is, the contact form's Server Action
+      will return a database error on submit instead of saving the
+      lead.
+- [ ] **⚠️ Resend not configured.** `RESEND_API_KEY`,
+      `RESEND_FROM_EMAIL`, and `STUDIO_NOTIFICATION_EMAIL` are all
+      blank in `.env.local`. The contact form still saves every lead
+      to the database regardless, but no confirmation or notification
+      email will send until these are filled in. `RESEND_FROM_EMAIL`
+      needs a domain Resend can verify — their shared
+      `onboarding@resend.dev` works for testing without any DNS setup,
+      but a real address like `hello@jadedmedia.ca` needs your domain
+      verified in Resend (a separate DNS step, best done once the
+      Namecheap/Vercel DNS work has settled).
+- [ ] **No public pricing on `/services`.** Every service ends in
+      "Get a Custom Quote" rather than listed price tiers — a real
+      business decision I didn't make on your behalf. Say the word if
+      you want actual prices public.
+- [ ] **`/about` has several honest placeholders**, not invented
+      facts: the founding story, and three stats (years in business,
+      projects delivered, a third figure) all read `[Add ...]` in
+      brackets. Send me the real story/numbers and I'll drop them in
+      — no code change needed, just content.
+- [ ] **Can't test the contact form or emails live from this
+      sandbox.** Same `*.supabase.co` network block as everything
+      else. Please submit a real test inquiry once 0006 is applied,
+      and check both the `leads` table and (once Resend is
+      configured) that both emails actually arrive.
+- [ ] **No admin UI to view/manage leads yet.** The `leads` table and
+      its RLS policies support it (authenticated can SELECT/UPDATE),
+      but there's no `/admin/leads` page — submissions are only
+      visible via the Supabase Table Editor for now.
 
 ## Resolved
 
