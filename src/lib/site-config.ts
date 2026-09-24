@@ -11,6 +11,8 @@ export const SITE_CONFIG = {
   instagramHandle: "@jaded.medias",
   instagramUrl: "https://www.instagram.com/jaded.medias/",
   // Used to build absolute asset URLs (e.g. the logo in email templates) —
-  // email clients can't load a relative /logo.png path.
-  siteUrl: "https://jadedmedia.ca",
+  // email clients can't load a relative /logo.png path. "www" is the
+  // canonical host: jadedmedia.ca redirects to www.jadedmedia.ca in
+  // Vercel's domain config, so this matches where the site actually lives.
+  siteUrl: "https://www.jadedmedia.ca",
 } as const;
