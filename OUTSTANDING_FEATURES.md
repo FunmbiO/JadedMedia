@@ -6,12 +6,6 @@ never silently dropped.
 
 ## Phase 1 — Foundation & Design System
 
-- [ ] **No mobile nav.** `SiteHeader`'s primary links are hidden below
-      the `lg` breakpoint (1024px) with no hamburger menu to replace
-      them — below that, visitors can only reach the logo and the
-      Book a Call button, not Work/Services/About/Contact.
-      Needs a client component with a toggle. (Breakpoint moved from
-      `md` to `lg` in phase 2 — see Resolved below for why.)
 - [ ] **Some footer links still 404.** `/faq`, `/press`, `/privacy`,
       `/terms` — none were in the original build plan as their own
       pages; decide if/when any of these are worth building, or drop
@@ -328,6 +322,16 @@ untouched since they're already yours, not mine.)*
 
 ## Resolved
 
+- [x] **Mobile nav added.** `SiteHeader` is now a client component with
+      a hamburger toggle below the `lg` breakpoint — three-bar icon
+      animates into an X, opens a full-screen panel (Work/Services/
+      About/Contact) portaled to `document.body`, locks body scroll
+      while open, closes on Escape or on clicking a link. (The portal
+      matters: the header's `backdrop-blur-sm` establishes a CSS
+      containing block for fixed-position descendants, which silently
+      collapsed the panel to a sliver when it was nested directly
+      inside `<header>` — caught by inspecting computed layout, not
+      just eyeballing a screenshot.)
 - [x] **Real logo asset.** Added at `public/logo.png` (a 5834x5834 PNG,
       no alpha channel) and wired into `site-header.tsx` and
       `site-footer.tsx` via `next/image`, replacing the "JM" text
