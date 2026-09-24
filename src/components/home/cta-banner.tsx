@@ -6,11 +6,11 @@ export function CtaBanner() {
     <section id="contact" className="border-y border-paper/10 bg-ink-2 px-6 py-24 text-center md:px-16 md:py-36">
       <div className="mx-auto flex max-w-[760px] flex-col items-center gap-7">
         <h2 className="font-display text-4xl leading-tight font-normal text-paper italic sm:text-5xl md:text-[54px]">
-          Let&apos;s create something timeless.
+          Let&apos;s talk about your project.
         </h2>
         <p className="max-w-[480px] font-sans text-base leading-relaxed font-light text-muted-on-ink">
-          Dates fill quickly &mdash; reach out and let&apos;s talk about your
-          story before my calendar fills without you.
+          My calendar fills up fast, so reach out early if you want a
+          date.
         </p>
         <Link
           href="/contact"

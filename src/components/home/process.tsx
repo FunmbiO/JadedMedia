@@ -2,26 +2,24 @@ const STEPS = [
   {
     number: "01",
     title: "Discovery Call",
-    description:
-      "I learn your story, your day, and what “unforgettable” means to you.",
+    description: "We talk about what you want and what the day looks like.",
   },
   {
     number: "02",
     title: "Custom Proposal",
     description:
-      "A tailored package and timeline — no bundled packages, no surprises.",
+      "I put together a plan and a timeline, so you know what to expect.",
   },
   {
     number: "03",
     title: "The Shoot",
-    description:
-      "I move quietly through your day, capturing what's real, not staged.",
+    description: "I stay out of the way and shoot the day as it happens.",
   },
   {
     number: "04",
     title: "The Reveal",
     description:
-      "A private screening link, delivered in 6–8 weeks, yours to keep forever.",
+      "You get a private link to everything, usually within 6–8 weeks. It's yours to keep.",
   },
 ];
 
@@ -34,7 +32,7 @@ export function Process() {
             How I Work
           </span>
           <h2 className="font-display text-3xl font-normal text-paper sm:text-4xl md:text-[44px]">
-            From first hello to final film.
+            From the first call to the final film.
           </h2>
         </div>
 

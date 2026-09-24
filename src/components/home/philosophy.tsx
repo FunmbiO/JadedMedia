@@ -23,12 +23,10 @@ export function Philosophy() {
           capturing, I&apos;m there.&rdquo;
         </h2>
         <p className="max-w-[440px] font-sans text-[15.5px] leading-relaxed font-light text-muted-on-paper">
-          Founded in 2019, Jaded Media has never been about picking a
-          lane. I don&apos;t believe &ldquo;worth capturing&rdquo; is a
-          genre — it&apos;s a wedding, a car, a boardroom, or an ordinary
-          afternoon that means everything to the person living it.
-          That&apos;s not my call to make. You decide what&apos;s worth
-          it; I just show up and make sure it&apos;s done right.
+          Founded in 2019, Jaded Media doesn&apos;t stick to one type of
+          shoot. Weddings, cars, business — if it matters to you, I&apos;ll
+          shoot it. You decide what&apos;s worth it, I just show up and
+          do it right.
         </p>
         <div className="mt-2 flex items-center gap-4">
           <div className="h-px w-10 bg-gold" />

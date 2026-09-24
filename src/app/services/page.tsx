@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Services | Jaded Media",
   description:
-    "Photography and film for weddings, automotive, and business & brand — tailored to your story.",
+    "Photo and film for weddings, cars, and business — see what's included.",
 };
 
 export default async function ServicesPage() {
@@ -22,12 +22,11 @@ export default async function ServicesPage() {
             What I Offer
           </span>
           <h1 className="font-display text-4xl font-normal text-paper sm:text-5xl">
-            Services built for every story.
+            Photo and film, whatever the occasion.
           </h1>
           <p className="font-sans text-base leading-relaxed font-light text-muted-on-ink">
-            Every project starts with a conversation, not a package —
-            below is what each service typically includes, tailored to what
-            your story actually needs.
+            Every project starts with a conversation, not a fixed package
+            — here&apos;s roughly what each service includes.
           </p>
         </div>
 

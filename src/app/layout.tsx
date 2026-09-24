@@ -19,7 +19,7 @@ const manrope = Manrope({
 
 const TITLE = "Jaded Media | Photography & Film";
 const DESCRIPTION =
-  "Jaded Media is photography & film by Olufunmbi Olajubu, for weddings, automotive, and business — cinematic stories, crafted with intention.";
+  "Jaded Media is Olufunmbi Olajubu's photo and film work — weddings, cars, and business shoots.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.siteUrl),

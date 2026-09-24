@@ -12,11 +12,10 @@ export async function ServicesTeaser() {
             What I Offer
           </span>
           <h2 className="font-display text-3xl font-normal text-paper sm:text-4xl md:text-[46px]">
-            Services built around your story.
+            A few ways I can help.
           </h2>
           <p className="font-sans text-base font-light text-muted-on-ink">
-            Every service below is offered in photography, film, or both —
-            matched to what your story needs.
+            Photo, film, or both — whatever fits what you need.
           </p>
         </div>
 

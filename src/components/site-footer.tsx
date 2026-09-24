@@ -39,8 +39,7 @@ export function SiteFooter() {
               </span>
             </Link>
             <p className="max-w-64 font-sans text-[13.5px] leading-relaxed font-light text-muted-on-ink">
-              One photographer &amp; filmmaker, shooting weddings, cars, and
-              brands worth remembering.
+              One photographer, shooting weddings, cars, and brand work.
             </p>
           </div>
 

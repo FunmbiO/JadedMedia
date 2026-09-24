@@ -26,7 +26,7 @@ export default async function ContactPage({ searchParams }: PageProps) {
           Contact
         </span>
         <h1 className="font-display text-4xl font-normal text-paper sm:text-5xl">
-          Let&apos;s talk about your story.
+          Get in touch.
         </h1>
         <p className="font-sans text-base leading-relaxed font-light text-muted-on-ink">
           Fill out the form below and I&apos;ll get back to you shortly. Or

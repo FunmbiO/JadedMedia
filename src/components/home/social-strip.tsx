@@ -8,7 +8,7 @@ export function SocialStrip() {
       <div className="mx-auto flex max-w-[1440px] flex-col gap-9">
         <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h3 className="font-display text-xl font-normal text-paper italic sm:text-2xl">
-            Follow the journey &mdash; {SITE_CONFIG.instagramHandle}
+            Follow along &mdash; {SITE_CONFIG.instagramHandle}
           </h3>
           <a
             href={SITE_CONFIG.instagramUrl}

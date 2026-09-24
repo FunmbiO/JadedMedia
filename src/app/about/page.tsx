@@ -5,24 +5,24 @@ import { CtaBanner } from "@/components/home/cta-banner";
 export const metadata: Metadata = {
   title: "About | Jaded Media",
   description:
-    "The person behind Jaded Media — photography and film for weddings, automotive, and business & brand.",
+    "Meet the person behind Jaded Media — photo and film for weddings, cars, and business.",
 };
 
 const VALUES = [
   {
     title: "Unscripted",
     description:
-      "I shoot what's actually happening, not a staged version of it. The best moments are the ones nobody planned.",
+      "I shoot what's happening, not a staged version of it. The best moments are the ones nobody planned.",
   },
   {
     title: "Editorial",
     description:
-      "Every frame is composed and graded with the same care as a magazine feature — never a quick phone-quality shot.",
+      "Every photo is shot and edited with care, not rushed out like a phone snap.",
   },
   {
     title: "Built to Last",
     description:
-      "Trends fade. I shoot and edit for how a photo or film will feel in twenty years, not just this season.",
+      "Trends fade. I shoot for how it'll look in twenty years, not just this year.",
   },
 ];
 
@@ -38,8 +38,8 @@ export default function AboutPage() {
             The person behind the work.
           </h1>
           <p className="font-sans text-base leading-relaxed font-light text-muted-on-ink">
-            Jaded Media is one person, one camera, and a belief that the
-            best work isn&apos;t staged &mdash; it&apos;s noticed.
+            It&apos;s just me and a camera. I don&apos;t stage shots, I
+            catch what&apos;s happening.
           </p>
         </div>
 

@@ -3,10 +3,10 @@ import Link from "next/link";
 export function Hero() {
   return (
     <section className="relative isolate flex min-h-[560px] flex-col overflow-hidden py-24 sm:min-h-[680px] md:min-h-[820px] md:py-0">
-      {/* Placeholder for the full-bleed cinematic reel background */}
+      {/* Placeholder for the full-bleed reel background */}
       <div className="absolute inset-0 flex items-end justify-start bg-stone p-5">
         <span className="text-[11px] tracking-[0.14em] text-paper/45 uppercase">
-          [ Full-bleed reel — cinematic motion background ]
+          [add background video -- later]
         </span>
       </div>
       <div className="absolute inset-0 bg-black/45" />
@@ -21,16 +21,15 @@ export function Hero() {
         </div>
 
         <h1 className="font-display text-[44px] leading-[1.08] font-normal text-paper italic sm:text-6xl md:text-7xl lg:text-[92px] lg:leading-[1.04]">
-          Cinematic stories,
+          Photo and film,
           <br />
-          crafted with intention.
+          shot the way it happened.
         </h1>
 
         <p className="max-w-[540px] font-sans text-base leading-relaxed font-light text-paper/80 sm:text-[17px]">
-          Jaded Media is one photographer&apos;s take on photography &amp;
-          film, for people who don&apos;t want an ordinary shot. From
-          weddings to build sheets to boardrooms, I turn real, unscripted
-          moments into something you&apos;ll still feel a decade from now.
+          I&apos;m Olufunmbi, and I shoot weddings, cars, and business work
+          under Jaded Media. No forced poses — just what&apos;s happening
+          in front of the camera.
         </p>
 
         <div className="mt-2 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-7">
@@ -44,7 +43,7 @@ export function Hero() {
             href="/contact"
             className="border-b border-gold-soft/50 pb-1 font-sans text-[13px] font-semibold text-gold-soft transition-opacity hover:opacity-75"
           >
-            Book a Consultation &rarr;
+            Book a Call &rarr;
           </Link>
         </div>
       </div>
