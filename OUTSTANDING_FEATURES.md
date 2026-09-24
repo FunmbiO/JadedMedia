@@ -204,6 +204,30 @@ back a phase.)*
       main `/contact` form still asks for those; the popup is meant to
       be faster/lighter. Say the word if you want those fields there
       too.
+- [x] **Bug found and fixed: Resend API errors were silently
+      swallowed.** Both email dispatchers only treated a *rejected*
+      promise as a failure, but the Resend SDK doesn't reject on an
+      API-level error (unverified domain, bad `from` address, bad API
+      key) — it resolves with `{ data: null, error: {...} }` instead.
+      That error was never checked, so a real send failure produced
+      no log anywhere, app-side or otherwise. Fixed in both
+      `send-lead-notifications.ts` and
+      `send-quote-request-notifications.ts` to check and log that
+      case too.
+- [ ] **⚠️ Action needed from you: find out what Resend is actually
+      rejecting.** The fix above makes failures visible, but I still
+      can't see your live logs from this sandbox. After redeploying,
+      submit a test inquiry, then check **Vercel → your project →
+      Logs** (or Runtime Logs) for a line starting `Lead notification
+      email (...) failed:` — that'll show Resend's exact error. The
+      single most common cause: `RESEND_FROM_EMAIL` uses a domain
+      (e.g. `hello@jadedmedia.ca`) that isn't verified in Resend yet
+      (Resend dashboard → Domains). Until a domain is verified, use
+      `onboarding@resend.dev` as `RESEND_FROM_EMAIL` for testing — it
+      works with no DNS setup. Also double check the three `RESEND_*`
+      env vars are set on **Vercel's Production environment**, not
+      just wherever you first tried them — Vercel doesn't read your
+      local `.env.local` file at all.
 
 ## Resolved
 
