@@ -192,6 +192,23 @@ back a phase.)*
       @jaded.medias — that needs Instagram's Graph API and an OAuth
       connection I don't have a way to set up from here. The handle
       and follow link are real; the tiles are decorative only.
+- [x] **All four transactional emails redesigned.** Logo + "JADED
+      MEDIA / PHOTO & FILM" wordmark header, a gold accent bar, an
+      eyebrow label above each heading, cleaner divided rows for the
+      details, and a proper footer (contact info + copyright) instead
+      of a plain "— Jaded Media" sign-off line. Shared chrome lives in
+      one `emailShell()` helper in `templates.ts` instead of being
+      duplicated across all four templates. Verified by rendering a
+      static copy and screenshotting it with Playwright — I can't send
+      a real email from this sandbox, but the actual HTML is what
+      ships.
+- [ ] **Logo in emails loads full-size (541KB) and gets scaled down to
+      40×40 by the `<img>` tag**, not actually resized — fine, just
+      not optimal for inbox load time. A dedicated small logo asset
+      (e.g. `logo-email.png` at ~200×200) would be a quick follow-up
+      if you want it. `SITE_CONFIG.siteUrl` (now `https://jadedmedia.ca`)
+      is what builds the logo's absolute URL — update that if the
+      domain ever changes.
 - [ ] **Can't test the quote-request flow or admin Leads view live
       from this sandbox.** Same `*.supabase.co` network block as
       everything else. Once 0009 is applied, please submit a real
