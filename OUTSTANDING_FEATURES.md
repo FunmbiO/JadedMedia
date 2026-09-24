@@ -113,16 +113,14 @@ back a phase.)*
       hasn't been run. Until it is, the contact form's Server Action
       will return a database error on submit instead of saving the
       lead.
-- [ ] **⚠️ Resend not configured.** `RESEND_API_KEY`,
-      `RESEND_FROM_EMAIL`, and `STUDIO_NOTIFICATION_EMAIL` are all
-      blank in `.env.local`. The contact form still saves every lead
-      to the database regardless, but no confirmation or notification
-      email will send until these are filled in. `RESEND_FROM_EMAIL`
-      needs a domain Resend can verify — their shared
-      `onboarding@resend.dev` works for testing without any DNS setup,
-      but a real address like `hello@jadedmedia.ca` needs your domain
-      verified in Resend (a separate DNS step, best done once the
-      Namecheap/Vercel DNS work has settled).
+- [x] **Resend now configured** (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`,
+      `JADEDMEDIA_TEAM_EMAIL` — renamed from `STUDIO_NOTIFICATION_EMAIL`
+      in phase 8). Using `onboarding@resend.dev` as the sending address
+      for now, which works without any domain verification; switch to
+      a real address like `hello@jadedmedia.ca` once that domain is
+      verified in Resend. See Phase 8 for the current email-sending
+      status — a real bug there is now fixed, still confirming it
+      sends end to end.
 - [ ] **No public pricing on `/services`.** Every service ends in
       "Get a Custom Quote" rather than listed price tiers — a real
       business decision I didn't make on your behalf. Say the word if
@@ -168,15 +166,12 @@ back a phase.)*
 
 ## Phase 7 — Solo Brand Voice & Real Contact Info
 
-- [ ] **Internal "studio" naming left as-is on purpose.** The Resend
-      env var `STUDIO_NOTIFICATION_EMAIL` and a few internal
-      function/variable names in `src/lib/email/` (`studioNotificationEmail`,
-      `studioEmail`) still say "studio" — none of that is visible
-      anywhere on the site or in the emails themselves (the subject
-      and body text were fixed), so I left the naming alone rather
-      than rename an env var you'd have to update in both
-      `.env.local` and Vercel for zero visible benefit. Say the word
-      if you want it renamed anyway.
+- [x] **Internal "studio" naming — renamed in phase 8.** Left alone
+      here on purpose at the time (an env var you'd have had to update
+      in two places for zero visible benefit), but you independently
+      set `JADEDMEDIA_TEAM_EMAIL` while configuring Resend rather than
+      `STUDIO_NOTIFICATION_EMAIL`, so the code was renamed to match
+      instead of asking you to change what you'd already set.
 - [ ] **No specific city given.** `SITE_CONFIG.city` reads "New
       Brunswick, Canada" since that's what you gave me — send a
       specific city/town if you'd rather show that instead.
@@ -214,20 +209,28 @@ back a phase.)*
       `send-lead-notifications.ts` and
       `send-quote-request-notifications.ts` to check and log that
       case too.
-- [ ] **⚠️ Action needed from you: find out what Resend is actually
-      rejecting.** The fix above makes failures visible, but I still
-      can't see your live logs from this sandbox. After redeploying,
-      submit a test inquiry, then check **Vercel → your project →
-      Logs** (or Runtime Logs) for a line starting `Lead notification
-      email (...) failed:` — that'll show Resend's exact error. The
-      single most common cause: `RESEND_FROM_EMAIL` uses a domain
-      (e.g. `hello@jadedmedia.ca`) that isn't verified in Resend yet
-      (Resend dashboard → Domains). Until a domain is verified, use
-      `onboarding@resend.dev` as `RESEND_FROM_EMAIL` for testing — it
-      works with no DNS setup. Also double check the three `RESEND_*`
-      env vars are set on **Vercel's Production environment**, not
-      just wherever you first tried them — Vercel doesn't read your
-      local `.env.local` file at all.
+- [x] **Second bug found: env var name mismatch.** While debugging
+      the above with you, it turned out you'd set `JADEDMEDIA_TEAM_EMAIL`
+      but the code was still reading `STUDIO_NOTIFICATION_EMAIL` —
+      different name, so the app saw it as unset and silently skipped
+      sending entirely (the early-exit check, separate from the
+      swallowed-error bug above). Renamed the code to
+      `JADEDMEDIA_TEAM_EMAIL` to match what you'd already set, rather
+      than asking you to rename it again.
+- [ ] **⚠️ Action needed from you: confirm both env vars actually
+      reach the running app.** You mentioned testing on localhost —
+      make sure your local `.env.local` has all three
+      (`RESEND_API_KEY`, `RESEND_FROM_EMAIL=onboarding@resend.dev`,
+      `JADEDMEDIA_TEAM_EMAIL=funmbiolajubu@gmail.com`) with the
+      renamed variable, and restart `npm run dev` after editing it —
+      it only reads env vars at startup. If it still doesn't send,
+      check your terminal output right after submitting the form for
+      a line starting `Lead notification email (...) failed:` or
+      `Quote request notification email (...) failed:` — that'll show
+      Resend's exact rejection reason now that it's actually logged.
+      Once this works locally, the same three vars need to be set on
+      **Vercel's Production environment** too before it'll work on the
+      live site — Vercel never reads your local `.env.local`.
 
 ## Resolved
 

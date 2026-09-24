@@ -2,7 +2,7 @@ import "server-only";
 import { createResendClient } from "@/lib/email/resend-client";
 import {
   clientConfirmationEmail,
-  studioNotificationEmail,
+  teamNotificationEmail,
 } from "@/lib/email/templates";
 import type { LeadFormPayload } from "@/app/contact/actions";
 
@@ -14,25 +14,25 @@ import type { LeadFormPayload } from "@/app/contact/actions";
 export async function sendLeadNotifications(payload: LeadFormPayload) {
   const apiKey = process.env.RESEND_API_KEY;
   const fromEmail = process.env.RESEND_FROM_EMAIL;
-  const studioEmail = process.env.STUDIO_NOTIFICATION_EMAIL;
+  const teamEmail = process.env.JADEDMEDIA_TEAM_EMAIL;
 
-  if (!apiKey || !fromEmail || !studioEmail) {
+  if (!apiKey || !fromEmail || !teamEmail) {
     console.warn(
-      "Resend not configured (RESEND_API_KEY/RESEND_FROM_EMAIL/STUDIO_NOTIFICATION_EMAIL) — skipping lead email notifications.",
+      "Resend not configured (RESEND_API_KEY/RESEND_FROM_EMAIL/JADEDMEDIA_TEAM_EMAIL) — skipping lead email notifications.",
     );
     return;
   }
 
   const resend = createResendClient();
-  const studio = studioNotificationEmail(payload);
+  const team = teamNotificationEmail(payload);
   const client = clientConfirmationEmail(payload);
 
   const results = await Promise.allSettled([
     resend.emails.send({
       from: fromEmail,
-      to: studioEmail,
-      subject: studio.subject,
-      html: studio.html,
+      to: teamEmail,
+      subject: team.subject,
+      html: team.html,
     }),
     resend.emails.send({
       from: fromEmail,
@@ -43,7 +43,7 @@ export async function sendLeadNotifications(payload: LeadFormPayload) {
   ]);
 
   results.forEach((result, index) => {
-    const label = index === 0 ? "studio" : "client";
+    const label = index === 0 ? "team" : "client";
     if (result.status === "rejected") {
       console.error(`Lead notification email (${label}) failed:`, result.reason);
     } else if (result.value.error) {

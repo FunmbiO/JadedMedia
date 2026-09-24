@@ -16,11 +16,11 @@ export async function sendQuoteRequestNotifications(
 ) {
   const apiKey = process.env.RESEND_API_KEY;
   const fromEmail = process.env.RESEND_FROM_EMAIL;
-  const studioEmail = process.env.STUDIO_NOTIFICATION_EMAIL;
+  const teamEmail = process.env.JADEDMEDIA_TEAM_EMAIL;
 
-  if (!apiKey || !fromEmail || !studioEmail) {
+  if (!apiKey || !fromEmail || !teamEmail) {
     console.warn(
-      "Resend not configured (RESEND_API_KEY/RESEND_FROM_EMAIL/STUDIO_NOTIFICATION_EMAIL) — skipping quote request email notifications.",
+      "Resend not configured (RESEND_API_KEY/RESEND_FROM_EMAIL/JADEDMEDIA_TEAM_EMAIL) — skipping quote request email notifications.",
     );
     return;
   }
@@ -32,7 +32,7 @@ export async function sendQuoteRequestNotifications(
   const results = await Promise.allSettled([
     resend.emails.send({
       from: fromEmail,
-      to: studioEmail,
+      to: teamEmail,
       subject: owner.subject,
       html: owner.html,
     }),

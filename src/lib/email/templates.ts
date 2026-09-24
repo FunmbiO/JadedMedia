@@ -15,7 +15,7 @@ function row(label: string, value: string): string {
   return `<p style="${LABEL_STYLE}">${label}</p><p style="${VALUE_STYLE}">${value}</p>`;
 }
 
-export function studioNotificationEmail(payload: LeadFormPayload) {
+export function teamNotificationEmail(payload: LeadFormPayload) {
   return {
     subject: `New inquiry: ${payload.name} (${EVENT_TYPE_LABELS[payload.eventType]})`,
     html: `
