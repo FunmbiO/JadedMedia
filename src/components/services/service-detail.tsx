@@ -1,14 +1,12 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
-import type { PortfolioCategory } from "@/lib/portfolio/types";
+import { ServiceIcon } from "@/components/services/service-icon";
 
 type ServiceDetailProps = {
   number: string;
   title: string;
   description: string;
   bullets: string[];
-  icon: ReactNode;
-  category: PortfolioCategory;
+  slug: string;
   reverse?: boolean;
 };
 
@@ -17,8 +15,7 @@ export function ServiceDetail({
   title,
   description,
   bullets,
-  icon,
-  category,
+  slug,
   reverse,
 }: ServiceDetailProps) {
   return (
@@ -29,9 +26,7 @@ export function ServiceDetail({
     >
       <div className="flex flex-col gap-6">
         <span className="font-display text-sm text-gold-soft">{number}</span>
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" className="text-paper" aria-hidden>
-          {icon}
-        </svg>
+        <ServiceIcon className="text-paper" />
         <h2 className="font-display text-3xl font-normal text-paper italic sm:text-4xl">
           {title}
         </h2>
@@ -39,7 +34,7 @@ export function ServiceDetail({
           {description}
         </p>
         <Link
-          href={`/contact?type=${category}`}
+          href={`/contact?type=${slug}`}
           className="w-fit rounded-full border border-gold px-6 py-2.5 font-sans text-[12.5px] font-semibold tracking-[0.06em] text-gold-soft uppercase transition-colors hover:bg-gold hover:text-ink"
         >
           Get a Custom Quote &rarr;
