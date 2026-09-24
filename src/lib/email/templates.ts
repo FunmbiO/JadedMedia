@@ -1,5 +1,6 @@
 import type { LeadFormPayload } from "@/app/contact/actions";
 import { EVENT_TYPE_LABELS } from "@/app/contact/labels";
+import type { QuoteRequestPayload } from "@/app/services/actions";
 
 const WRAPPER_STYLE =
   "font-family: -apple-system, Helvetica, Arial, sans-serif; background: #0d0d0b; color: #f6f4ef; padding: 40px 24px;";
@@ -48,6 +49,50 @@ export function clientConfirmationEmail(payload: LeadFormPayload) {
           ${row("Inquiry type", EVENT_TYPE_LABELS[payload.eventType])}
           ${row("Event date", payload.eventDate)}
           ${row("Message", payload.message)}
+          <p style="font-size: 13px; color: #7c7768; margin: 24px 0 0;">
+            &mdash; Jaded Media
+          </p>
+        </div>
+      </div>
+    `,
+  };
+}
+
+export function quoteRequestNotificationEmail(
+  payload: QuoteRequestPayload & { serviceTitle: string },
+) {
+  return {
+    subject: `New consultation request: ${payload.name} (${payload.serviceTitle})`,
+    html: `
+      <div style="${WRAPPER_STYLE}">
+        <div style="${CARD_STYLE}">
+          <h1 style="font-size: 20px; font-style: italic; margin: 0 0 24px; color: #f6f4ef;">New consultation request</h1>
+          ${row("Service", payload.serviceTitle)}
+          ${row("Name", payload.name)}
+          ${row("Email", payload.email)}
+          ${row("Phone", payload.phone)}
+          ${row("Details", payload.details)}
+        </div>
+      </div>
+    `,
+  };
+}
+
+export function quoteRequestConfirmationEmail(
+  payload: QuoteRequestPayload & { serviceTitle: string },
+) {
+  return {
+    subject: "Consultation received — Jaded Media",
+    html: `
+      <div style="${WRAPPER_STYLE}">
+        <div style="${CARD_STYLE}">
+          <h1 style="font-size: 22px; font-style: italic; margin: 0 0 16px; color: #f6f4ef;">Consultation received, ${payload.name}.</h1>
+          <p style="font-size: 15px; line-height: 1.6; color: #c9c5b9; margin: 0 0 20px;">
+            I've received your consultation request and will get back to you
+            shortly. Here's a copy of what you sent:
+          </p>
+          ${row("Service", payload.serviceTitle)}
+          ${row("Details", payload.details)}
           <p style="font-size: 13px; color: #7c7768; margin: 24px 0 0;">
             &mdash; Jaded Media
           </p>
