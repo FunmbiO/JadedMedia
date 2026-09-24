@@ -45,11 +45,15 @@ export async function sendQuoteRequestNotifications(
   ]);
 
   results.forEach((result, index) => {
+    const label = index === 0 ? "owner" : "client";
     if (result.status === "rejected") {
-      console.error(
-        `Quote request notification email (${index === 0 ? "owner" : "client"}) failed:`,
-        result.reason,
-      );
+      console.error(`Quote request notification email (${label}) failed:`, result.reason);
+    } else if (result.value.error) {
+      // The Resend SDK resolves (doesn't reject) on an API-level error like
+      // an unverified sending domain — it comes back as { error } instead
+      // of a thrown exception, so this has to be checked separately from
+      // the rejected case above or failures here go completely unnoticed.
+      console.error(`Quote request notification email (${label}) failed:`, result.value.error);
     }
   });
 }

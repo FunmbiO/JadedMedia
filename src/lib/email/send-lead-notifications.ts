@@ -43,11 +43,15 @@ export async function sendLeadNotifications(payload: LeadFormPayload) {
   ]);
 
   results.forEach((result, index) => {
+    const label = index === 0 ? "studio" : "client";
     if (result.status === "rejected") {
-      console.error(
-        `Lead notification email (${index === 0 ? "studio" : "client"}) failed:`,
-        result.reason,
-      );
+      console.error(`Lead notification email (${label}) failed:`, result.reason);
+    } else if (result.value.error) {
+      // The Resend SDK resolves (doesn't reject) on an API-level error like
+      // an unverified sending domain — it comes back as { error } instead
+      // of a thrown exception, so this has to be checked separately from
+      // the rejected case above or failures here go completely unnoticed.
+      console.error(`Lead notification email (${label}) failed:`, result.value.error);
     }
   });
 }
