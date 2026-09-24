@@ -289,6 +289,43 @@ below is verified against your real project, not assumed.)*
       migration. Two clicks, checks new admin passwords against
       HaveIBeenPwned. Worth doing since it's free.
 
+## Phase 10 — Copy Simplify
+
+*(A full pass rewriting site copy that read as AI-generated — heavy
+"isn't X, it's Y" rhetorical contrast, words like "actually" and
+"real," and phrases like "cinematic stories, crafted with intention"
+— into plainer, shorter, more direct wording. Your own words on
+`/about` — the bio paragraphs and the Philosophy quote — were left
+untouched since they're already yours, not mine.)*
+
+- [x] **Rewrote copy across the homepage, About, Services, and Contact
+      pages**: hero headline and intro, Philosophy's supporting
+      paragraph, all four Process steps, the CTA banner, the Services
+      teaser, About's intro line and three value descriptions, the
+      Services page intro, the Contact page heading, the footer
+      tagline, and the social strip label. Also updated the root
+      layout's meta description and the Services page's meta
+      description — same "crafted with intention" style phrase was
+      sitting there too.
+- [x] **Simplified the three service descriptions stored in the
+      database** (Weddings/Automotive/Business & Brand) — these are
+      admin-editable now, so a code change alone wouldn't have touched
+      what's actually live. Updated directly via Supabase MCP and
+      verified with a follow-up query; migration 0011 keeps the repo's
+      history matching what's live, same as every other data change
+      here.
+- [x] **All bracket placeholders restyled to a plain `[add -- later]`
+      format** — testimonial quote/name/client type, the work-detail
+      page's cover image and story fallbacks, the press strip's
+      publication slots, and the hero's background-video placeholder
+      (this one was still using the old wordier style and had been
+      missed until now).
+- [x] **Verified visually, not just by reading the diff.** Screenshotted
+      the homepage, About, Services, and Contact pages against a clean
+      rebuild after a stale local server initially served pre-edit
+      copy (caught by comparing rendered text against what was just
+      written, not assumed correct).
+
 ## Resolved
 
 - [x] **Real logo asset.** Added at `public/logo.png` (a 5834x5834 PNG,
