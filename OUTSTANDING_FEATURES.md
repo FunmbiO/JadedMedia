@@ -139,10 +139,6 @@ back a phase.)*
       else. Please submit a real test inquiry once 0006 is applied,
       and check both the `leads` table and (once Resend is
       configured) that both emails actually arrive.
-- [ ] **No admin UI to view/manage leads yet.** The `leads` table and
-      its RLS policies support it (authenticated can SELECT/UPDATE),
-      but there's no `/admin/leads` page — submissions are only
-      visible via the Supabase Table Editor for now.
 
 ## Phase 6 — Services Admin CMS
 
@@ -184,6 +180,30 @@ back a phase.)*
 - [ ] **No specific city given.** `SITE_CONFIG.city` reads "New
       Brunswick, Canada" since that's what you gave me — send a
       specific city/town if you'd rather show that instead.
+
+## Phase 8 — Quote Requests, Leads Admin & Instagram
+
+- [ ] **⚠️ Migration 0009 not applied yet — action needed from you.**
+      `supabase/migrations/0009_lead_service_link.sql` adds `service_id`
+      and `source` columns to `leads`. Until it's run, submitting a
+      quote request from `/services` will fail with a database error
+      (the insert references columns that don't exist yet).
+- [ ] **No Instagram feed embed.** The social strip's photo tiles are
+      still generic grey squares, not real posts pulled from
+      @jaded.medias — that needs Instagram's Graph API and an OAuth
+      connection I don't have a way to set up from here. The handle
+      and follow link are real; the tiles are decorative only.
+- [ ] **Can't test the quote-request flow or admin Leads view live
+      from this sandbox.** Same `*.supabase.co` network block as
+      everything else. Once 0009 is applied, please submit a real
+      quote request from `/services`, confirm it shows up in
+      `/admin/leads` tagged "Quote Request" with the right service,
+      and check that both emails arrive.
+- [ ] **Quote-popup leads don't collect an event date or budget
+      range** — just name, email, phone, and free-text details. The
+      main `/contact` form still asks for those; the popup is meant to
+      be faster/lighter. Say the word if you want those fields there
+      too.
 
 ## Resolved
 
@@ -242,9 +262,12 @@ back a phase.)*
       real email, phone, and location instead of bracketed
       placeholders — the footer, CTA banner, and contact page all pull
       from it.
-- [x] **Social strip removed.** It was 100% placeholder (grey tiles, a
-      `[@yourhandle]` link to nowhere) with no real Instagram account
-      to connect — deleted rather than left as a placeholder.
+- [x] **Social strip removed, then restored in phase 8** once you gave
+      me the real handle (@jaded.medias). It was 100% placeholder
+      (grey tiles, a `[@yourhandle]` link to nowhere) with no real
+      Instagram account to connect at the time, so it was deleted
+      rather than left as a placeholder — the tiles are still generic
+      squares (no real feed embed), but the handle and link are real.
 - [x] **`/about` placeholder stats removed.** The three `[Add ...]`
       stat boxes never had real numbers to put in and weren't on the
       keep list — removed rather than left as brackets.
@@ -259,3 +282,15 @@ back a phase.)*
       with the same real founder photo used on `/about`
       (`public/founder.jpg`) instead of a "[ Studio / behind-the-scenes
       photo ]" placeholder box.
+- [x] **"Get a Custom Quote" now opens a popup instead of linking to
+      `/contact`.** Each service card's button opens a modal showing
+      that service's own description and bullet list next to a
+      name/email/phone/details form. Submitting saves a `leads` row
+      tagged to that service (`service_id` + `source = 'quote_popup'`,
+      via migration 0009) and fires a styled "Consultation received"
+      confirmation to the client plus a notification to the business
+      inbox — see Phase 8.
+- [x] **Admin Leads view built.** `/admin/leads` lists every lead
+      (contact-form submissions and quote-popup requests alike),
+      badged by source, with the tied service or event type, and an
+      inline status dropdown (new/contacted/booked/closed).
