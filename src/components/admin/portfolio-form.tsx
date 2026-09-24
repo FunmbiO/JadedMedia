@@ -7,7 +7,7 @@ import type {
   PortfolioItem,
   PortfolioMedium,
 } from "@/lib/portfolio/types";
-import { slugify } from "@/lib/portfolio/slugify";
+import { slugify } from "@/lib/slugify";
 import {
   createPortfolioItem,
   updatePortfolioItem,
