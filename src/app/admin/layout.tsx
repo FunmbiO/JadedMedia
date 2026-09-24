@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "@/app/admin/actions";
+import { AdminNavTabs } from "@/components/admin/admin-nav-tabs";
 
 export default async function AdminLayout({
   children,
@@ -33,6 +34,7 @@ export default async function AdminLayout({
           </form>
         )}
       </header>
+      {user && <AdminNavTabs />}
       <main className="flex flex-1 flex-col">{children}</main>
     </div>
   );
