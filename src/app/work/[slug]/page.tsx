@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getPortfolioItemBySlug } from "@/lib/portfolio/queries";
 import { CATEGORY_LABELS, MEDIUM_LABELS } from "@/lib/portfolio/labels";
 import { VideoPlayer } from "@/components/portfolio/video-player";
+import { GalleryCarousel } from "@/components/portfolio/gallery-carousel";
 
 // Portfolio content changes independently of deploys — render per request
 // rather than trying to statically generate against the database at build
@@ -92,24 +93,16 @@ export default async function PortfolioDetailPage({ params }: PageProps) {
         <p className="max-w-[640px] font-sans text-base leading-relaxed font-light text-paper/85 whitespace-pre-line">
           {item.story ?? "[Add the full project story for this page.]"}
         </p>
-
-        {hasGallery && (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-            {item.galleryUrls.map((url) => (
-              <div key={url} className="relative aspect-[4/3] bg-stone">
-                <Image
-                  src={url}
-                  alt={item.title}
-                  fill
-                  sizes="(min-width: 640px) 33vw, 50vw"
-                  className="object-cover"
-                  quality={90}
-                />
-              </div>
-            ))}
-          </div>
-        )}
       </div>
+
+      {hasGallery && (
+        <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-4 px-6 pb-16 md:px-16 md:pb-24">
+          <span className="font-sans text-[11px] font-semibold tracking-[0.12em] text-gold uppercase">
+            Gallery
+          </span>
+          <GalleryCarousel images={item.galleryUrls} alt={item.title} />
+        </div>
+      )}
     </article>
   );
 }
