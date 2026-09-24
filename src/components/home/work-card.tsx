@@ -21,7 +21,7 @@ export function WorkCard({
           alt={item.title}
           fill
           sizes="(min-width: 640px) 50vw, 100vw"
-          className="object-cover transition-[filter] duration-200 group-hover:brightness-[0.82]"
+          className="object-cover object-top transition-[filter] duration-200 group-hover:brightness-[0.82]"
           quality={90}
         />
       ) : (

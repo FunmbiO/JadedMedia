@@ -53,7 +53,7 @@ export function GalleryCarousel({
                 alt={`${alt} — photo ${index + 1}`}
                 fill
                 sizes="(min-width: 1100px) 1100px, 100vw"
-                className="object-cover"
+                className="object-contain"
                 quality={90}
                 priority={index === 0}
               />

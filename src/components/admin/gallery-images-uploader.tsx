@@ -43,7 +43,7 @@ export function GalleryImagesUploader({
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
           {values.map((url, index) => (
             <div key={url} className="relative aspect-square overflow-hidden rounded bg-stone">
-              <Image src={url} alt="" fill sizes="150px" className="object-cover" />
+              <Image src={url} alt="" fill sizes="150px" className="object-contain" />
               <button
                 type="button"
                 onClick={() => removeAt(index)}
