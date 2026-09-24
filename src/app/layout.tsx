@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Manrope } from "next/font/google";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
+import { ConditionalSiteChrome } from "@/components/conditional-site-chrome";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -30,9 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${fraunces.variable} ${manrope.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ink text-paper">
-        <SiteHeader />
-        <main className="flex flex-1 flex-col">{children}</main>
-        <SiteFooter />
+        <ConditionalSiteChrome>{children}</ConditionalSiteChrome>
       </body>
     </html>
   );
