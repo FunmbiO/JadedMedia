@@ -52,6 +52,12 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     images: ["/logo.png"],
   },
+  // Google Search Console ownership verification (HTML tag method) —
+  // a second, independent path alongside the /google...html file, so
+  // either one verifies the property.
+  verification: {
+    google: "Em02yIMTKaUjXiwzIJjhvCKqBVwyHkxx_Tim3xXor4c",
+  },
 };
 
 const JSON_LD = {
