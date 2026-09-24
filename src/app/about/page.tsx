@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { CtaBanner } from "@/components/home/cta-banner";
 
 export const metadata: Metadata = {
@@ -44,24 +45,54 @@ export default function AboutPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-16">
-          <div className="relative flex aspect-[4/3] items-end bg-beige p-5">
-            <span className="text-[10px] tracking-[0.1em] text-ink/45 uppercase">
-              [ Studio / behind-the-scenes photo ]
-            </span>
+          <div className="relative aspect-[4/3] overflow-hidden bg-beige">
+            <Image
+              src="/founder.jpg"
+              alt="Olufunmbi Olajubu, founder of Jaded Media"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              quality={90}
+              className="object-cover object-top"
+            />
           </div>
           <div className="flex flex-col justify-center gap-5">
-            <h2 className="font-display text-2xl font-light text-paper italic sm:text-3xl">
-              &ldquo;We don&apos;t just document moments &mdash; we
-              translate feeling into photo and film.&rdquo;
-            </h2>
             <p className="max-w-md font-sans text-[15px] leading-relaxed font-light text-muted-on-ink">
-              [Add the full founding story here — who started Jaded
-              Media, why, and what the studio has grown into since.]
+              Hey, I&apos;m Olufunmbi Olajubu &mdash; one might call it
+              cliché, but I&apos;m quite literally just a guy with a
+              camera. I love representing the moment as accurately as I
+              can through photo or video. As I&apos;d like to say,
+              I&apos;m a visual storyteller.
+            </p>
+            <p className="max-w-md font-sans text-[15px] leading-relaxed font-light text-muted-on-ink">
+              You might be slightly confused seeing this website,
+              wondering exactly what I specialize in&hellip; Nothing. I
+              don&apos;t stick to just one style of photography or
+              videography; I capture everything from weddings to
+              landscapes, portraits to events, and even the
+              &mdash;<em className="italic">ahem</em>&mdash; boring
+              company and business shoots.
+            </p>
+            <p className="max-w-md font-sans text-[15px] leading-relaxed font-light text-muted-on-ink">
+              Some say, &ldquo;Jack of all trades, master of
+              none,&rdquo; but I believe the full quote fits me better:
+              &ldquo;Jack of all trades, master of none, but oftentimes
+              better than the master of one.&rdquo; (Not to brag,
+              obviously.)
+            </p>
+            <p className="max-w-md font-sans text-[15px] leading-relaxed font-light text-muted-on-ink">
+              Every project teaches me something new, and I embrace the
+              challenge of making every frame, every shot, and every
+              story as captivating as possible. No matter the setting,
+              I bring creativity, adaptability, and a keen eye for
+              detail to every shoot.
+            </p>
+            <p className="max-w-md font-sans text-[15px] leading-relaxed font-light text-muted-on-ink">
+              So yeah &mdash; book me and whatnot.
             </p>
             <div className="flex items-center gap-4">
               <div className="h-px w-10 bg-gold" />
               <span className="font-display text-base text-paper italic">
-                Jaded Media, Est. 2019
+                Olufunmbi Olajubu, Founder &amp; Lead Storyteller
               </span>
             </div>
           </div>

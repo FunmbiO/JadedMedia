@@ -131,11 +131,17 @@ back a phase.)*
       "Get a Custom Quote" rather than listed price tiers — a real
       business decision I didn't make on your behalf. Say the word if
       you want actual prices public.
-- [ ] **`/about` has several honest placeholders**, not invented
-      facts: the founding story, and three stats (years in business,
-      projects delivered, a third figure) all read `[Add ...]` in
-      brackets. Send me the real story/numbers and I'll drop them in
-      — no code change needed, just content.
+- [ ] **⚠️ `/about` founder photo missing — action needed from you.**
+      The bio section now renders your real copy next to an `<Image>`
+      pointed at `public/founder.jpg`, but that file doesn't exist in
+      the repo yet, so it'll show as a broken image until you add one.
+      Drop a photo in at `public/founder.jpg` (same way `logo.png` got
+      added) — replacing that file any time swaps the photo, no code
+      change needed.
+- [ ] **`/about` still has three placeholder stats** (years in
+      business, projects delivered, a third figure) reading `[Add ...]`
+      in brackets. Send me the real numbers and I'll drop them in — no
+      code change needed, just content.
 - [ ] **Can't test the contact form or emails live from this
       sandbox.** Same `*.supabase.co` network block as everything
       else. Please submit a real test inquiry once 0006 is applied,
