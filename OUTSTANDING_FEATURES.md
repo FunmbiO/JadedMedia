@@ -12,10 +12,11 @@ never silently dropped.
       Book a Call button, not Work/Services/About/Journal/Contact.
       Needs a client component with a toggle. (Breakpoint moved from
       `md` to `lg` in phase 2 — see Resolved below for why.)
-- [ ] **Some footer links still 404.** `/journal`, `/faq`, `/careers`,
-      `/press`, `/privacy`, `/terms` — none were in the original build
-      plan as their own pages; decide if/when any of these are worth
-      building, or drop the links.
+- [ ] **Some footer links still 404.** `/journal`, `/faq`, `/press`,
+      `/privacy`, `/terms` — none were in the original build plan as
+      their own pages; decide if/when any of these are worth building,
+      or drop the links. (`/careers` was removed in phase 7 — doesn't
+      make sense for a one-person business.)
 - [ ] **No Vercel project/deployment.** This phase only prepares the
       codebase to be deployed — no live URL exists yet. Creating the
       Vercel project and connecting the repo needs your Vercel account;
@@ -23,23 +24,18 @@ never silently dropped.
 
 ## Phase 2 — Homepage
 
-- [ ] **Real business contact details still needed.** `src/lib/
-      site-config.ts` centralizes email/phone/city/Instagram handle as
-      bracketed placeholders (e.g. `[Add studio email]`) — used by the
-      footer, CTA banner, and social strip. Fill in real values before
-      launch; everything downstream updates from that one file.
 - [ ] **Press strip is placeholder.** Naming specific real publications
-      before the studio has actually been featured in them would be a
+      before Jaded Media has actually been featured in them would be a
       false claim, so `PressStrip` renders generic `[ Publication ]`
       slots instead. Replace with real outlet wordmarks (or remove the
-      section entirely) once there's real press to show.
+      section entirely) once there's real press to show. (Kept as a
+      placeholder deliberately as of phase 7 — you asked to keep this
+      one.)
 - [ ] **Testimonial is placeholder.** Bracketed placeholder copy, not a
       fabricated client quote — swap in a real testimonial (or wire to
       the testimonials table once Sprint 5's admin exists) before this
-      ships.
-- [ ] **Social strip tiles are empty placeholders**, and the Instagram
-      handle/link in `site-config.ts` are brackets — same real-content
-      dependency as above.
+      ships. (Kept as a placeholder deliberately as of phase 7 — you
+      asked to keep this one too.)
 - [ ] **Logo wordmark wraps at the narrowest phones (~320px).** "JADED
       MEDIA" breaks to two lines at an iPhone SE-width viewport. Not
       broken, just not ideal — worth a proper fix alongside the mobile
@@ -138,10 +134,6 @@ back a phase.)*
       Drop a photo in at `public/founder.jpg` (same way `logo.png` got
       added) — replacing that file any time swaps the photo, no code
       change needed.
-- [ ] **`/about` still has three placeholder stats** (years in
-      business, projects delivered, a third figure) reading `[Add ...]`
-      in brackets. Send me the real numbers and I'll drop them in — no
-      code change needed, just content.
 - [ ] **Can't test the contact form or emails live from this
       sandbox.** Same `*.supabase.co` network block as everything
       else. Please submit a real test inquiry once 0006 is applied,
@@ -177,6 +169,21 @@ back a phase.)*
       Please run through it yourself once 0007/0008 are applied:
       create a service, edit one, delete one, toggle published/draft,
       and confirm both `/services` and the homepage teaser update.
+
+## Phase 7 — Solo Brand Voice & Real Contact Info
+
+- [ ] **Internal "studio" naming left as-is on purpose.** The Resend
+      env var `STUDIO_NOTIFICATION_EMAIL` and a few internal
+      function/variable names in `src/lib/email/` (`studioNotificationEmail`,
+      `studioEmail`) still say "studio" — none of that is visible
+      anywhere on the site or in the emails themselves (the subject
+      and body text were fixed), so I left the naming alone rather
+      than rename an env var you'd have to update in both
+      `.env.local` and Vercel for zero visible benefit. Say the word
+      if you want it renamed anyway.
+- [ ] **No specific city given.** `SITE_CONFIG.city` reads "New
+      Brunswick, Canada" since that's what you gave me — send a
+      specific city/town if you'd rather show that instead.
 
 ## Resolved
 
@@ -231,3 +238,24 @@ back a phase.)*
       instead of a service-role key — no god-mode key anywhere in the
       deployed app. That env var line can stay empty permanently
       unless a future feature genuinely needs to bypass RLS.
+- [x] **Real contact info filled in.** `SITE_CONFIG` now has your
+      real email, phone, and location instead of bracketed
+      placeholders — the footer, CTA banner, and contact page all pull
+      from it.
+- [x] **Social strip removed.** It was 100% placeholder (grey tiles, a
+      `[@yourhandle]` link to nowhere) with no real Instagram account
+      to connect — deleted rather than left as a placeholder.
+- [x] **`/about` placeholder stats removed.** The three `[Add ...]`
+      stat boxes never had real numbers to put in and weren't on the
+      keep list — removed rather than left as brackets.
+- [x] **Site copy rewritten for a solo operator.** "Studio," "we,"
+      "our," and "team"-flavored language removed from every
+      user-facing page (home, about, services, contact, footer,
+      header, confirmation emails) in favor of first-person singular —
+      Jaded Media is explicitly one person, not a studio with staff.
+      Press strip and testimonial placeholders were kept as-is at your
+      request.
+- [x] **Homepage Philosophy section's placeholder image replaced**
+      with the same real founder photo used on `/about`
+      (`public/founder.jpg`) instead of a "[ Studio / behind-the-scenes
+      photo ]" placeholder box.
