@@ -15,6 +15,7 @@ import {
 } from "@/app/admin/portfolio/actions";
 import { CoverImageUploader } from "@/components/admin/cover-image-uploader";
 import { GalleryImagesUploader } from "@/components/admin/gallery-images-uploader";
+import { VideoUploader } from "@/components/admin/video-uploader";
 
 const inputClass =
   "rounded border border-paper/20 bg-transparent px-3.5 py-2.5 font-sans text-sm text-paper outline-none focus:border-gold";
@@ -182,11 +183,9 @@ export function PortfolioForm({ item }: { item?: PortfolioItem }) {
         </label>
       </div>
 
-      <label className="flex flex-col gap-1.5">
-        <span className={labelClass}>
-          Video URL (optional — upload to R2 yourself, paste the public
-          URL here)
-        </span>
+      <div className="flex flex-col gap-2">
+        <span className={labelClass}>Video (optional)</span>
+        <VideoUploader value={videoUrl} onChange={setVideoUrl} />
         <input
           type="url"
           value={videoUrl}
@@ -194,7 +193,10 @@ export function PortfolioForm({ item }: { item?: PortfolioItem }) {
           placeholder="https://pub-xxxx.r2.dev/your-film.mp4"
           className={inputClass}
         />
-      </label>
+        <span className="font-sans text-[11px] text-muted-on-ink/70">
+          Upload above, or paste an existing R2 URL directly.
+        </span>
+      </div>
 
       <CoverImageUploader value={coverImageUrl} onChange={setCoverImageUrl} />
       <GalleryImagesUploader values={galleryUrls} onChange={setGalleryUrls} />
