@@ -14,17 +14,16 @@ export function Testimonial() {
           &ldquo;
         </span>
         <p className="font-display text-xl leading-relaxed font-light text-ink italic sm:text-2xl md:text-[32px]">
-          [Client testimonial goes here — a sentence or two on how the
-          experience felt, in their own words.]
+          [add testimonial -- later]
         </p>
         <div className="mt-3 flex items-center gap-3.5">
           <div className="h-11 w-11 shrink-0 rounded-full bg-beige" />
           <div className="flex flex-col items-start gap-0.5">
             <span className="font-sans text-sm font-semibold text-ink">
-              [Client Name]
+              [add name -- later]
             </span>
             <span className="font-sans text-[12.5px] text-muted-on-paper">
-              [Wedding / Automotive / Business Client — Location]
+              [add client type -- later]
             </span>
           </div>
         </div>

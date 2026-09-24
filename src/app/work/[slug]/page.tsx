@@ -61,7 +61,7 @@ export default async function PortfolioDetailPage({ params }: PageProps) {
           ) : (
             <div className="flex h-full w-full items-center justify-center">
               <span className="font-sans text-[11px] tracking-[0.1em] text-paper/40 uppercase">
-                [ Add cover media for this project ]
+                [add cover -- later]
               </span>
             </div>
           )}
@@ -91,7 +91,7 @@ export default async function PortfolioDetailPage({ params }: PageProps) {
         </div>
 
         <p className="max-w-[640px] font-sans text-base leading-relaxed font-light text-paper/85 whitespace-pre-line">
-          {item.story ?? "[Add the full project story for this page.]"}
+          {item.story ?? "[add story -- later]"}
         </p>
       </div>
 

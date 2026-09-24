@@ -19,7 +19,7 @@ export function PressStrip() {
               key={i}
               className="rounded border border-dashed border-paper/15 px-4 py-2 text-center font-sans text-[11px] tracking-[0.05em] text-paper/55 uppercase"
             >
-              [ Publication ]
+              [add logo -- later]
             </span>
           ))}
         </div>
