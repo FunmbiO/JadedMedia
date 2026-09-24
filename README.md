@@ -1,8 +1,8 @@
 # Jaded Media
 
-Marketing site and (eventually) content admin for Jaded Media, a
-photography & videography studio covering weddings, automotive, and
-business/brand work.
+Marketing site and content admin for Jaded Media — Olufunmbi Olajubu's
+photography & videography work, covering weddings, automotive, and
+business/brand shoots.
 
 ## Stack
 

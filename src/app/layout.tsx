@@ -17,9 +17,9 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Jaded Media | Photography & Videography Studio",
+  title: "Jaded Media | Photography & Film",
   description:
-    "Jaded Media is a photography & videography studio for weddings, automotive, and business — cinematic stories, crafted with intention.",
+    "Jaded Media is photography & film by Olufunmbi Olajubu, for weddings, automotive, and business — cinematic stories, crafted with intention.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

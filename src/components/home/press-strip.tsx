@@ -2,7 +2,7 @@ const PLACEHOLDER_SLOTS = 5;
 
 /**
  * "As seen in" is a real, specific claim — naming actual publications here
- * would be false until the studio has been featured in them. Rendered as
+ * would be false until Jaded Media has actually been featured in them. Rendered as
  * generic placeholder slots until there's real press to list; swap for
  * real outlet wordmarks (or remove the section) when that exists.
  */
