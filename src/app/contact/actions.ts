@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { sendLeadNotifications } from "@/lib/email/send-lead-notifications";
 
 export type LeadEventType = "wedding" | "automotive" | "business" | "other";
 
@@ -36,9 +37,9 @@ export async function submitLead(
     return { error: error.message };
   }
 
-  // Email notifications (Resend) are wired up separately — the lead is
-  // saved either way, so a client's inquiry is never lost even if email
-  // sending fails or isn't configured yet.
+  // Fails soft internally — the lead above is already saved, so a client's
+  // inquiry is never lost even if email isn't configured yet or fails.
+  await sendLeadNotifications(payload);
 
   return {};
 }
