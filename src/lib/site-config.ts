@@ -8,4 +8,6 @@ export const SITE_CONFIG = {
   city: "New Brunswick, Canada",
   travelNote:
     "Based in New Brunswick — available to travel for the right project (travel costs may apply).",
+  instagramHandle: "@jaded.medias",
+  instagramUrl: "https://www.instagram.com/jaded.medias/",
 } as const;
