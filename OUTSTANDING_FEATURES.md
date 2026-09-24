@@ -253,6 +253,42 @@ back a phase.)*
       **Vercel's Production environment** too before it'll work on the
       live site — Vercel never reads your local `.env.local`.
 
+## Phase 9 — Client-Ready Polish
+
+*(This phase had real Vercel and Supabase access for the first time —
+not just guessing what's live, I could actually check it. Every claim
+below is verified against your real project, not assumed.)*
+
+- [ ] **⚠️ Being #1 on Google for "Jaded Media" isn't something I can
+      guarantee — nobody honestly can.** Ranking depends on Google's
+      own algorithm, competition, backlinks, and time, none of which a
+      developer controls directly. What I *did* do: proper page
+      titles/descriptions, Open Graph + Twitter preview cards, a
+      `ProfessionalService` structured-data block naming you as
+      founder (helps Google understand "Jaded Media" as a specific
+      local business, not just text), a sitemap, and a robots.txt.
+      Lighthouse's SEO score is 100/100 — the technical side is as
+      solid as it gets. Two things worth doing on your end: (1) submit
+      the site to [Google Search Console](https://search.google.com/search-console)
+      once you're ready (verify `www.jadedmedia.ca`, submit
+      `/sitemap.xml`) — this is what actually gets Google to notice
+      and crawl a new site quickly, and I can't do it myself since it
+      needs your Google account; (2) claim a
+      [Google Business Profile](https://business.google.com) for
+      Jaded Media — for a "business name" search like this, a Business
+      Profile often outranks the website itself and is one of the
+      biggest levers you personally control.
+- [ ] **No dedicated social-share image.** Open Graph/Twitter cards
+      fall back to `logo.png` (a square product shot, not designed for
+      the 1200×630 landscape crop social platforms use) since no
+      dedicated share image exists yet. Looks fine, not ideal — a real
+      one would show better when the site gets shared or linked.
+- [ ] **Leaked password protection is off in Supabase Auth.** Confirmed
+      via advisor check — this is a dashboard toggle (Authentication →
+      Policies → Password Security), not something fixable via SQL
+      migration. Two clicks, checks new admin passwords against
+      HaveIBeenPwned. Worth doing since it's free.
+
 ## Resolved
 
 - [x] **Real logo asset.** Added at `public/logo.png` (a 5834x5834 PNG,
@@ -342,3 +378,53 @@ back a phase.)*
       (contact-form submissions and quote-popup requests alike),
       badged by source, with the tied service or event type, and an
       inline status dropdown (new/contacted/booked/closed).
+- [x] **Confirmed live: all 9 migrations are actually applied.** Direct
+      Supabase access this phase let me check for real instead of
+      asking — `portfolio_items` (5 rows), `services` (3 rows), and
+      `leads` (5 rows, meaning real inquiries have already come in)
+      all exist with the right columns, including 0009's `service_id`/
+      `source` on `leads`. `list_migrations` itself shows empty since
+      these were run by hand in the SQL Editor rather than through the
+      Supabase CLI's migration tracking — that's just bookkeeping, the
+      schema itself is confirmed correct.
+- [x] **Favicon and app icons set from the real logo** (`icon.png`,
+      `apple-icon.png`, `favicon.ico`, generated from `public/logo.png`
+      via sharp — see the phase 9 commits for how the `.ico` was
+      hand-built since sharp doesn't write that format directly).
+- [x] **SEO fundamentals added**: Open Graph + Twitter card metadata,
+      a `ProfessionalService` JSON-LD block, `/sitemap.xml`,
+      `/robots.txt`, and `metadataBase` pointed at the canonical
+      `www.jadedmedia.ca` (confirmed via Vercel's own domain config —
+      `jadedmedia.ca` redirects to `www`, not the other way around).
+      Lighthouse SEO score: 100/100.
+- [x] **Bug found and fixed: `/robots.txt` and `/sitemap.xml` were
+      404ing.** The auth middleware's matcher didn't exclude them, and
+      running the Supabase session-refresh logic on those routes broke
+      them — confirmed by testing every route after a clean rebuild
+      (not assuming a first fix worked), narrowing it down to exactly
+      those two, and fixing the matcher. Both work correctly now.
+- [x] **Supabase advisor findings fixed on the live database** (via
+      Supabase MCP, confirmed clean with a follow-up advisor check):
+      added the missing index on `leads.service_id`, pinned
+      `search_path` on the `set_updated_at()` trigger function, and
+      removed a redundant permissive RLS policy overlap on
+      `portfolio_items`/`services`. Migration 0010 keeps the repo's
+      schema history matching what's live.
+- [x] **Real Lighthouse audit run against the production build** —
+      not guessed. Before: Performance 95, Accessibility 95, Best
+      Practices 100, SEO 100. Found genuine WCAG contrast failures
+      (press strip labels, footer copyright/links, the Philosophy
+      "eyebrow" label, testimonial attribution, Process section's
+      decorative step numerals) and fixed all of them — two shared
+      design tokens darkened (`--color-sage`, `--color-muted-on-paper`,
+      safe since both are only ever used as text-on-light-background)
+      plus a few component-level opacity bumps. Re-run after fixes:
+      **Accessibility 100**, Performance 94, Best Practices 100, SEO
+      100. This measures the actual code (bundle size, render
+      performance, real accessibility tree) against a local production
+      server — it can't measure real-world network latency from a
+      visitor's actual location to Vercel's edge, since this sandbox
+      can't reach the live domain at all. Worth a real PageSpeed
+      Insights run against `https://www.jadedmedia.ca` once you have a
+      minute, just to confirm the edge/CDN side looks as good as the
+      code does.
