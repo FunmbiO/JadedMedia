@@ -105,6 +105,18 @@ back a phase.)*
       "that slug is taken" message.
 - [ ] **No pagination on `/admin`.** Fine at a handful of entries,
       will need it eventually.
+- [ ] **⚠️ Video upload untested end to end.** `.env.local` now has
+      real R2 credentials (Account ID, Access Key, bucket name), but
+      the bucket's CORS policy needs to be enabled before a browser
+      upload will succeed (instructions given separately) — and I
+      can't test any of it myself, same network block as everything
+      else Supabase/R2. Please try uploading a real video from
+      `/admin/portfolio/new` once the migration is run and your login
+      exists.
+- [ ] **Single presigned PUT, not chunked multipart.** A dropped
+      connection mid-upload means starting that file over, not
+      resuming. Deliberate simplification given realistic file sizes
+      here — revisit if it becomes a real problem.
 
 ## Resolved
 
