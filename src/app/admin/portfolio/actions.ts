@@ -2,7 +2,27 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { PORTFOLIO_IMAGES_BUCKET } from "@/lib/supabase/storage-bucket";
 import type { PortfolioCategory, PortfolioMedium } from "@/lib/portfolio/types";
+
+const SLUG_UNIQUE_VIOLATION = "23505";
+
+function friendlyError(error: { code?: string; message: string }): string {
+  if (error.code === SLUG_UNIQUE_VIOLATION) {
+    return "That slug is already taken — pick a different one.";
+  }
+  return error.message;
+}
+
+// Public Storage URLs look like
+// `.../storage/v1/object/public/Portfolio%20Images/<path>` — pull the
+// path back out so a delete can also remove the underlying file.
+function storagePathFromUrl(url: string): string | null {
+  const marker = `/storage/v1/object/public/${encodeURIComponent(PORTFOLIO_IMAGES_BUCKET)}/`;
+  const index = url.indexOf(marker);
+  if (index === -1) return null;
+  return decodeURIComponent(url.slice(index + marker.length));
+}
 
 export type PortfolioFormPayload = {
   slug: string;
@@ -56,7 +76,7 @@ export async function createPortfolioItem(
   const { error } = await supabase.from("portfolio_items").insert(toRow(payload));
 
   if (error) {
-    return { error: error.message };
+    return { error: friendlyError(error) };
   }
 
   revalidatePortfolioPaths(payload.slug);
@@ -74,7 +94,7 @@ export async function updatePortfolioItem(
     .eq("id", id);
 
   if (error) {
-    return { error: error.message };
+    return { error: friendlyError(error) };
   }
 
   revalidatePortfolioPaths(payload.slug);
@@ -83,13 +103,41 @@ export async function updatePortfolioItem(
 
 export async function deletePortfolioItem(id: string) {
   const supabase = await createClient();
+
+  const { data: item } = await supabase
+    .from("portfolio_items")
+    .select("cover_image_url, gallery_urls")
+    .eq("id", id)
+    .single();
+
   const { error } = await supabase
     .from("portfolio_items")
     .delete()
     .eq("id", id);
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error(friendlyError(error));
+  }
+
+  const urls = [item?.cover_image_url, ...(item?.gallery_urls ?? [])].filter(
+    (url): url is string => Boolean(url),
+  );
+  const paths = urls
+    .map(storagePathFromUrl)
+    .filter((path): path is string => Boolean(path));
+
+  if (paths.length > 0) {
+    const { error: storageError } = await supabase.storage
+      .from(PORTFOLIO_IMAGES_BUCKET)
+      .remove(paths);
+    if (storageError) {
+      // The database row is already gone — this is cleanup, not a reason
+      // to fail the delete the admin just confirmed.
+      console.error(
+        `Failed to remove Storage files for deleted portfolio item ${id}:`,
+        storageError.message,
+      );
+    }
   }
 
   revalidatePortfolioPaths();

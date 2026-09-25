@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
-
-const PORTFOLIO_IMAGES_BUCKET = "Portfolio Images";
+import { PORTFOLIO_IMAGES_BUCKET } from "@/lib/supabase/storage-bucket";
 
 /**
  * Uploads directly from the browser to Supabase Storage (not proxied
