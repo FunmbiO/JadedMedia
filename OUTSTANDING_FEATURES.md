@@ -6,40 +6,41 @@ never silently dropped.
 
 ## Phase 1 — Foundation & Design System
 
-- [ ] **Some footer links still 404.** `/faq`, `/press`, `/privacy`,
-      `/terms` — none were in the original build plan as their own
-      pages; decide if/when any of these are worth building, or drop
-      the links. (`/careers` was removed in phase 7 — doesn't make
-      sense for a one-person business. `/journal` was removed in
-      phase 8 at your request — say the word if you want it back once
-      there's something to put there.)
-- [ ] **No Vercel project/deployment.** This phase only prepares the
-      codebase to be deployed — no live URL exists yet. Creating the
-      Vercel project and connecting the repo needs your Vercel account;
-      I don't have a way to do that from here.
+- [ ] **⚠️ Can't fix without you: some footer links still 404.**
+      `/faq`, `/press`, `/privacy`, `/terms` — none were in the
+      original build plan as their own pages. I can't write `/privacy`
+      or `/terms` on my own judgment (that's real legal text for your
+      business, not boilerplate I should guess at), and `/faq`/`/press`
+      need actual content I don't have. **How to fix it:** either tell
+      me what should go on each page and I'll build them, or say the
+      word and I'll drop the dead links instead. (`/careers` was
+      removed in phase 7 — doesn't make sense for a one-person
+      business. `/journal` was removed in phase 8 at your request.)
+- [x] **Vercel project live.** Confirmed directly via the Vercel API —
+      project `jaded-media` has a `READY` production deployment on
+      `main`, not just assumed from the repo existing.
 
 ## Phase 2 — Homepage
 
-- [ ] **Testimonial is placeholder.** Bracketed placeholder copy, not a
-      fabricated client quote — swap in a real testimonial (or wire to
-      the testimonials table once Sprint 5's admin exists) before this
-      ships. (Kept as a placeholder deliberately as of phase 7 — you
-      asked to keep this one too.)
+- [ ] **⚠️ Can't fix without you: testimonial is still a placeholder.**
+      I won't fabricate a client quote to fill the slot — that'd be a
+      fake testimonial on a real business's site. **How to fix it:**
+      send a real quote (and who it's from) and I'll drop it in, or
+      say the word and I'll remove the section until you have one.
+      (Kept as a placeholder deliberately as of phase 7 — you asked to
+      keep this one.)
 
 ## Phase 3 — Portfolio & Case Studies
 
-- [ ] **Can't test R2 video from this sandbox.** `*.r2.dev` is blocked
-      by this session's network policy. Direct Supabase access (as of
-      phase 9) confirmed `portfolio_items` and its 0001/0002 migrations
-      are live with real rows, but the R2-hosted video itself still
-      needs a manual check — please confirm the video player renders
-      correctly on `/work/d1-autotech-exclusivo` (or wherever it's
-      published).
-- [ ] **R2 image/video domains are hardcoded to `*.r2.dev` in
-      `next.config.ts`.** If you switch the bucket to a custom domain
-      later, that remotePatterns entry needs updating or `next/image`
-      will refuse to load from it (videos aren't affected — the native
-      `<video>` element doesn't have this restriction).
+- [x] **R2 video playback confirmed working.** You checked the D1
+      Autotech project page directly (this sandbox still can't reach
+      `*.r2.dev` to verify it itself) — the video player renders and
+      plays correctly against the live R2-hosted file.
+- [x] **R2 image/video domains no longer force a code change if the
+      bucket moves.** `next.config.ts` still defaults to `*.r2.dev`,
+      but now also reads an optional `R2_PUBLIC_HOSTNAME` env var and
+      adds it to `remotePatterns` if set — so switching to a custom R2
+      domain later is an env var + redeploy, not a code edit.
 
 ## Phase 4 — Admin & Content CMS
 
@@ -47,22 +48,42 @@ never silently dropped.
 now rather than after Services/About/Contact, so those are pushed
 back a phase.)*
 
-- [ ] **No password reset flow.** If you forget your admin password,
-      recovery is via the Supabase dashboard (Authentication → Users →
-      reset), not through the site itself.
-- [ ] **No pagination on `/admin`.** Fine at a handful of entries,
-      will need it eventually.
-- [ ] **Single presigned PUT, not chunked multipart.** A dropped
-      connection mid-upload means starting that file over, not
-      resuming. Deliberate simplification given realistic file sizes
-      here — revisit if it becomes a real problem.
-- [ ] **Removing an image inside the edit form (before saving) still
-      doesn't delete the underlying file from Storage.** Deleting a
-      whole portfolio item now cleans up its cover + gallery files too
-      (see Resolved) — this is the narrower remaining case: swap out or
-      drop a gallery photo mid-edit and the old upload is orphaned in
-      the `Portfolio Images` bucket. Low cost at current scale, worth a
-      cleanup pass eventually.
+- [x] **Password reset flow built.** "Forgot password?" on `/admin/login`
+      → `/admin/forgot-password` (requests a reset email via Supabase
+      Auth) → the emailed link lands on `/admin/auth/confirm` (a route
+      handler that exchanges the token for a real session) → redirects
+      to `/admin/reset-password` to set a new one. The middleware gate
+      now recognizes all three as reachable without an existing
+      session — that's the whole point of the flow. The request step
+      always shows "check your inbox," whether or not the email has an
+      account, so it can't be used to probe for valid admin addresses —
+      but does log a failure server-side (`console.error`) rather than
+      swallowing it silently, since that's the exact bug already found
+      and fixed in the Resend integration (Phase 8). **Can't fully
+      verify from here**: this sandbox can't reach `*.supabase.co` (confirmed
+      directly — the request failed with "Host not in allowlist," not
+      assumed), so I couldn't watch a real reset email arrive or click
+      through it myself. Please run it once for real: request a reset,
+      open the email, set a new password, confirm you can log in with it.
+- [x] **Pagination added to `/admin` and `/admin/leads`.** 20 per page,
+      `?page=` in the URL, Prev/Next controls, total count shown.
+      Skipped `/admin/services` on purpose — it's a fixed, curated list
+      of offerings (3 rows), not something that grows toward needing
+      pages the way portfolio entries or leads do.
+- [ ] **Single presigned PUT, not chunked multipart — left as is,
+      not attempting without you asking.** A dropped connection
+      mid-upload means starting that file over, not resuming. Building
+      real resumable/chunked upload is a genuine feature addition (S3
+      multipart initiation, chunking, resume logic), not a bug fix, and
+      the existing note says to revisit only "if it becomes a real
+      problem" — none has been reported. Say the word if you want it
+      built anyway.
+- [x] **Removing an image from the edit form now cleans up Storage
+      too.** Extends the same cleanup from a full item delete: saving
+      an edit now diffs the previous cover/gallery URLs against the
+      submitted ones and removes whatever was dropped — covers both a
+      swapped-out cover image and a removed gallery photo, not just the
+      narrower gallery-only case this was originally scoped as.
 
 ## Phase 5 — Services, About & Contact/Booking
 
@@ -74,10 +95,11 @@ back a phase.)*
       verified in Resend. See Phase 8 for the current email-sending
       status — a real bug there is now fixed, still confirming it
       sends end to end.
-- [ ] **No public pricing on `/services`.** Every service ends in
-      "Get a Custom Quote" rather than listed price tiers — a real
-      business decision I didn't make on your behalf. Say the word if
-      you want actual prices public.
+- [ ] **⚠️ Can't fix without you: no public pricing on `/services`.**
+      Every service ends in "Get a Custom Quote" rather than listed
+      price tiers. I'm not going to invent prices for your business.
+      **How to fix it:** send real numbers (or ranges) per service and
+      I'll add a pricing field and put them on the page.
 - [x] **`/about` founder photo added.** Lives at `public/founder.avif`
       (you uploaded it in phase 8, originally as `Founder.avif` then
       renamed to `.jpg` — I renamed it back to `.avif` since the file
@@ -90,17 +112,14 @@ back a phase.)*
 
 ## Phase 6 — Services Admin CMS
 
-- [ ] **Per-service custom icons were dropped.** Each service used to
-      have its own hand-drawn SVG icon; those can't reasonably be
-      edited from a text-only admin form, so every service now shares
-      one generic camera icon instead. If you want distinct icons back
-      per service, that'd need a small fixed icon picker (a dropdown of
-      a few preset icons) — say the word.
-- [ ] **No pricing field.** Services CRUD covers title, slug,
-      description, the bullet list, display order, and
-      published/draft — matching the earlier decision not to make
-      pricing public yet. If that changes, a price field is a small
-      add.
+- [ ] **Per-service custom icons — not building speculatively.** Every
+      service shares one generic camera icon since the admin form is
+      text-only. A small preset icon picker (a dropdown of a few fixed
+      options) is a genuine, scoped feature — deliberately not adding
+      UI you haven't asked for. Say the word and I'll build it.
+- [ ] **No pricing field — tied to the Phase 5 pricing decision above.**
+      Same thing: send real prices and I'll add the field and wire it
+      up on the same pass.
 
 ## Phase 7 — Solo Brand Voice & Real Contact Info
 
@@ -110,17 +129,25 @@ back a phase.)*
       set `JADEDMEDIA_TEAM_EMAIL` while configuring Resend rather than
       `STUDIO_NOTIFICATION_EMAIL`, so the code was renamed to match
       instead of asking you to change what you'd already set.
-- [ ] **No specific city given.** `SITE_CONFIG.city` reads "New
-      Brunswick, Canada" since that's what you gave me — send a
-      specific city/town if you'd rather show that instead.
+- [ ] **⚠️ Can't fix without you: no specific city given.**
+      `SITE_CONFIG.city` reads "New Brunswick, Canada" since that's
+      what you gave me. **How to fix it:** send a specific city/town
+      and it's a one-line change.
 
 ## Phase 8 — Quote Requests, Leads Admin & Instagram
 
-- [ ] **No Instagram feed embed.** The social strip's photo tiles are
-      still generic grey squares, not real posts pulled from
-      @jaded.medias — that needs Instagram's Graph API and an OAuth
-      connection I don't have a way to set up from here. The handle
-      and follow link are real; the tiles are decorative only.
+- [ ] **⚠️ Can't fix without you: no Instagram feed embed.** The
+      social strip's photo tiles are still generic grey squares, not
+      real posts pulled from @jaded.medias. This needs a Meta developer
+      app + Instagram Graph API access + an OAuth connection to your
+      account — credentials I have no way to obtain myself. **How to
+      fix it:** create a Meta app at
+      [developers.facebook.com](https://developers.facebook.com),
+      connect @jaded.medias's Instagram Business account, generate a
+      long-lived access token, and send it to me (as an env var, not
+      pasted in chat) — I'll wire the feed to real posts from there.
+      The handle and follow link are already real; only the tiles are
+      decorative.
 - [x] **All four transactional emails redesigned.** Logo + "JADED
       MEDIA / PHOTO & FILM" wordmark header, a gold accent bar, an
       eyebrow label above each heading, cleaner divided rows for the
@@ -190,16 +217,27 @@ below is verified against your real project, not assumed.)*
       Jaded Media — for a "business name" search like this, a Business
       Profile often outranks the website itself and is one of the
       biggest levers you personally control.
-- [ ] **No dedicated social-share image.** Open Graph/Twitter cards
-      fall back to `logo.png` (a square product shot, not designed for
-      the 1200×630 landscape crop social platforms use) since no
-      dedicated share image exists yet. Looks fine, not ideal — a real
-      one would show better when the site gets shared or linked.
-- [ ] **Leaked password protection is off in Supabase Auth.** Confirmed
-      via advisor check — this is a dashboard toggle (Authentication →
-      Policies → Password Security), not something fixable via SQL
-      migration. Two clicks, checks new admin passwords against
-      HaveIBeenPwned. Worth doing since it's free.
+- [x] **Real 1200×630 social-share image built.** Open Graph/Twitter
+      cards fell back to `logo.png` — a square product shot, cropped
+      badly at the landscape ratio social platforms use. Added
+      `src/app/opengraph-image.tsx` using `next/og`'s `ImageResponse`:
+      a real branded card (logo badge, wordmark, gold subtitle,
+      tagline) generated server-side from the same `logo.png`, at the
+      correct size. Next's file-convention metadata picks it up
+      automatically — removed the manual `images` override in
+      `layout.tsx` so there's one source of truth, not two. Verified by
+      fetching `/opengraph-image` directly and confirming the homepage's
+      actual `<meta property="og:image">` tag now points to it.
+- [ ] **⚠️ Can't fix without you: leaked password protection is still
+      off in Supabase Auth.** Re-checked via the advisor tool just now,
+      not assumed — still disabled. This is an Auth service setting
+      behind Supabase's Management API, not something a SQL migration
+      or this app's code can reach. **How to fix it:** Supabase
+      dashboard → Authentication → Policies → Password Security →
+      enable "Leaked password protection." Two clicks, free, checks new
+      admin passwords against HaveIBeenPwned. (If you toggled this
+      before, it didn't save — worth trying again and confirming it
+      shows enabled afterward.)
 
 ## Phase 10 — Copy Simplify
 
@@ -274,8 +312,9 @@ untouched since they're already yours, not mine.)*
       Images` bucket. Now selects the URLs before deleting the row,
       derives their Storage paths, and removes them (best-effort —
       logged, not fatal, if cleanup fails after the row is already
-      gone). Doesn't yet cover swapping out a single gallery image
-      mid-edit without saving — see the remaining item under Phase 4.
+      gone). At the time this didn't yet cover swapping out a single
+      gallery image mid-edit without saving — that gap is now closed
+      too, see Phase 4's storage-cleanup-on-edit item.
 - [x] **Slug conflicts now show a friendly message.** Creating or
       renaming a portfolio item or service to a slug that's already
       taken previously surfaced Postgres's raw unique-violation error
