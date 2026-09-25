@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { mapLeadRow, type Lead, type LeadRow } from "@/lib/leads/types";
+import { ADMIN_PAGE_SIZE, type PaginatedResult } from "@/lib/pagination";
 
 const SELECT_COLUMNS =
   "id, name, email, phone, event_type, event_date, budget_range, message, status, source, service_id, created_at";
@@ -9,16 +10,22 @@ const SELECT_COLUMNS =
  * alike. Relies on the authenticated-role RLS policy (0006); returns
  * nothing useful for a logged-out caller.
  */
-export async function getAllLeadsForAdmin(): Promise<Lead[]> {
+export async function getAllLeadsForAdmin(
+  page = 1,
+): Promise<PaginatedResult<Lead>> {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const from = (page - 1) * ADMIN_PAGE_SIZE;
+  const to = from + ADMIN_PAGE_SIZE - 1;
+
+  const { data, error, count } = await supabase
     .from("leads")
-    .select(SELECT_COLUMNS)
-    .order("created_at", { ascending: false });
+    .select(SELECT_COLUMNS, { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
   if (error) {
     console.error("getAllLeadsForAdmin failed:", error.message);
-    return [];
+    return { items: [], totalCount: 0, page, pageSize: ADMIN_PAGE_SIZE };
   }
 
   const rows = data as LeadRow[];
@@ -46,7 +53,12 @@ export async function getAllLeadsForAdmin(): Promise<Lead[]> {
     }
   }
 
-  return rows.map((row) =>
-    mapLeadRow(row, row.service_id ? (titleByServiceId[row.service_id] ?? null) : null),
-  );
+  return {
+    items: rows.map((row) =>
+      mapLeadRow(row, row.service_id ? (titleByServiceId[row.service_id] ?? null) : null),
+    ),
+    totalCount: count ?? 0,
+    page,
+    pageSize: ADMIN_PAGE_SIZE,
+  };
 }

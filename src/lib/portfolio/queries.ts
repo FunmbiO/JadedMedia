@@ -5,6 +5,7 @@ import {
   type PortfolioItem,
   type PortfolioItemRow,
 } from "@/lib/portfolio/types";
+import { ADMIN_PAGE_SIZE, type PaginatedResult } from "@/lib/pagination";
 
 const SELECT_COLUMNS =
   "id, slug, title, category, medium, summary, story, client, location, cover_image_url, gallery_urls, video_url, featured, published, sort_order, created_at, updated_at";
@@ -78,19 +79,30 @@ export async function getPortfolioItemBySlug(
  * authenticated-role RLS policy (0005); returns nothing useful for a
  * logged-out caller, since the anon policy only exposes published rows.
  */
-export async function getAllPortfolioItemsForAdmin(): Promise<PortfolioItem[]> {
+export async function getAllPortfolioItemsForAdmin(
+  page = 1,
+): Promise<PaginatedResult<PortfolioItem>> {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const from = (page - 1) * ADMIN_PAGE_SIZE;
+  const to = from + ADMIN_PAGE_SIZE - 1;
+
+  const { data, error, count } = await supabase
     .from("portfolio_items")
-    .select(SELECT_COLUMNS)
+    .select(SELECT_COLUMNS, { count: "exact" })
     .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
   if (error) {
     console.error("getAllPortfolioItemsForAdmin failed:", error.message);
-    return [];
+    return { items: [], totalCount: 0, page, pageSize: ADMIN_PAGE_SIZE };
   }
-  return (data as PortfolioItemRow[]).map(mapPortfolioRow);
+  return {
+    items: (data as PortfolioItemRow[]).map(mapPortfolioRow),
+    totalCount: count ?? 0,
+    page,
+    pageSize: ADMIN_PAGE_SIZE,
+  };
 }
 
 /** A single item by id, published or not — for the admin edit form. */

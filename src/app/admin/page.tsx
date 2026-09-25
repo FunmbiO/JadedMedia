@@ -4,6 +4,8 @@ import Image from "next/image";
 import { getAllPortfolioItemsForAdmin } from "@/lib/portfolio/queries";
 import { CATEGORY_LABELS, MEDIUM_LABELS } from "@/lib/portfolio/labels";
 import { DeletePortfolioButton } from "@/components/admin/delete-portfolio-button";
+import { AdminPagination } from "@/components/admin/admin-pagination";
+import { parsePageParam } from "@/lib/pagination";
 
 export const dynamic = "force-dynamic";
 
@@ -11,8 +13,13 @@ export const metadata: Metadata = {
   title: "Admin | Jaded Media",
 };
 
-export default async function AdminDashboardPage() {
-  const items = await getAllPortfolioItemsForAdmin();
+type PageProps = {
+  searchParams: Promise<{ page?: string }>;
+};
+
+export default async function AdminDashboardPage({ searchParams }: PageProps) {
+  const page = parsePageParam((await searchParams).page);
+  const { items, totalCount, pageSize } = await getAllPortfolioItemsForAdmin(page);
 
   return (
     <div className="flex flex-col gap-8 px-6 py-10 md:px-10">
@@ -86,6 +93,13 @@ export default async function AdminDashboardPage() {
           ))}
         </div>
       )}
+
+      <AdminPagination
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        basePath="/admin"
+      />
     </div>
   );
 }

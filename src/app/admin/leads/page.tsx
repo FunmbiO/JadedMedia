@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getAllLeadsForAdmin } from "@/lib/leads/queries";
 import { EVENT_TYPE_LABELS } from "@/app/contact/labels";
 import { LeadStatusSelect } from "@/components/admin/lead-status-select";
+import { AdminPagination } from "@/components/admin/admin-pagination";
+import { parsePageParam } from "@/lib/pagination";
 
 export const dynamic = "force-dynamic";
 
@@ -9,8 +11,13 @@ export const metadata: Metadata = {
   title: "Leads | Jaded Media Admin",
 };
 
-export default async function AdminLeadsPage() {
-  const leads = await getAllLeadsForAdmin();
+type PageProps = {
+  searchParams: Promise<{ page?: string }>;
+};
+
+export default async function AdminLeadsPage({ searchParams }: PageProps) {
+  const page = parsePageParam((await searchParams).page);
+  const { items: leads, totalCount, pageSize } = await getAllLeadsForAdmin(page);
 
   return (
     <div className="flex flex-col gap-8 px-6 py-10 md:px-10">
@@ -77,6 +84,13 @@ export default async function AdminLeadsPage() {
           ))}
         </div>
       )}
+
+      <AdminPagination
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        basePath="/admin/leads"
+      />
     </div>
   );
 }
