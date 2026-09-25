@@ -20,13 +20,6 @@ never silently dropped.
 
 ## Phase 2 — Homepage
 
-- [ ] **Press strip is placeholder.** Naming specific real publications
-      before Jaded Media has actually been featured in them would be a
-      false claim, so `PressStrip` renders generic `[ Publication ]`
-      slots instead. Replace with real outlet wordmarks (or remove the
-      section entirely) once there's real press to show. (Kept as a
-      placeholder deliberately as of phase 7 — you asked to keep this
-      one.)
 - [ ] **Testimonial is placeholder.** Bracketed placeholder copy, not a
       fabricated client quote — swap in a real testimonial (or wire to
       the testimonials table once Sprint 5's admin exists) before this
@@ -247,6 +240,24 @@ untouched since they're already yours, not mine.)*
 
 ## Resolved
 
+- [x] **Press strip now shows real client logos, "Trusted By."** Swapped
+      the five `[add logo -- later]` placeholder slots for two real
+      logos (D1 Autotech, Muir Real Estate Group) and renamed the label
+      from "As Seen In" (a press-mention claim) to "Trusted By" (a
+      client-trust claim, which these actually are). Both source images
+      needed processing to blend into the dark strip rather than
+      sitting in their original boxes: D1's webp already carried a real
+      alpha channel, so its shape was recolored to the site's `paper`
+      tone directly from that alpha; Muir's PNG had a flat gray
+      background baked in as fully opaque, so its alpha was rebuilt
+      from a luminance threshold (its white mark vs. the gray fill)
+      before the same recolor. Muted to 60% opacity via CSS
+      (`hover:opacity-100`) rather than baked into the file, so hover
+      brightens without a second export. Both live at full native
+      resolution in `public/logos/` — next/image handles the actual
+      display sizing, so nothing is blurry. Verified visually at
+      desktop and mobile widths, plus zero horizontal overflow at
+      320–768px.
 - [x] **Header wordmark/subtitle wrapping to two lines at narrow phones
       fixed.** At ~320–414px, "JADED MEDIA" and "PHOTO & FILM" were
       wrapping mid-word — flexbox was shrinking the wordmark block down
