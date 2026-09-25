@@ -28,13 +28,6 @@ never silently dropped.
 
 ## Phase 3 — Portfolio & Case Studies
 
-- [ ] **Can't test R2 video from this sandbox.** `*.r2.dev` is blocked
-      by this session's network policy. Direct Supabase access (as of
-      phase 9) confirmed `portfolio_items` and its 0001/0002 migrations
-      are live with real rows, but the R2-hosted video itself still
-      needs a manual check — please confirm the video player renders
-      correctly on `/work/d1-autotech-exclusivo` (or wherever it's
-      published).
 - [ ] **R2 image/video domains are hardcoded to `*.r2.dev` in
       `next.config.ts`.** If you switch the bucket to a custom domain
       later, that remotePatterns entry needs updating or `next/image`
@@ -240,6 +233,10 @@ untouched since they're already yours, not mine.)*
 
 ## Resolved
 
+- [x] **R2 video playback confirmed working.** You checked the D1
+      Autotech project page directly (this sandbox still can't reach
+      `*.r2.dev` to verify it itself) — the video player renders and
+      plays correctly against the live R2-hosted file.
 - [x] **Press strip now shows real client logos, "Trusted By."** Swapped
       the five `[add logo -- later]` placeholder slots for two real
       logos (D1 Autotech, Muir Real Estate Group) and renamed the label
