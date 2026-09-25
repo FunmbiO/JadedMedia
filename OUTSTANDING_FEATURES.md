@@ -144,46 +144,13 @@ back a phase.)*
 
 ## Phase 8 — Quote Requests, Leads Admin & Instagram
 
-- [ ] **⚠️ Can't fix without you: no Instagram feed embed.** The
-      social strip's photo tiles are still generic grey squares, not
-      real posts pulled from @jaded.medias. Instagram's old Basic
-      Display API is dead (Meta shut it down December 2024) — this now
-      runs through the newer **Instagram API with Instagram Login**,
-      which is genuinely simpler than it sounds for showing *your own*
-      posts (checked against Meta's current docs, not memory, since
-      this stuff changes fast):
-
-      1. Make sure @jaded.medias is a **Professional account**
-         (Business or Creator) in the Instagram app — Settings →
-         Account type. Personal accounts have no API access at all.
-      2. Go to [developers.facebook.com](https://developers.facebook.com)
-         and create a new app.
-      3. In the app dashboard, add the **Instagram** product, then
-         choose **Business Login for Instagram** (this is the "Login
-         with Instagram directly" path — no Facebook Page required,
-         unlike the older Graph API route).
-      4. Request the `instagram_business_basic` permission scope —
-         that's read access to your own profile and media, which is
-         all a feed embed needs.
-      5. Because this only ever touches *your own* account, Meta calls
-         it "Standard Access" — **no App Review needed**, which is the
-         part that otherwise takes weeks.
-      6. Complete the login flow once as @jaded.medias's owner to get a
-         short-lived token, then exchange it for a long-lived one
-         (~60 days, refreshable).
-
-      Steps 2–4 need an OAuth redirect back to the site to actually
-      receive that token — that's a small piece of code I'll build once
-      you're ready to start (a callback route + token exchange), so
-      don't worry about that part. **What I need from you:** either get
-      as far as you can through steps 1–3 and tell me where you land,
-      or just say the word and I'll walk you through it live. Once
-      there's a long-lived token, send it to me as an env var, never
-      pasted in chat — I'll wire the feed to real posts from there. The
-      handle and follow link are already real; only the tiles are
-      decorative.
-
-      Sources: [Instagram API with Instagram Login — Meta Developer Docs](https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/), [Instagram Official APIs — Comprehensive Reference (April 2026)](https://gist.github.com/jameschapman2c/65eff9f54a2d350b17a6ce5127b9fe42)
+- [x] **Instagram feed grid scrapped, not worth the Meta setup.** The
+      photo-tile grid (generic grey squares needing real Graph API
+      posts) is gone from `SocialStrip` — not worth the Meta
+      app/OAuth/token setup described in the previous version of this
+      note. Kept everything else in the section: the "Follow along —
+      @jaded.medias" heading and the "Follow on Instagram" link, both
+      real, now on one clean row without an empty grid under them.
 - [x] **All four transactional emails redesigned.** Logo + "JADED
       MEDIA / PHOTO & FILM" wordmark header, a gold accent bar, an
       eyebrow label above each heading, cleaner divided rows for the
@@ -319,6 +286,14 @@ untouched since they're already yours, not mine.)*
 
 ## Resolved
 
+- [x] **Two more logos added to "Trusted By": Atlantic Built, Mancuso
+      Clinic.** Same treatment as D1/Muir — recolored to the site's
+      paper tone and masked from a luminance threshold, since both
+      sources had a flat opaque background baked in (solid black for
+      Atlantic Built's neon mark, solid white for Mancuso's wordmark —
+      opposite polarities, so the threshold direction is flipped
+      between the two). Four logos now sit on one row, verified with
+      zero horizontal overflow at 320–1024px.
 - [x] **Press strip now shows real client logos, "Trusted By."** Swapped
       the five `[add logo -- later]` placeholder slots for two real
       logos (D1 Autotech, Muir Real Estate Group) and renamed the label
