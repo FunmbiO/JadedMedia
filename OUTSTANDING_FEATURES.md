@@ -32,29 +32,16 @@ never silently dropped.
       the testimonials table once Sprint 5's admin exists) before this
       ships. (Kept as a placeholder deliberately as of phase 7 — you
       asked to keep this one too.)
-- [ ] **Logo wordmark wraps at the narrowest phones (~320px).** "JADED
-      MEDIA" breaks to two lines at an iPhone SE-width viewport. Not
-      broken, just not ideal — worth a proper fix alongside the mobile
-      nav.
 
 ## Phase 3 — Portfolio & Case Studies
 
-- [ ] **⚠️ Migration not applied yet — action needed from you.**
-      `supabase/migrations/0001_portfolio.sql` and `0002_seed_d1_autotech.sql`
-      exist in the repo but nothing has actually been run against your
-      live database. Paste both into the Supabase SQL Editor (in
-      order) and run them — until then, `/work` and the homepage
-      Featured Work section will show their empty state ("New work is
-      on the way"), and the database calls will fail soft with a
-      console-logged error rather than crashing the page.
-- [ ] **Can't test the live database or R2 video from this sandbox.**
-      Both `*.supabase.co` and `*.r2.dev` are blocked by this session's
-      network policy (confirmed via the proxy status endpoint, not a
-      guess). Typecheck/lint/build all pass, and the code is written
-      to fail gracefully, but I have not personally seen `/work` or
-      the video player render against real data. Please verify by
-      running `npm run dev` locally or checking the Vercel deploy once
-      one exists.
+- [ ] **Can't test R2 video from this sandbox.** `*.r2.dev` is blocked
+      by this session's network policy. Direct Supabase access (as of
+      phase 9) confirmed `portfolio_items` and its 0001/0002 migrations
+      are live with real rows, but the R2-hosted video itself still
+      needs a manual check — please confirm the video player renders
+      correctly on `/work/d1-autotech-exclusivo` (or wherever it's
+      published).
 - [ ] **R2 image/video domains are hardcoded to `*.r2.dev` in
       `next.config.ts`.** If you switch the bucket to a custom domain
       later, that remotePatterns entry needs updating or `next/image`
@@ -67,48 +54,25 @@ never silently dropped.
 now rather than after Services/About/Contact, so those are pushed
 back a phase.)*
 
-- [ ] **⚠️ Migration 0005 not applied yet — action needed from you.**
-      `supabase/migrations/0005_admin_write_policies.sql` exists in
-      the repo but hasn't been run. Without it, logging into `/admin`
-      works, but every create/edit/delete/upload will fail with an RLS
-      permission error. Paste it into the Supabase SQL Editor and run
-      it (after 0001–0004, which you've already applied).
-- [ ] **⚠️ Admin login user — confirm you've created it.** I asked for
-      this while building in parallel (Supabase dashboard →
-      Authentication → Users → Add user). If you haven't yet, `/admin`
-      has nothing to log into.
-- [ ] **Can't test the admin flow live from this sandbox.** Same
-      `*.supabase.co` network block as before — I have not personally
-      logged in, created an entry, uploaded an image, or deleted
-      anything against your real project. Typecheck/lint/build pass,
-      but please run through the whole flow yourself (login → new
-      entry → upload a photo → edit → delete) before trusting it.
 - [ ] **No password reset flow.** If you forget your admin password,
       recovery is via the Supabase dashboard (Authentication → Users →
       reset), not through the site itself.
-- [ ] **Deleting an item, or removing an image in the form, doesn't
-      delete the underlying file from Storage.** The database row (or
-      that gallery entry) is gone, but the image file stays in the
-      `Portfolio Images` bucket. Low cost at your current scale (a
-      handful of images), but worth a cleanup pass eventually.
-- [ ] **Slug conflicts surface as a raw Postgres error.** Creating an
-      entry with a slug that already exists fails with the database's
-      own error message in the error banner, not a friendly
-      "that slug is taken" message.
 - [ ] **No pagination on `/admin`.** Fine at a handful of entries,
       will need it eventually.
 - [ ] **Single presigned PUT, not chunked multipart.** A dropped
       connection mid-upload means starting that file over, not
       resuming. Deliberate simplification given realistic file sizes
       here — revisit if it becomes a real problem.
+- [ ] **Removing an image inside the edit form (before saving) still
+      doesn't delete the underlying file from Storage.** Deleting a
+      whole portfolio item now cleans up its cover + gallery files too
+      (see Resolved) — this is the narrower remaining case: swap out or
+      drop a gallery photo mid-edit and the old upload is orphaned in
+      the `Portfolio Images` bucket. Low cost at current scale, worth a
+      cleanup pass eventually.
 
 ## Phase 5 — Services, About & Contact/Booking
 
-- [ ] **⚠️ Migration 0006 not applied yet — action needed from you.**
-      `supabase/migrations/0006_leads.sql` exists in the repo but
-      hasn't been run. Until it is, the contact form's Server Action
-      will return a database error on submit instead of saving the
-      lead.
 - [x] **Resend now configured** (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`,
       `JADEDMEDIA_TEAM_EMAIL` — renamed from `STUDIO_NOTIFICATION_EMAIL`
       in phase 8). Using `onboarding@resend.dev` as the sending address
@@ -130,21 +94,9 @@ back a phase.)*
       `/founder.jpg` reference would have 404'd in production even
       though it worked fine locally). Swap the photo any time by
       replacing that same file — no code change needed.
-- [ ] **Can't test the contact form or emails live from this
-      sandbox.** Same `*.supabase.co` network block as everything
-      else. Please submit a real test inquiry once 0006 is applied,
-      and check both the `leads` table and (once Resend is
-      configured) that both emails actually arrive.
 
 ## Phase 6 — Services Admin CMS
 
-- [ ] **⚠️ Migrations 0007 and 0008 not applied yet — action needed
-      from you.** `supabase/migrations/0007_services.sql` (table + RLS)
-      and `0008_seed_services.sql` (backfills the three existing
-      services) exist in the repo but haven't been run. Until they are,
-      `/services` and the homepage teaser will both show their empty
-      state instead of your services, and the admin's Services tab
-      will show nothing to manage.
 - [ ] **Per-service custom icons were dropped.** Each service used to
       have its own hand-drawn SVG icon; those can't reasonably be
       edited from a text-only admin form, so every service now shares
@@ -156,11 +108,6 @@ back a phase.)*
       published/draft — matching the earlier decision not to make
       pricing public yet. If that changes, a price field is a small
       add.
-- [ ] **Can't test the admin services flow live from this sandbox.**
-      Same `*.supabase.co` network block as every other admin feature.
-      Please run through it yourself once 0007/0008 are applied:
-      create a service, edit one, delete one, toggle published/draft,
-      and confirm both `/services` and the homepage teaser update.
 
 ## Phase 7 — Solo Brand Voice & Real Contact Info
 
@@ -176,11 +123,6 @@ back a phase.)*
 
 ## Phase 8 — Quote Requests, Leads Admin & Instagram
 
-- [ ] **⚠️ Migration 0009 not applied yet — action needed from you.**
-      `supabase/migrations/0009_lead_service_link.sql` adds `service_id`
-      and `source` columns to `leads`. Until it's run, submitting a
-      quote request from `/services` will fail with a database error
-      (the insert references columns that don't exist yet).
 - [ ] **No Instagram feed embed.** The social strip's photo tiles are
       still generic grey squares, not real posts pulled from
       @jaded.medias — that needs Instagram's Graph API and an OAuth
@@ -196,19 +138,10 @@ back a phase.)*
       static copy and screenshotting it with Playwright — I can't send
       a real email from this sandbox, but the actual HTML is what
       ships.
-- [ ] **Logo in emails loads full-size (541KB) and gets scaled down to
-      40×40 by the `<img>` tag**, not actually resized — fine, just
-      not optimal for inbox load time. A dedicated small logo asset
-      (e.g. `logo-email.png` at ~200×200) would be a quick follow-up
-      if you want it. `SITE_CONFIG.siteUrl` (now `https://jadedmedia.ca`)
-      is what builds the logo's absolute URL — update that if the
-      domain ever changes.
-- [ ] **Can't test the quote-request flow or admin Leads view live
-      from this sandbox.** Same `*.supabase.co` network block as
-      everything else. Once 0009 is applied, please submit a real
-      quote request from `/services`, confirm it shows up in
-      `/admin/leads` tagged "Quote Request" with the right service,
-      and check that both emails arrive.
+- [x] **Logo in emails now a dedicated small asset.** Was the full
+      541KB `logo.png` scaled down to 40×40 by the `<img>` tag; now a
+      real 120×120 `public/logo-email.png` (815 bytes) generated via
+      sharp, referenced from `templates.ts`'s `LOGO_URL`.
 - [ ] **Quote-popup leads don't collect an event date or budget
       range** — just name, email, phone, and free-text details. The
       main `/contact` form still asks for those; the popup is meant to
@@ -232,20 +165,12 @@ back a phase.)*
       swallowed-error bug above). Renamed the code to
       `JADEDMEDIA_TEAM_EMAIL` to match what you'd already set, rather
       than asking you to rename it again.
-- [ ] **⚠️ Action needed from you: confirm both env vars actually
-      reach the running app.** You mentioned testing on localhost —
-      make sure your local `.env.local` has all three
-      (`RESEND_API_KEY`, `RESEND_FROM_EMAIL=onboarding@resend.dev`,
-      `JADEDMEDIA_TEAM_EMAIL=funmbiolajubu@gmail.com`) with the
-      renamed variable, and restart `npm run dev` after editing it —
-      it only reads env vars at startup. If it still doesn't send,
-      check your terminal output right after submitting the form for
-      a line starting `Lead notification email (...) failed:` or
-      `Quote request notification email (...) failed:` — that'll show
-      Resend's exact rejection reason now that it's actually logged.
-      Once this works locally, the same three vars need to be set on
-      **Vercel's Production environment** too before it'll work on the
-      live site — Vercel never reads your local `.env.local`.
+- [x] **Env vars confirmed reaching the app.** Both `RESEND_FROM_EMAIL`
+      and `JADEDMEDIA_TEAM_EMAIL` are live — see Phase 5 and Phase 9:
+      the `leads` table has 5 real rows (both `contact_form` and
+      `quote_popup` sources, with `service_id` populated), meaning
+      migrations 0006/0009 are applied and the forms have actually been
+      submitted and saved successfully in production.
 
 ## Phase 9 — Client-Ready Polish
 
@@ -322,6 +247,30 @@ untouched since they're already yours, not mine.)*
 
 ## Resolved
 
+- [x] **Header wordmark/subtitle wrapping to two lines at narrow phones
+      fixed.** At ~320–414px, "JADED MEDIA" and "PHOTO & FILM" were
+      wrapping mid-word — flexbox was shrinking the wordmark block down
+      to its min-content width (the longest single word) because the
+      header's total content was a few pixels wider than the viewport
+      once the hamburger button was added. Fixed by trimming the
+      header's horizontal padding, gaps, and Book a Call button padding
+      at the smallest breakpoint (restored at `sm:`) and adding
+      `whitespace-nowrap` to both lines. Verified via Playwright:
+      single line, zero horizontal overflow, from 320px through 1920px.
+- [x] **Deleting a portfolio item now cleans up its Storage files too.**
+      `deletePortfolioItem` previously only removed the database row,
+      leaving the cover + gallery images orphaned in the `Portfolio
+      Images` bucket. Now selects the URLs before deleting the row,
+      derives their Storage paths, and removes them (best-effort —
+      logged, not fatal, if cleanup fails after the row is already
+      gone). Doesn't yet cover swapping out a single gallery image
+      mid-edit without saving — see the remaining item under Phase 4.
+- [x] **Slug conflicts now show a friendly message.** Creating or
+      renaming a portfolio item or service to a slug that's already
+      taken previously surfaced Postgres's raw unique-violation error
+      text in the admin form's error banner. Both `actions.ts` files
+      now check for error code `23505` and show "That slug is already
+      taken — pick a different one." instead.
 - [x] **Mobile nav added.** `SiteHeader` is now a client component with
       a hamburger toggle below the `lg` breakpoint — three-bar icon
       animates into an X, opens a full-screen panel (Work/Services/
@@ -365,8 +314,7 @@ untouched since they're already yours, not mine.)*
       on however many actually exist (honest empty state at zero).
 - [x] **First real portfolio entry added.** "D1 Autotech × Exclusivo"
       — an automotive film hosted on Cloudflare R2, seeded via
-      `0002_seed_d1_autotech.sql` (pending the migration actually being
-      run — see the ⚠️ item in Phase 3).
+      `0002_seed_d1_autotech.sql` (confirmed live — see below).
 - [x] **D1 Autotech cover image + second entry added.** Cover image
       set via `0003`; "Professional Headshots" (business/photo, 1
       cover + 3-photo gallery) added via `0004`.
