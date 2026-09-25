@@ -38,8 +38,16 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isAdminRoute = pathname.startsWith("/admin");
   const isLoginRoute = pathname === "/admin/login";
+  // The password-reset flow (request → email link → confirm → set new
+  // password) has to work without an existing session — that's the whole
+  // point of it — so these stay reachable even when `user` is null.
+  const isPublicAuthRoute =
+    isLoginRoute ||
+    pathname === "/admin/forgot-password" ||
+    pathname === "/admin/reset-password" ||
+    pathname === "/admin/auth/confirm";
 
-  if (!user && isAdminRoute && !isLoginRoute) {
+  if (!user && isAdminRoute && !isPublicAuthRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";
     return NextResponse.redirect(url);
