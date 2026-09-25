@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 import { ConditionalSiteChrome } from "@/components/conditional-site-chrome";
 import { SITE_CONFIG } from "@/lib/site-config";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -94,6 +95,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
         />
         <ConditionalSiteChrome>{children}</ConditionalSiteChrome>
+        <Analytics />
       </body>
     </html>
   );
