@@ -6,8 +6,10 @@ import { SITE_CONFIG } from "@/lib/site-config";
 const FONT_STACK =
   "-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif";
 // Email clients can't load a relative path — this has to be an absolute URL
-// to the deployed site.
-const LOGO_URL = `${SITE_CONFIG.siteUrl}/logo.png`;
+// to the deployed site. A dedicated small asset (120x120, generated from
+// public/logo.png via sharp) instead of the full 541KB logo scaled down to
+// 40x40 by the <img> tag.
+const LOGO_URL = `${SITE_CONFIG.siteUrl}/logo-email.png`;
 
 const WRAPPER_STYLE = `font-family: ${FONT_STACK}; background: #0a0a08; padding: 48px 20px;`;
 const CARD_STYLE =
