@@ -6,14 +6,20 @@ never silently dropped.
 
 ## Phase 1 — Foundation & Design System
 
-- [ ] **⚠️ Can't fix without you: some footer links still 404.**
-      `/faq`, `/press`, `/privacy`, `/terms` — none were in the
-      original build plan as their own pages. I can't write `/privacy`
-      or `/terms` on my own judgment (that's real legal text for your
-      business, not boilerplate I should guess at), and `/faq`/`/press`
-      need actual content I don't have. **How to fix it:** either tell
-      me what should go on each page and I'll build them, or say the
-      word and I'll drop the dead links instead. (`/careers` was
+- [x] **`/faq` built with real content.** Eight questions grounded only
+      in what's already established on the site (services, quote-based
+      pricing, Moncton + travel, the booking flow) — nothing invented.
+      Native `<details>/<summary>` accordion, no JS needed. Added to
+      the sitemap.
+- [x] **`/privacy` and `/terms` are real pages now, not 404s** — each a
+      simple "Coming soon" placeholder, at your request, rather than me
+      drafting actual legal text on my own judgment (that's real
+      liability for your business, not boilerplate to guess at).
+      Deliberately left out of the sitemap until there's real content.
+      **Still needs you eventually:** the actual privacy policy and
+      terms text, whenever you're ready for that.
+- [ ] **`/press` still 404s.** Not part of this round — say the word
+      if you want it built or the footer link dropped. (`/careers` was
       removed in phase 7 — doesn't make sense for a one-person
       business. `/journal` was removed in phase 8 at your request.)
 - [x] **Vercel project live.** Confirmed directly via the Vercel API —
@@ -22,13 +28,10 @@ never silently dropped.
 
 ## Phase 2 — Homepage
 
-- [ ] **⚠️ Can't fix without you: testimonial is still a placeholder.**
-      I won't fabricate a client quote to fill the slot — that'd be a
-      fake testimonial on a real business's site. **How to fix it:**
-      send a real quote (and who it's from) and I'll drop it in, or
-      say the word and I'll remove the section until you have one.
-      (Kept as a placeholder deliberately as of phase 7 — you asked to
-      keep this one.)
+- [ ] **Testimonial is still a placeholder — deliberately last in
+      line.** You've said build it last, so it's staying a placeholder
+      on purpose, not stalled. Whenever you're ready: a real quote (and
+      who it's from), and it's a quick swap.
 
 ## Phase 3 — Portfolio & Case Studies
 
@@ -95,11 +98,11 @@ back a phase.)*
       verified in Resend. See Phase 8 for the current email-sending
       status — a real bug there is now fixed, still confirming it
       sends end to end.
-- [ ] **⚠️ Can't fix without you: no public pricing on `/services`.**
-      Every service ends in "Get a Custom Quote" rather than listed
-      price tiers. I'm not going to invent prices for your business.
-      **How to fix it:** send real numbers (or ranges) per service and
-      I'll add a pricing field and put them on the page.
+- [ ] **No public pricing on `/services` — deferred, not blocked.**
+      Every service still ends in "Get a Custom Quote." You've said to
+      save this for later; whenever you're ready, send real numbers (or
+      ranges) per service and it's a quick add (see Phase 6's matching
+      item for the admin-form side of it).
 - [x] **`/about` founder photo added.** Lives at `public/founder.avif`
       (you uploaded it in phase 8, originally as `Founder.avif` then
       renamed to `.jpg` — I renamed it back to `.avif` since the file
@@ -117,9 +120,9 @@ back a phase.)*
       text-only. A small preset icon picker (a dropdown of a few fixed
       options) is a genuine, scoped feature — deliberately not adding
       UI you haven't asked for. Say the word and I'll build it.
-- [ ] **No pricing field — tied to the Phase 5 pricing decision above.**
-      Same thing: send real prices and I'll add the field and wire it
-      up on the same pass.
+- [ ] **No pricing field — deferred along with Phase 5's pricing
+      decision.** Same thing: whenever you're ready, send real prices
+      and I'll add the field and wire it up in one pass.
 
 ## Phase 7 — Solo Brand Voice & Real Contact Info
 
@@ -129,25 +132,58 @@ back a phase.)*
       set `JADEDMEDIA_TEAM_EMAIL` while configuring Resend rather than
       `STUDIO_NOTIFICATION_EMAIL`, so the code was renamed to match
       instead of asking you to change what you'd already set.
-- [ ] **⚠️ Can't fix without you: no specific city given.**
-      `SITE_CONFIG.city` reads "New Brunswick, Canada" since that's
-      what you gave me. **How to fix it:** send a specific city/town
-      and it's a one-line change.
+- [x] **Real city set: Moncton.** `SITE_CONFIG.city` and `travelNote`
+      now read "Moncton, New Brunswick" instead of the generic
+      province-only placeholder — shows up in the footer, contact page,
+      and the new FAQ. Also added `addressLocality: "Moncton"` to the
+      homepage's `ProfessionalService` JSON-LD (was missing entirely,
+      only had province + country) and "wedding photographer Moncton" /
+      "videographer Moncton New Brunswick" to the page's SEO keywords —
+      a real town name is worth more for local search than the province
+      alone.
 
 ## Phase 8 — Quote Requests, Leads Admin & Instagram
 
 - [ ] **⚠️ Can't fix without you: no Instagram feed embed.** The
       social strip's photo tiles are still generic grey squares, not
-      real posts pulled from @jaded.medias. This needs a Meta developer
-      app + Instagram Graph API access + an OAuth connection to your
-      account — credentials I have no way to obtain myself. **How to
-      fix it:** create a Meta app at
-      [developers.facebook.com](https://developers.facebook.com),
-      connect @jaded.medias's Instagram Business account, generate a
-      long-lived access token, and send it to me (as an env var, not
-      pasted in chat) — I'll wire the feed to real posts from there.
-      The handle and follow link are already real; only the tiles are
+      real posts pulled from @jaded.medias. Instagram's old Basic
+      Display API is dead (Meta shut it down December 2024) — this now
+      runs through the newer **Instagram API with Instagram Login**,
+      which is genuinely simpler than it sounds for showing *your own*
+      posts (checked against Meta's current docs, not memory, since
+      this stuff changes fast):
+
+      1. Make sure @jaded.medias is a **Professional account**
+         (Business or Creator) in the Instagram app — Settings →
+         Account type. Personal accounts have no API access at all.
+      2. Go to [developers.facebook.com](https://developers.facebook.com)
+         and create a new app.
+      3. In the app dashboard, add the **Instagram** product, then
+         choose **Business Login for Instagram** (this is the "Login
+         with Instagram directly" path — no Facebook Page required,
+         unlike the older Graph API route).
+      4. Request the `instagram_business_basic` permission scope —
+         that's read access to your own profile and media, which is
+         all a feed embed needs.
+      5. Because this only ever touches *your own* account, Meta calls
+         it "Standard Access" — **no App Review needed**, which is the
+         part that otherwise takes weeks.
+      6. Complete the login flow once as @jaded.medias's owner to get a
+         short-lived token, then exchange it for a long-lived one
+         (~60 days, refreshable).
+
+      Steps 2–4 need an OAuth redirect back to the site to actually
+      receive that token — that's a small piece of code I'll build once
+      you're ready to start (a callback route + token exchange), so
+      don't worry about that part. **What I need from you:** either get
+      as far as you can through steps 1–3 and tell me where you land,
+      or just say the word and I'll walk you through it live. Once
+      there's a long-lived token, send it to me as an env var, never
+      pasted in chat — I'll wire the feed to real posts from there. The
+      handle and follow link are already real; only the tiles are
       decorative.
+
+      Sources: [Instagram API with Instagram Login — Meta Developer Docs](https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/), [Instagram Official APIs — Comprehensive Reference (April 2026)](https://gist.github.com/jameschapman2c/65eff9f54a2d350b17a6ce5127b9fe42)
 - [x] **All four transactional emails redesigned.** Logo + "JADED
       MEDIA / PHOTO & FILM" wordmark header, a gold accent bar, an
       eyebrow label above each heading, cleaner divided rows for the
@@ -228,16 +264,21 @@ below is verified against your real project, not assumed.)*
       `layout.tsx` so there's one source of truth, not two. Verified by
       fetching `/opengraph-image` directly and confirming the homepage's
       actual `<meta property="og:image">` tag now points to it.
-- [ ] **⚠️ Can't fix without you: leaked password protection is still
-      off in Supabase Auth.** Re-checked via the advisor tool just now,
-      not assumed — still disabled. This is an Auth service setting
-      behind Supabase's Management API, not something a SQL migration
-      or this app's code can reach. **How to fix it:** Supabase
-      dashboard → Authentication → Policies → Password Security →
-      enable "Leaked password protection." Two clicks, free, checks new
-      admin passwords against HaveIBeenPwned. (If you toggled this
-      before, it didn't save — worth trying again and confirming it
-      shows enabled afterward.)
+- [ ] **⚠️ Found the actual reason you can't see this toggle: it's a
+      Pro-plan feature, and your project is on Supabase's Free plan.**
+      My earlier "two clicks, free" note was wrong — I hadn't checked
+      Supabase's own docs at the time. Just did: leaked password
+      protection is explicitly gated to the Pro Plan and above
+      ([Supabase docs — Password security](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection)),
+      and confirmed your org (`FunmbiO's Org`) is on `tier_free` via
+      the Supabase API directly — so the setting isn't hidden or
+      broken, it genuinely isn't available on your current plan. This
+      is a real Supabase Auth service setting, not something a SQL
+      migration or this app's code can reach either way. **Your call:**
+      upgrade to Supabase Pro ($25/mo) if this matters enough to pay
+      for, or leave it — it's a defense-in-depth extra (blocks reusing
+      a password that's already leaked elsewhere), not a hole in the
+      admin login itself.
 
 ## Phase 10 — Copy Simplify
 
