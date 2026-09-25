@@ -3,6 +3,15 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
+const SLUG_UNIQUE_VIOLATION = "23505";
+
+function friendlyError(error: { code?: string; message: string }): string {
+  if (error.code === SLUG_UNIQUE_VIOLATION) {
+    return "That slug is already taken — pick a different one.";
+  }
+  return error.message;
+}
+
 export type ServiceFormPayload = {
   slug: string;
   title: string;
@@ -40,7 +49,7 @@ export async function createService(
   const { error } = await supabase.from("services").insert(toRow(payload));
 
   if (error) {
-    return { error: error.message };
+    return { error: friendlyError(error) };
   }
 
   revalidateServicesPaths();
@@ -58,7 +67,7 @@ export async function updateService(
     .eq("id", id);
 
   if (error) {
-    return { error: error.message };
+    return { error: friendlyError(error) };
   }
 
   revalidateServicesPaths();
