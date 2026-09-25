@@ -3,6 +3,7 @@ import { Fraunces, Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ConditionalSiteChrome } from "@/components/conditional-site-chrome";
 import { SITE_CONFIG } from "@/lib/site-config";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const fraunces = Fraunces({
