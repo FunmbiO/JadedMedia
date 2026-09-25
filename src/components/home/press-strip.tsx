@@ -22,11 +22,11 @@ const CLIENT_LOGOS: ClientLogo[] = [
 export function PressStrip() {
   return (
     <section className="border-y border-paper/10 bg-ink px-6 py-8 md:px-16">
-      <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-6 sm:flex-row sm:justify-between">
+      <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-start sm:gap-14">
         <span className="shrink-0 font-sans text-[11px] tracking-[0.18em] text-paper/55 uppercase">
           Trusted By
         </span>
-        <div className="flex w-full flex-wrap items-center justify-center gap-x-14 gap-y-6 sm:w-auto sm:justify-end">
+        <div className="flex w-full flex-wrap items-center justify-center gap-x-14 gap-y-6 sm:w-auto sm:justify-start">
           {CLIENT_LOGOS.map((logo) => (
             <Image
               key={logo.name}
@@ -35,7 +35,7 @@ export function PressStrip() {
               width={logo.width}
               height={logo.height}
               quality={100}
-              className="h-9 w-auto opacity-60 transition-opacity hover:opacity-100"
+              className="h-14 w-auto opacity-60 transition-opacity hover:opacity-100"
             />
           ))}
         </div>
