@@ -5,9 +5,9 @@
 export const SITE_CONFIG = {
   email: "funmbiolajubu@gmail.com",
   phone: "(506) 588-6081",
-  city: "New Brunswick, Canada",
+  city: "Moncton, New Brunswick, Canada",
   travelNote:
-    "Based in New Brunswick — available to travel for the right project (travel costs may apply).",
+    "Based in Moncton, New Brunswick — available to travel for the right project (travel costs may apply).",
   instagramHandle: "@jaded.medias",
   instagramUrl: "https://www.instagram.com/jaded.medias/",
   // Used to build absolute asset URLs (e.g. the logo in email templates) —

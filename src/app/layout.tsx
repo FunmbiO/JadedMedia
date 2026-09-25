@@ -29,10 +29,11 @@ export const metadata: Metadata = {
   keywords: [
     "Jaded Media",
     "Olufunmbi Olajubu",
+    "wedding photographer Moncton",
     "wedding photographer New Brunswick",
     "automotive photography",
     "business photography",
-    "videographer New Brunswick Canada",
+    "videographer Moncton New Brunswick",
   ],
   authors: [{ name: "Olufunmbi Olajubu" }],
   creator: "Olufunmbi Olajubu",
@@ -73,6 +74,7 @@ const JSON_LD = {
   priceRange: "$$",
   address: {
     "@type": "PostalAddress",
+    addressLocality: "Moncton",
     addressRegion: "NB",
     addressCountry: "CA",
   },
