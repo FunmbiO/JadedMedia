@@ -32,11 +32,11 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-paper/10 bg-ink/95 backdrop-blur-sm">
-      <div className="mx-auto flex h-24 max-w-[1440px] items-center justify-between px-6 md:px-16">
+      <div className="mx-auto flex h-24 max-w-[1440px] items-center justify-between px-4 sm:px-6 md:px-16">
         <Link
           href="/"
           onClick={() => setIsMenuOpen(false)}
-          className="flex items-center gap-3.5"
+          className="flex min-w-0 items-center gap-2.5 sm:gap-3.5"
         >
           <span
             aria-hidden
@@ -52,11 +52,11 @@ export function SiteHeader() {
               priority
             />
           </span>
-          <span className="flex flex-col leading-none">
-            <span className="font-sans text-[15px] font-bold tracking-[0.06em] text-paper">
+          <span className="flex shrink-0 flex-col leading-none">
+            <span className="font-sans text-[13px] font-bold tracking-[0.06em] whitespace-nowrap text-paper sm:text-[15px]">
               JADED MEDIA
             </span>
-            <span className="mt-[3px] font-sans text-[10px] font-normal tracking-[0.22em] text-gold">
+            <span className="mt-[3px] font-sans text-[10px] font-normal tracking-[0.22em] whitespace-nowrap text-gold">
               PHOTO &amp; FILM
             </span>
           </span>
@@ -74,7 +74,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
@@ -106,7 +106,7 @@ export function SiteHeader() {
           <Link
             href="/contact"
             onClick={() => setIsMenuOpen(false)}
-            className="shrink-0 rounded-full border border-gold px-4 py-2.5 text-[12px] font-semibold tracking-[0.08em] whitespace-nowrap text-gold-soft uppercase transition-colors hover:bg-gold hover:text-ink sm:px-6"
+            className="shrink-0 rounded-full border border-gold px-3 py-2.5 text-[11px] font-semibold tracking-[0.06em] whitespace-nowrap text-gold-soft uppercase transition-colors hover:bg-gold hover:text-ink sm:px-6 sm:text-[12px] sm:tracking-[0.08em]"
           >
             Book a Call
           </Link>
