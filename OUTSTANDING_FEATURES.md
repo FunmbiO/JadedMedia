@@ -286,6 +286,25 @@ untouched since they're already yours, not mine.)*
 
 ## Resolved
 
+- [x] **Added the structured-data field Google actually uses for the
+      circular logo next to search results / the Knowledge Panel.**
+      The homepage already had a plain `image` field in its JSON-LD,
+      but that's not what controls this — Google keys specifically off
+      an Organization `logo` property (checked against Google's current
+      docs, not assumed). Added it as an `ImageObject` pointing at
+      `logo.png`, which turns out to already meet both of Google's
+      requirements without needing a new asset: at least 112x112px
+      (it's 5834x5834) and legible on a white background (it already
+      has a real white background baked in, confirmed by sampling the
+      actual pixels, not eyeballing it). Separately, the small favicon
+      next to the URL in a regular search result was already set up
+      correctly back in phase 9 (`icon.png`, 512x512, well over
+      Google's 48px minimum) — that part didn't need a fix. **Caveat
+      I won't oversell:** Google doesn't guarantee either of these will
+      actually show, even when everything's correct, and it can take
+      days to weeks after a recrawl either way. Worth requesting a
+      recrawl of the homepage in Google Search Console to speed that up
+      rather than waiting for Google to notice on its own.
 - [x] **Two more logos added to "Trusted By": Atlantic Built, Mancuso
       Clinic.** Same treatment as D1/Muir — recolored to the site's
       paper tone and masked from a luminance threshold, since both

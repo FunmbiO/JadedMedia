@@ -68,6 +68,18 @@ const JSON_LD = {
   "@type": "ProfessionalService",
   name: "Jaded Media",
   image: `${SITE_CONFIG.siteUrl}/logo.png`,
+  // This is the field Google actually keys off for the small circular
+  // logo shown next to the site in search results / the Knowledge
+  // Panel — a plain `image` isn't enough on its own. Google requires
+  // at least 112x112px and legible on a white background; logo.png is
+  // 5834x5834 with a real white (not transparent) background, so it
+  // clears both without needing a separate asset.
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE_CONFIG.siteUrl}/logo.png`,
+    width: 5834,
+    height: 5834,
+  },
   url: SITE_CONFIG.siteUrl,
   telephone: SITE_CONFIG.phone,
   email: SITE_CONFIG.email,
