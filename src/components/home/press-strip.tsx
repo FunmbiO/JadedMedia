@@ -8,15 +8,18 @@ type ClientLogo = {
 };
 
 // Recolored to a flat paper tone and masked by each source logo's own
-// shape (alpha channel for D1, a luminance threshold for Muir, whose
-// original was a flat gray background baked into an opaque PNG) — kept at
-// native aspect ratio and displayed at a fixed height so mixed logo shapes
-// (a tall square mark vs. a wide wordmark) still sit on one baseline.
-// Muted via opacity in CSS rather than baked into the file, so it can
-// brighten on hover without a second export.
+// shape (alpha channel for D1, a luminance threshold for the rest, whose
+// originals were a flat background baked into an opaque PNG — light for
+// Muir/Mancuso, dark for Atlantic Built) — kept at native aspect ratio and
+// displayed at a fixed height so mixed logo shapes (a tall square mark vs.
+// a wide wordmark) still sit on one baseline. Muted via opacity in CSS
+// rather than baked into the file, so it can brighten on hover without a
+// second export.
 const CLIENT_LOGOS: ClientLogo[] = [
   { name: "D1 Autotech", src: "/logos/d1-autotech.png", width: 940, height: 1024 },
   { name: "Muir Real Estate Group", src: "/logos/muir-real-estate.png", width: 775, height: 231 },
+  { name: "Atlantic Built", src: "/logos/atlantic-built.png", width: 183, height: 164 },
+  { name: "Mancuso Clinic", src: "/logos/mancuso-clinic.png", width: 344, height: 76 },
 ];
 
 export function PressStrip() {
