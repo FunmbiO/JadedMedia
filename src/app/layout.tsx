@@ -45,13 +45,14 @@ export const metadata: Metadata = {
     siteName: "Jaded Media",
     title: TITLE,
     description: DESCRIPTION,
-    images: [{ url: "/logo.png", width: 1200, height: 1200, alt: "Jaded Media" }],
+    // No manual `images` override — opengraph-image.tsx (a real 1200x630
+    // branded card, not the square product-shot logo) is picked up
+    // automatically by Next's file-convention metadata.
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
-    images: ["/logo.png"],
   },
   // Google Search Console ownership verification (HTML tag method) —
   // a second, independent path alongside the /google...html file, so
