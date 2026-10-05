@@ -1,5 +1,5 @@
 import "server-only";
-import { createResendClient } from "@/lib/email/resend-client";
+import { createResendClient, formatFromAddress } from "@/lib/email/resend-client";
 import {
   quoteRequestConfirmationEmail,
   quoteRequestNotificationEmail,
@@ -26,18 +26,19 @@ export async function sendQuoteRequestNotifications(
   }
 
   const resend = createResendClient();
+  const from = formatFromAddress(fromEmail);
   const owner = quoteRequestNotificationEmail(payload);
   const client = quoteRequestConfirmationEmail(payload);
 
   const results = await Promise.allSettled([
     resend.emails.send({
-      from: fromEmail,
+      from,
       to: teamEmail,
       subject: owner.subject,
       html: owner.html,
     }),
     resend.emails.send({
-      from: fromEmail,
+      from,
       to: payload.email,
       subject: client.subject,
       html: client.html,

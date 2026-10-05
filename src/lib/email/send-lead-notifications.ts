@@ -1,5 +1,5 @@
 import "server-only";
-import { createResendClient } from "@/lib/email/resend-client";
+import { createResendClient, formatFromAddress } from "@/lib/email/resend-client";
 import {
   clientConfirmationEmail,
   teamNotificationEmail,
@@ -24,18 +24,19 @@ export async function sendLeadNotifications(payload: LeadFormPayload) {
   }
 
   const resend = createResendClient();
+  const from = formatFromAddress(fromEmail);
   const team = teamNotificationEmail(payload);
   const client = clientConfirmationEmail(payload);
 
   const results = await Promise.allSettled([
     resend.emails.send({
-      from: fromEmail,
+      from,
       to: teamEmail,
       subject: team.subject,
       html: team.html,
     }),
     resend.emails.send({
-      from: fromEmail,
+      from,
       to: payload.email,
       subject: client.subject,
       html: client.html,
