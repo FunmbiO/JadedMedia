@@ -31,15 +31,23 @@ export async function sendQuoteRequestNotifications(
   const client = quoteRequestConfirmationEmail(payload);
 
   const results = await Promise.allSettled([
+    // Hitting reply on the owner's own notification goes straight to the
+    // client who requested the quote — the natural next action after
+    // "you got a request" is replying to that person.
     resend.emails.send({
       from,
       to: teamEmail,
+      replyTo: payload.email,
       subject: owner.subject,
       html: owner.html,
     }),
+    // The client's confirmation sends from onboarding@resend.dev (no
+    // real inbox behind it) until a verified domain is set up — reply-to
+    // routes a reply to the real inbox instead of bouncing or vanishing.
     resend.emails.send({
       from,
       to: payload.email,
+      replyTo: teamEmail,
       subject: client.subject,
       html: client.html,
     }),

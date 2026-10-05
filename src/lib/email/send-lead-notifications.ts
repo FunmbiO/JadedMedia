@@ -29,15 +29,23 @@ export async function sendLeadNotifications(payload: LeadFormPayload) {
   const client = clientConfirmationEmail(payload);
 
   const results = await Promise.allSettled([
+    // Hitting reply on the team's own notification goes straight to the
+    // client who submitted it — the natural next action after "you got a
+    // lead" is replying to that person, not to the sending address.
     resend.emails.send({
       from,
       to: teamEmail,
+      replyTo: payload.email,
       subject: team.subject,
       html: team.html,
     }),
+    // The client's confirmation sends from onboarding@resend.dev (no
+    // real inbox behind it) until a verified domain is set up — reply-to
+    // routes a reply to the real inbox instead of bouncing or vanishing.
     resend.emails.send({
       from,
       to: payload.email,
+      replyTo: teamEmail,
       subject: client.subject,
       html: client.html,
     }),
