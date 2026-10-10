@@ -303,8 +303,7 @@ sentence on every page.)*
       both headline lines, intro paragraph, both button labels),
       Philosophy (label, quote, paragraph, signature line), the 4-step
       "How I Work" process (every step's title + description), the
-      Services teaser's heading block, the Testimonial (quote/name/
-      client type — see Phase 2 above), the closing CTA banner, and
+      Services teaser's heading block, the closing CTA banner, and
       site-wide contact details (email, phone, city, travel note,
       Instagram handle + URL) — which now also update the footer, the
       contact page, and the FAQ's email line in one place instead of
@@ -330,40 +329,79 @@ sentence on every page.)*
       empty and the hero falls back to the original "[add background
       video -- later]" placeholder panel, so there's no broken/blank
       state either way.
-- [x] **The italic-serif headline look replaced sitewide.** Every
-      heading that used to set `italic` on the Fraunces display font
-      (29 occurrences, audited with a full-repo grep, not guessed at)
-      now falls into one of two treatments: public-facing emphasis
-      moments (hero headline, pull-quotes, card titles, nav links, CTA
-      headings) switch to a new upright accent serif, **Petrona**
-      (`--font-accent`, loaded via `next/font/google`, normal style
-      only — never italicized); internal admin screens (login,
-      dashboard headers, form titles) just drop the italic and stay
-      plain Fraunces, since nobody but you sees those and they didn't
-      need the extra font. Two spots were deliberately left alone:
-      your own `<em>ahem</em>` aside on `/about` (that's real
+- [x] **The italic-serif headline look replaced sitewide — then the
+      whole typography replaced again the same phase.** First pass: every
+      heading that used to set `italic` on the Fraunces display font (29
+      occurrences, audited with a full-repo grep) moved to a new upright
+      accent serif (Petrona) for public-facing emphasis moments, plain
+      non-italic Fraunces for admin screens. Two spots deliberately left
+      alone both times: your own `<em>ahem</em>` aside on `/about` (real
       grammatical emphasis in your own words, not the heading pattern),
-      and the transactional emails' italic heading style (a different,
-      email-safe font stack entirely — not Fraunces, so the same "AI
-      tell" critique doesn't really apply there). Fraunces' italic
-      style variant was dropped from the font load entirely
-      (`style: ["normal"]`, was `["normal", "italic"]`) since nothing
-      references it anymore — a small bundle-size win that fell out of
-      this for free.
+      and the transactional emails' italic heading (a different,
+      email-safe font stack, not Fraunces — the "AI tell" critique
+      doesn't apply there).
+
+      **Then superseded within the same phase**, after you shared a
+      moodboard of bold/high-contrast poster-style type and asked for
+      three specific marketplace fonts by name. Two of those ("Salty
+      Ages," a $19 Fontspring font, and "Lust," a Creative Fabrica
+      subscription font) are commercial — I won't use a paid font
+      without a license, so I didn't, and said so plainly when you said
+      you didn't want to pay. In their place, three free Google Fonts
+      matching the same bold/retro/handwritten vibe you picked from a
+      narrowed set of real alternatives I offered:
+      - **Yeseva One** (`--font-display`, replaces Fraunces) — every
+        section heading, card title, nav link.
+      - **Abril Fatface** (`--font-accent`, replaces Petrona) — the loud
+        statement moments: hero headline, pull-quotes, the closing CTA.
+      - **Rock Salt** (`--font-brush`, new) — deliberately narrow: only
+        the Philosophy "Est. 2019" line, the testimonial attribution
+        name, and the About page sign-off. Illegible as body copy, so it
+        never goes there.
+      - Manrope is untouched — body paragraphs stay on it since neither
+        of your two display picks nor the brush font are readable at
+        paragraph size, and no replacement was named for it.
+
+      Verified visually both times (screenshots at 390px/1440px, zero
+      horizontal overflow), not just assumed from the code.
+- [x] **Testimonials moved off `/admin/content` into their own real
+      table — "add another testimonial" button included.** The original
+      Phase 15 build put a single testimonial's quote/name/client type
+      into `site_content`, same as everything else — but a flat
+      key/value row can only ever hold one. Replaced with an actual
+      `testimonials` table (migration `0013`, same RLS shape as
+      `services`: public sees published rows only, the admin has full
+      CRUD) and a new `/admin/testimonials` tab — list, **"+ Add
+      Testimonial"** button, edit, delete, same conventions as the
+      Services admin. The homepage section now renders every published
+      testimonial stacked in the same pull-quote treatment (not a
+      carousel — simpler, no client JS, fine for the handful of
+      quotes a site like this will realistically have) and disappears
+      entirely when none are published, same honest behavior as before.
+      One loose end: the three now-unused `testimonial_*` rows in
+      `site_content` wouldn't `DELETE` — the query kept timing out
+      against the live database after several retries. They're
+      harmless orphans (empty, nothing reads them anymore), not a
+      functional problem, but worth a manual cleanup in the Supabase
+      SQL Editor if you want the table tidy:
+      `delete from site_content where key in ('testimonial_quote', 'testimonial_name', 'testimonial_client_type');`
 - [x] **Verified, not just built.** Typecheck, lint, and a clean
-      production build all pass. Screenshotted the homepage and
-      `/about` at 390px and 1440px (zero horizontal overflow at
-      either), plus `/admin/login` to confirm the admin heading
-      cleanup. Confirmed every new/changed route returns the right
-      status: public pages 200, `/admin` and `/admin/content` redirect
-      (307) when logged out exactly like the existing admin routes
-      already did. **Couldn't verify from here:** a real end-to-end
-      save in `/admin/content` — this sandbox still can't reach
-      `*.supabase.co` (same standing limitation noted in earlier
-      phases), so every screenshot above is the DB-unreachable
+      production build all pass — twice, once after the original
+      content/video/typography build and again after the font re-swap
+      and the testimonials rework. Screenshotted the homepage and
+      `/about` at 390px and 1440px after every round (zero horizontal
+      overflow throughout), plus `/admin/login` to confirm the admin
+      heading cleanup. Confirmed every new/changed route returns the
+      right status: public pages 200, every `/admin/*` route (including
+      the three new testimonials ones) redirects (307) when logged out,
+      exactly like the existing admin routes already did.
+      **Couldn't verify from here:** a real end-to-end save in
+      `/admin/content` or `/admin/testimonials` — this sandbox still
+      can't reach `*.supabase.co` (same standing limitation noted in
+      earlier phases), so every screenshot above is the DB-unreachable
       *fallback* path rendering correctly, not a live round-trip with
-      real edited content. Please log in once, change a field, save,
-      and confirm it shows up on the live site.
+      real data. Please log in once, edit a content field and add a
+      testimonial, and confirm both show up on the live site.
 
 ## Resolved
 
