@@ -18,6 +18,11 @@ export default async function AdminContentPage() {
         <p className="max-w-2xl font-sans text-sm font-light text-muted-on-ink">
           Edit the text and background video shown on the public site.
           Changes go live as soon as you save — no code or redeploy needed.
+          Looking for testimonials? Those moved to their own{" "}
+          <a href="/admin/testimonials" className="text-gold-soft underline underline-offset-2 hover:opacity-75">
+            Testimonials tab
+          </a>{" "}
+          — you can add more than one now.
         </p>
       </div>
       <ContentForm initial={content} />
