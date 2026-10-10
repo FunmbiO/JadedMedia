@@ -53,14 +53,6 @@ export const CONTENT_SECTIONS: SectionDef[] = [
     ],
   },
   {
-    title: "Testimonial",
-    fields: [
-      { key: "testimonial_quote", label: "Quote (leave blank to hide this section)", type: "textarea" },
-      { key: "testimonial_name", label: "Client name", type: "text" },
-      { key: "testimonial_client_type", label: "Client type (e.g. \"Wedding client\")", type: "text" },
-    ],
-  },
-  {
     title: "Let's Talk (bottom call-to-action)",
     fields: [
       { key: "cta_heading", label: "Heading", type: "text" },

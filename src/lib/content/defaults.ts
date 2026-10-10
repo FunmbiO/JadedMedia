@@ -39,9 +39,8 @@ export const CONTENT_DEFAULTS = {
   services_teaser_heading: "A few ways I can help.",
   services_teaser_subcopy: "Photo, film, or both — whatever fits what you need.",
 
-  testimonial_quote: "",
-  testimonial_name: "",
-  testimonial_client_type: "",
+  // Testimonials moved to a real `testimonials` table (phase 15 follow-up)
+  // so there can be more than one — see /admin/testimonials.
 
   cta_heading: "Let's talk about your project.",
   cta_subcopy: "My calendar fills up fast, so reach out early if you want a date.",
