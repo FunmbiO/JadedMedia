@@ -23,7 +23,7 @@ export default async function ForgotPasswordPage({ searchParams }: PageProps) {
           <span className="font-sans text-xs font-semibold tracking-[0.2em] text-gold uppercase">
             Admin
           </span>
-          <h1 className="font-display text-3xl font-normal text-paper italic">
+          <h1 className="font-display text-3xl font-normal text-paper">
             Reset password
           </h1>
           <p className="font-sans text-sm text-muted-on-ink">

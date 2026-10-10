@@ -90,7 +90,7 @@ export default function AboutPage() {
             </p>
             <div className="flex items-center gap-4">
               <div className="h-px w-10 bg-gold" />
-              <span className="font-display text-base text-paper italic">
+              <span className="font-accent text-base text-paper">
                 Olufunmbi Olajubu &mdash; Photographer &amp; Filmmaker
               </span>
             </div>
@@ -107,7 +107,7 @@ export default function AboutPage() {
                 key={value.title}
                 className="flex flex-col gap-3 border-t border-paper/15 pt-6"
               >
-                <h3 className="font-display text-xl text-paper italic">
+                <h3 className="font-accent text-xl text-paper">
                   {value.title}
                 </h3>
                 <p className="font-sans text-[14.5px] leading-relaxed font-light text-muted-on-ink">

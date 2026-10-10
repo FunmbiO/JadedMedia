@@ -56,7 +56,7 @@ export function ContactForm({
   if (submitted) {
     return (
       <div className="flex flex-col gap-3 rounded-md border border-gold/30 bg-gold/5 px-6 py-10 text-center">
-        <span className="font-display text-2xl text-paper italic">
+        <span className="font-accent text-2xl text-paper">
           Thank you &mdash; message sent.
         </span>
         <p className="font-sans text-sm font-light text-muted-on-ink">

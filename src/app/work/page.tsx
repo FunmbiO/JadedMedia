@@ -81,7 +81,7 @@ export default async function WorkPage({ searchParams }: PageProps) {
         </div>
       ) : (
         <div className="flex flex-col items-center gap-2 py-20 text-center">
-          <span className="font-display text-xl text-paper/70 italic">
+          <span className="font-accent text-xl text-paper/70">
             New work is on the way.
           </span>
           <p className="max-w-md font-sans text-sm font-light text-muted-on-ink">

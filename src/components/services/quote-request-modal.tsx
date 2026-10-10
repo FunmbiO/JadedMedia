@@ -98,7 +98,7 @@ export function QuoteRequestModal({
                 <span className="font-sans text-[11px] font-semibold tracking-[0.14em] text-gold-soft uppercase">
                   Custom Quote
                 </span>
-                <h3 className="font-display text-2xl text-paper italic">
+                <h3 className="font-accent text-2xl text-paper">
                   {title}
                 </h3>
               </div>
@@ -114,7 +114,7 @@ export function QuoteRequestModal({
 
             {submitted ? (
               <div className="flex flex-col items-center gap-3 py-6 text-center">
-                <span className="font-display text-xl text-paper italic">
+                <span className="font-accent text-xl text-paper">
                   Consultation received.
                 </span>
                 <p className="max-w-sm font-sans text-sm font-light text-muted-on-ink">

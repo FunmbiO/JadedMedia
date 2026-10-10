@@ -10,7 +10,7 @@ export default function PrivacyPage() {
       <span className="font-sans text-xs font-semibold tracking-[0.2em] text-gold uppercase">
         Privacy Policy
       </span>
-      <h1 className="font-display text-3xl font-normal text-paper italic sm:text-4xl">
+      <h1 className="font-accent text-3xl font-normal text-paper sm:text-4xl">
         Coming soon.
       </h1>
     </div>

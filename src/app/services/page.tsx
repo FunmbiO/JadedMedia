@@ -32,7 +32,7 @@ export default async function ServicesPage() {
 
         {services.length === 0 ? (
           <div className="flex flex-col items-center gap-2 border-t border-paper/15 py-20 text-center">
-            <span className="font-display text-xl text-paper/70 italic">
+            <span className="font-accent text-xl text-paper/70">
               Services are being updated.
             </span>
             <p className="max-w-md font-sans text-sm font-light text-muted-on-ink">

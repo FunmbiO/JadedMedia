@@ -27,7 +27,7 @@ export async function FeaturedWork() {
 
         {items.length === 0 ? (
           <div className="flex flex-col items-center gap-2 rounded-md border border-dashed border-ink/15 py-20 text-center">
-            <span className="font-display text-xl text-ink/70 italic">
+            <span className="font-accent text-xl text-ink/70">
               New work is on the way.
             </span>
             <p className="max-w-md font-sans text-sm font-light text-muted-on-paper">

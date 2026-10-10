@@ -27,7 +27,7 @@ export function ServiceDetail({
       <div className="flex flex-col gap-6">
         <span className="font-display text-sm text-gold-soft">{number}</span>
         <ServiceIcon className="text-paper" />
-        <h2 className="font-display text-3xl font-normal text-paper italic sm:text-4xl">
+        <h2 className="font-accent text-3xl font-normal text-paper sm:text-4xl">
           {title}
         </h2>
         <p className="max-w-md font-sans text-base leading-relaxed font-light text-muted-on-ink">

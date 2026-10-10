@@ -125,7 +125,7 @@ export function SiteHeader() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsMenuOpen(false)}
-                className="border-b border-paper/10 py-4 font-display text-2xl text-paper italic"
+                className="border-b border-paper/10 py-4 font-accent text-2xl text-paper"
               >
                 {link.label}
               </Link>

@@ -21,7 +21,7 @@ export default async function AdminLeadsPage({ searchParams }: PageProps) {
 
   return (
     <div className="flex flex-col gap-8 px-6 py-10 md:px-10">
-      <h1 className="font-display text-2xl text-paper italic">Leads</h1>
+      <h1 className="font-display text-2xl text-paper">Leads</h1>
 
       {leads.length === 0 ? (
         <p className="font-sans text-sm text-muted-on-ink">No leads yet.</p>

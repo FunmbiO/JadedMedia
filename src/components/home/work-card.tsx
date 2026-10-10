@@ -52,7 +52,7 @@ export function WorkCard({
         <span className="font-sans text-[10.5px] font-semibold tracking-[0.12em] text-gold-soft uppercase">
           {CATEGORY_LABELS[item.category]} &middot; {MEDIUM_LABELS[item.medium]}
         </span>
-        <span className="font-display text-xl text-paper italic sm:text-2xl">
+        <span className="font-accent text-xl text-paper sm:text-2xl">
           {item.title}
         </span>
       </div>

@@ -47,7 +47,7 @@ export function PortfolioCard({ item }: { item: PortfolioItem }) {
         <span className="font-sans text-[10.5px] font-semibold tracking-[0.1em] text-gold-soft uppercase">
           {CATEGORY_LABELS[item.category]} &middot; {MEDIUM_LABELS[item.medium]}
         </span>
-        <span className="font-display text-lg text-paper italic">
+        <span className="font-accent text-lg text-paper">
           {item.title}
         </span>
       </div>

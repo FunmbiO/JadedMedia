@@ -44,6 +44,7 @@
 
   --font-display: var(--font-fraunces);
   --font-sans: var(--font-manrope);
+  --font-accent: var(--font-petrona);
 
   --text-hero: 92px;
   --text-hero--line-height: 1.04;

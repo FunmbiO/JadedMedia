@@ -80,7 +80,7 @@ export default async function PortfolioDetailPage({ params }: PageProps) {
           <span className="font-sans text-[11px] font-semibold tracking-[0.12em] text-gold uppercase">
             {CATEGORY_LABELS[item.category]} &middot; {MEDIUM_LABELS[item.medium]}
           </span>
-          <h1 className="font-display text-3xl font-normal text-paper italic sm:text-4xl md:text-5xl">
+          <h1 className="font-accent text-3xl font-normal text-paper sm:text-4xl md:text-5xl">
             {item.title}
           </h1>
           {(item.client || item.location) && (
