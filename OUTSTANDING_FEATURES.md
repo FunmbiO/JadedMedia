@@ -18,20 +18,22 @@ never silently dropped.
       Deliberately left out of the sitemap until there's real content.
       **Still needs you eventually:** the actual privacy policy and
       terms text, whenever you're ready for that.
-- [ ] **`/press` still 404s.** Not part of this round — say the word
-      if you want it built or the footer link dropped. (`/careers` was
-      removed in phase 7 — doesn't make sense for a one-person
-      business. `/journal` was removed in phase 8 at your request.)
+- [x] **`/press` built — phase 15.** Same "Coming soon" placeholder
+      treatment as `/privacy` and `/terms`, so the footer's existing
+      link stops 404ing. (`/careers` was removed in phase 7 — doesn't
+      make sense for a one-person business. `/journal` was removed in
+      phase 8 at your request.)
 - [x] **Vercel project live.** Confirmed directly via the Vercel API —
       project `jaded-media` has a `READY` production deployment on
       `main`, not just assumed from the repo existing.
 
 ## Phase 2 — Homepage
 
-- [ ] **Testimonial is still a placeholder — deliberately last in
-      line.** You've said build it last, so it's staying a placeholder
-      on purpose, not stalled. Whenever you're ready: a real quote (and
-      who it's from), and it's a quick swap.
+- [x] **Testimonial is now a real admin-editable field — phase 15.**
+      No longer a hardcoded bracket placeholder. The homepage section
+      hides itself entirely until a quote is set in `/admin/content` —
+      no more permanent "[add testimonial -- later]" showing in
+      production. Fill it in whenever you have a real one.
 
 ## Phase 3 — Portfolio & Case Studies
 
@@ -283,6 +285,85 @@ untouched since they're already yours, not mine.)*
       rebuild after a stale local server initially served pre-edit
       copy (caught by comparing rendered text against what was just
       written, not assumed correct).
+
+## Phase 15 — Editable Content, Hero Video & Typography
+
+*(The big one: "make everything editable through the admin, I don't want
+to go into my code to edit things" + a background video field on the
+hero + getting rid of the italic-serif headline look. Scoped honestly
+below — this covers section copy and site-wide settings, not every
+sentence on every page.)*
+
+- [x] **New `/admin/content` tab — edit homepage copy and site-wide
+      contact info without touching code.** A single `site_content`
+      key/value table (migration `0012_site_content.sql`, applied and
+      seeded with today's copy so the form opens with real values, not
+      blanks), RLS'd the same way as `services`: public can read,
+      only the logged-in admin can write. Covers: the Hero (eyebrow,
+      both headline lines, intro paragraph, both button labels),
+      Philosophy (label, quote, paragraph, signature line), the 4-step
+      "How I Work" process (every step's title + description), the
+      Services teaser's heading block, the Testimonial (quote/name/
+      client type — see Phase 2 above), the closing CTA banner, and
+      site-wide contact details (email, phone, city, travel note,
+      Instagram handle + URL) — which now also update the footer, the
+      contact page, and the FAQ's email line in one place instead of
+      five. A missing/blank field quietly falls back to today's
+      hardcoded copy (`src/lib/content/defaults.ts`) rather than
+      rendering empty, so this can never produce a broken-looking page.
+      **Deliberately not covered** (scope boundary, not an oversight):
+      the full `/about` bio paragraphs, FAQ answers, and legal pages —
+      editing *all* prose on every page is a different, much bigger
+      feature (a real page builder) than "edit the homepage sections
+      and my contact info." Say the word if you want that too. Also
+      **not wired**: the transactional email footer (still reads the
+      code-level `SITE_CONFIG` for its sign-off line) and the
+      JSON-LD/sitemap/`metadataBase` SEO fields in `layout.tsx` — both
+      infrequently-changed and infrastructural rather than content, so
+      left as a documented, trivial follow-up rather than adding more
+      surface to an already-large change.
+- [x] **Hero background video, uploadable from the admin.** Same R2
+      presigned-upload flow already used for portfolio videos (reused
+      `VideoUploader` and its existing server action directly, no
+      duplicate code) — drop a file in on `/admin/content` and it
+      autoplays muted/looped/full-bleed behind the hero text. Leave it
+      empty and the hero falls back to the original "[add background
+      video -- later]" placeholder panel, so there's no broken/blank
+      state either way.
+- [x] **The italic-serif headline look replaced sitewide.** Every
+      heading that used to set `italic` on the Fraunces display font
+      (29 occurrences, audited with a full-repo grep, not guessed at)
+      now falls into one of two treatments: public-facing emphasis
+      moments (hero headline, pull-quotes, card titles, nav links, CTA
+      headings) switch to a new upright accent serif, **Petrona**
+      (`--font-accent`, loaded via `next/font/google`, normal style
+      only — never italicized); internal admin screens (login,
+      dashboard headers, form titles) just drop the italic and stay
+      plain Fraunces, since nobody but you sees those and they didn't
+      need the extra font. Two spots were deliberately left alone:
+      your own `<em>ahem</em>` aside on `/about` (that's real
+      grammatical emphasis in your own words, not the heading pattern),
+      and the transactional emails' italic heading style (a different,
+      email-safe font stack entirely — not Fraunces, so the same "AI
+      tell" critique doesn't really apply there). Fraunces' italic
+      style variant was dropped from the font load entirely
+      (`style: ["normal"]`, was `["normal", "italic"]`) since nothing
+      references it anymore — a small bundle-size win that fell out of
+      this for free.
+- [x] **Verified, not just built.** Typecheck, lint, and a clean
+      production build all pass. Screenshotted the homepage and
+      `/about` at 390px and 1440px (zero horizontal overflow at
+      either), plus `/admin/login` to confirm the admin heading
+      cleanup. Confirmed every new/changed route returns the right
+      status: public pages 200, `/admin` and `/admin/content` redirect
+      (307) when logged out exactly like the existing admin routes
+      already did. **Couldn't verify from here:** a real end-to-end
+      save in `/admin/content` — this sandbox still can't reach
+      `*.supabase.co` (same standing limitation noted in earlier
+      phases), so every screenshot above is the DB-unreachable
+      *fallback* path rendering correctly, not a live round-trip with
+      real edited content. Please log in once, change a field, save,
+      and confirm it shows up on the live site.
 
 ## Resolved
 
