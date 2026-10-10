@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Manrope, Petrona } from "next/font/google";
+import { Yeseva_One, Abril_Fatface, Rock_Salt, Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ConditionalSiteChrome } from "@/components/conditional-site-chrome";
 import { SiteHeader } from "@/components/site-header";
@@ -7,13 +7,12 @@ import { SiteFooter } from "@/components/site-footer";
 import { SITE_CONFIG } from "@/lib/site-config";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+// Bold retro-display serif — every section heading, card title, and nav
+// link. Only ships weight 400; that's all Google has for this family.
+const yesevaOne = Yeseva_One({
+  variable: "--font-yeseva",
   subsets: ["latin"],
-  // Italic dropped: every spot that used to set `italic` on this font now
-  // uses Petrona (--font-accent) upright instead — see globals.css.
-  style: ["normal"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400"],
 });
 
 const manrope = Manrope({
@@ -22,15 +21,21 @@ const manrope = Manrope({
   weight: ["300", "400", "500", "600", "700"],
 });
 
-// The site's one deliberate flourish — used upright, never italic, only
-// for the specific emotional/pull-quote moments (hero headline, the
-// Philosophy quote, the testimonial, the closing CTA) that previously
-// leaned on an italicized Fraunces for emphasis.
-const petrona = Petrona({
-  variable: "--font-petrona",
+// The louder statement face — hero headline, pull-quotes, the closing CTA.
+// Ultra-bold by design even at its one available weight (400).
+const abrilFatface = Abril_Fatface({
+  variable: "--font-abril",
   subsets: ["latin"],
-  style: ["normal"],
-  weight: ["300", "400", "500"],
+  weight: ["400"],
+});
+
+// Brush/signature accent — deliberately narrow use only: the Philosophy
+// "Est. 2019" line, the testimonial attribution, and the About page
+// sign-off. Illegible at body-copy or label sizes, so it never goes there.
+const rockSalt = Rock_Salt({
+  variable: "--font-rock-salt",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 const TITLE = "Jaded Media | Photography & Film";
@@ -117,7 +122,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${manrope.variable} ${petrona.variable} h-full antialiased`}
+      className={`${yesevaOne.variable} ${manrope.variable} ${abrilFatface.variable} ${rockSalt.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ink text-paper">
         <script

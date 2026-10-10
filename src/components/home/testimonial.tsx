@@ -26,7 +26,7 @@ export async function Testimonial() {
         <div className="mt-3 flex items-center gap-3.5">
           <div className="h-11 w-11 shrink-0 rounded-full bg-beige" />
           <div className="flex flex-col items-start gap-0.5">
-            <span className="font-sans text-sm font-semibold text-ink">
+            <span className="font-brush text-lg text-ink">
               {pickContent(content, "testimonial_name")}
             </span>
             <span className="font-sans text-[12.5px] text-muted-on-paper">

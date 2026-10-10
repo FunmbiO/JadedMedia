@@ -90,7 +90,7 @@ export default function AboutPage() {
             </p>
             <div className="flex items-center gap-4">
               <div className="h-px w-10 bg-gold" />
-              <span className="font-accent text-base text-paper">
+              <span className="font-brush text-xl text-paper">
                 Olufunmbi Olajubu &mdash; Photographer &amp; Filmmaker
               </span>
             </div>

@@ -42,9 +42,10 @@
   --color-muted-on-ink: var(--color-muted-on-ink);
   --color-muted-on-paper: var(--color-muted-on-paper);
 
-  --font-display: var(--font-fraunces);
+  --font-display: var(--font-yeseva);
   --font-sans: var(--font-manrope);
-  --font-accent: var(--font-petrona);
+  --font-accent: var(--font-abril);
+  --font-brush: var(--font-rock-salt);
 
   --text-hero: 92px;
   --text-hero--line-height: 1.04;

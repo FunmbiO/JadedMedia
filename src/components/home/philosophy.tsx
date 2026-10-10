@@ -29,7 +29,7 @@ export async function Philosophy() {
         </p>
         <div className="mt-2 flex items-center gap-4">
           <div className="h-px w-10 bg-gold" />
-          <span className="font-accent text-base text-ink">
+          <span className="font-brush text-lg text-ink">
             {pickContent(content, "philosophy_est_line")}
           </span>
         </div>
