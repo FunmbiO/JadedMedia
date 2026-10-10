@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
-import { Fraunces, Manrope } from "next/font/google";
+import { Fraunces, Manrope, Petrona } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ConditionalSiteChrome } from "@/components/conditional-site-chrome";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 import { SITE_CONFIG } from "@/lib/site-config";
 import "./globals.css";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
-  style: ["normal", "italic"],
+  // Italic dropped: every spot that used to set `italic` on this font now
+  // uses Petrona (--font-accent) upright instead — see globals.css.
+  style: ["normal"],
   weight: ["300", "400", "500", "600"],
 });
 
@@ -16,6 +20,17 @@ const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+});
+
+// The site's one deliberate flourish — used upright, never italic, only
+// for the specific emotional/pull-quote moments (hero headline, the
+// Philosophy quote, the testimonial, the closing CTA) that previously
+// leaned on an italicized Fraunces for emphasis.
+const petrona = Petrona({
+  variable: "--font-petrona",
+  subsets: ["latin"],
+  style: ["normal"],
+  weight: ["300", "400", "500"],
 });
 
 const TITLE = "Jaded Media | Photography & Film";
@@ -102,14 +117,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${manrope.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${manrope.variable} ${petrona.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ink text-paper">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
         />
-        <ConditionalSiteChrome>{children}</ConditionalSiteChrome>
+        <ConditionalSiteChrome header={<SiteHeader />} footer={<SiteFooter />}>
+          {children}
+        </ConditionalSiteChrome>
         <Analytics />
       </body>
     </html>

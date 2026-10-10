@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { SITE_CONFIG } from "@/lib/site-config";
+import { getSiteContent, pickContent } from "@/lib/content/queries";
 
 const EXPLORE_LINKS = [
   { href: "/work", label: "Work" },
@@ -14,7 +14,9 @@ const INFO_LINKS = [
   { href: "/press", label: "Press" },
 ] as const;
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const content = await getSiteContent();
+
   return (
     <footer className="border-t border-paper/10 bg-ink-3">
       <div className="mx-auto max-w-[1440px] px-6 pt-16 pb-10 md:px-16 md:pt-22">
@@ -78,13 +80,13 @@ export function SiteFooter() {
               Contact
             </span>
             <span className="font-sans text-[13.5px] text-paper/80">
-              {SITE_CONFIG.email}
+              {pickContent(content, "contact_email")}
             </span>
             <span className="font-sans text-[13.5px] text-paper/80">
-              {SITE_CONFIG.phone}
+              {pickContent(content, "contact_phone")}
             </span>
             <span className="font-sans text-[13.5px] text-paper/80">
-              {SITE_CONFIG.city}
+              {pickContent(content, "contact_city")}
             </span>
           </div>
         </div>

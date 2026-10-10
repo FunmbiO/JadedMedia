@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SITE_CONFIG } from "@/lib/site-config";
+import { getSiteContent, pickContent } from "@/lib/content/queries";
 
 export const metadata: Metadata = {
   title: "FAQ | Jaded Media",
@@ -72,7 +72,9 @@ const FAQS = [
   },
 ] as const;
 
-export default function FaqPage() {
+export default async function FaqPage() {
+  const content = await getSiteContent();
+
   return (
     <div className="flex flex-col gap-16 px-6 py-20 md:px-16 md:py-28">
       <div className="flex max-w-2xl flex-col gap-4">
@@ -90,7 +92,7 @@ export default function FaqPage() {
           >
             Just ask
           </Link>{" "}
-          — {SITE_CONFIG.email}.
+          — {pickContent(content, "contact_email")}.
         </p>
       </div>
 

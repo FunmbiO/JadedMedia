@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/contact-form";
 import type { LeadEventType } from "@/app/contact/actions";
 import { isLeadEventType } from "@/app/contact/labels";
-import { SITE_CONFIG } from "@/lib/site-config";
+import { getSiteContent, pickContent } from "@/lib/content/queries";
 
 export const metadata: Metadata = {
   title: "Contact | Jaded Media",
@@ -15,7 +15,7 @@ type PageProps = {
 };
 
 export default async function ContactPage({ searchParams }: PageProps) {
-  const { type } = await searchParams;
+  const [{ type }, content] = await Promise.all([searchParams, getSiteContent()]);
   const defaultEventType: LeadEventType =
     type && isLeadEventType(type) ? type : "wedding";
 
@@ -33,12 +33,12 @@ export default async function ContactPage({ searchParams }: PageProps) {
           reach out directly:
         </p>
         <div className="flex flex-col gap-1 font-sans text-sm text-paper/80">
-          <span>{SITE_CONFIG.email}</span>
-          <span>{SITE_CONFIG.phone}</span>
-          <span>{SITE_CONFIG.city}</span>
+          <span>{pickContent(content, "contact_email")}</span>
+          <span>{pickContent(content, "contact_phone")}</span>
+          <span>{pickContent(content, "contact_city")}</span>
         </div>
         <p className="max-w-md font-sans text-sm font-light text-muted-on-ink">
-          {SITE_CONFIG.travelNote}
+          {pickContent(content, "contact_travel_note")}
         </p>
       </div>
 
