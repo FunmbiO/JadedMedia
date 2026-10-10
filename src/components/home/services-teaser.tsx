@@ -1,21 +1,25 @@
 import { ServiceIcon } from "@/components/services/service-icon";
 import { getPublishedServices } from "@/lib/services/queries";
+import { getSiteContent, pickContent } from "@/lib/content/queries";
 
 export async function ServicesTeaser() {
-  const services = await getPublishedServices();
+  const [services, content] = await Promise.all([
+    getPublishedServices(),
+    getSiteContent(),
+  ]);
 
   return (
     <section id="services" className="bg-ink px-6 py-20 md:px-16 md:py-32">
       <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-18">
         <div className="flex max-w-[640px] flex-col gap-4">
           <span className="font-sans text-xs font-semibold tracking-[0.2em] text-gold uppercase">
-            What I Offer
+            {pickContent(content, "services_teaser_eyebrow")}
           </span>
           <h2 className="font-display text-3xl font-normal text-paper sm:text-4xl md:text-[46px]">
-            A few ways I can help.
+            {pickContent(content, "services_teaser_heading")}
           </h2>
           <p className="font-sans text-base font-light text-muted-on-ink">
-            Photo, film, or both — whatever fits what you need.
+            {pickContent(content, "services_teaser_subcopy")}
           </p>
         </div>
 

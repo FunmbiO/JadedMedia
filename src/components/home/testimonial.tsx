@@ -1,9 +1,16 @@
+import { getSiteContent, pickContent } from "@/lib/content/queries";
+
 /**
- * Placeholder copy on purpose — a fabricated client quote would be a false
- * testimonial. Swap in a real one (or wire this to the testimonials table
- * once Sprint 5's admin exists) before this ships.
+ * Hidden entirely until a real quote is set via /admin/content — showing
+ * a permanent "[add testimonial -- later]" bracket in production reads
+ * as unfinished, and a fabricated quote would be a false testimonial.
  */
-export function Testimonial() {
+export async function Testimonial() {
+  const content = await getSiteContent();
+  const quote = pickContent(content, "testimonial_quote");
+
+  if (!quote) return null;
+
   return (
     <section className="bg-beige-deep px-6 py-24 text-center md:px-16 md:py-36">
       <div className="mx-auto flex max-w-[820px] flex-col items-center gap-7">
@@ -13,17 +20,17 @@ export function Testimonial() {
         >
           &ldquo;
         </span>
-        <p className="font-display text-xl leading-relaxed font-light text-ink italic sm:text-2xl md:text-[32px]">
-          [add testimonial -- later]
+        <p className="font-accent text-xl leading-relaxed font-light text-ink sm:text-2xl md:text-[32px]">
+          {quote}
         </p>
         <div className="mt-3 flex items-center gap-3.5">
           <div className="h-11 w-11 shrink-0 rounded-full bg-beige" />
           <div className="flex flex-col items-start gap-0.5">
             <span className="font-sans text-sm font-semibold text-ink">
-              [add name -- later]
+              {pickContent(content, "testimonial_name")}
             </span>
             <span className="font-sans text-[12.5px] text-muted-on-paper">
-              [add client type -- later]
+              {pickContent(content, "testimonial_client_type")}
             </span>
           </div>
         </div>
