@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getFeaturedPortfolioItems } from "@/lib/portfolio/queries";
-import { WorkCard } from "@/components/home/work-card";
 import { FeaturedWorkMobile } from "@/components/home/featured-work-mobile";
+import { FeaturedWorkDesktop } from "@/components/home/featured-work-desktop";
 
 export async function FeaturedWork() {
   const items = await getFeaturedPortfolioItems(5);
@@ -38,27 +38,7 @@ export async function FeaturedWork() {
         ) : (
           <>
             <FeaturedWorkMobile items={items} />
-
-            <div className="hidden sm:block">
-              {items.length === 1 ? (
-                <WorkCard item={items[0]} className="h-80 w-full sm:h-[560px]" />
-              ) : items.length === 2 ? (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
-                  {items.map((item) => (
-                    <WorkCard key={item.id} item={item} className="h-72 sm:h-[480px]" />
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-col gap-4 sm:gap-6">
-                  <WorkCard item={items[0]} className="h-80 w-full sm:h-[500px]" />
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
-                    {items.slice(1).map((item) => (
-                      <WorkCard key={item.id} item={item} className="h-56 sm:h-[320px]" />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+            <FeaturedWorkDesktop items={items} />
           </>
         )}
       </div>
