@@ -474,6 +474,50 @@ testimonial carousel instead of a stacked list, and fully editable FAQs.)*
       confirms the code path is correct, not that a real Supabase write
       comes back and renders the way it's supposed to.
 
+## Phase 17 — Mobile "Work Worth a Second Look" Layout
+
+*(The grid on mobile just stacked every card full-width in a plain vertical
+line — boring, as flagged directly. Explored four visual directions first
+as an interactive mockup before writing any code, landed on a combination
+of two of them.)*
+
+- [x] **New mobile-only layout for the homepage Featured Work grid.** Below
+      the `sm` breakpoint, up to 3 portfolio items now stack together as
+      one page — large faded numerals (01, 02, 03…), alternating left and
+      right, same device the "How I Work" section already uses — with no
+      scrolling needed to see all 3. Swiping that page sideways reveals
+      the next 3 as a new page (native CSS scroll-snap, no extra library),
+      with the numbering counting up continuously across pages and a dot
+      row underneath tracking which page you're on. New component:
+      `src/components/home/featured-work-mobile.tsx`. The **desktop grid
+      (`sm:` and up) is completely untouched** — the two live side by side
+      behind a `sm:hidden` / `hidden sm:block` split in
+      `featured-work.tsx`, so this is additive, not a rewrite.
+- [x] **Explored visually before building.** Mocked up four directions
+      (horizontal filmstrip, Pinterest-style asymmetric mosaic, a plain
+      editorial numbered stack, and this combined version) as a live,
+      swipeable design canvas and iterated on the specific one from
+      feedback through three more rounds before writing any real code —
+      nothing here was guessed at from a text description alone.
+- [x] **Verified, not just built.** Typecheck, lint, and a clean
+      production build all pass. Same sandbox limitation as every earlier
+      phase (`*.supabase.co` unreachable from here) — to actually see the
+      swipe and the page-tracking dots work, not just confirm they fail
+      gracefully to the empty state, temporarily pointed
+      `getFeaturedPortfolioItems` at 5 fake items, rebuilt, and drove it
+      with Playwright: page 1 correctly shows items 01&ndash;03 alternating
+      sides, scrolling the pager to page 2 correctly shows 04&ndash;05, and
+      the desktop screenshot confirms the original 3-column grid still
+      renders unchanged with the mobile pager's `display` computed as
+      `none`. Zero horizontal overflow at both 390px and 1440px. Reverted
+      the stub immediately after (confirmed via `git diff` that only the
+      two real files — the new mobile component and the `featured-work.tsx`
+      wiring — remained changed).
+      **Couldn't verify from here:** how it feels on a real phone with
+      real photos and touch scrolling, versus a simulated mouse-driven
+      scroll in a headless browser. Worth a quick check on an actual
+      device once this is live.
+
 ## Resolved
 
 - [x] **Added the structured-data field Google actually uses for the
