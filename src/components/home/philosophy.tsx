@@ -13,7 +13,7 @@ export async function Philosophy() {
           fill
           sizes="(min-width: 768px) 50vw, 100vw"
           quality={90}
-          className="object-cover object-top"
+          className="object-contain"
         />
       </div>
 

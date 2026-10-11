@@ -54,7 +54,7 @@ export default async function AboutPage() {
               fill
               sizes="(min-width: 768px) 50vw, 100vw"
               quality={90}
-              className="object-cover object-top"
+              className="object-contain"
             />
           </div>
           <div className="flex flex-col justify-center gap-5">
