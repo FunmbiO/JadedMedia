@@ -1,7 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { mapTestimonialRow, type Testimonial, type TestimonialRow } from "@/lib/testimonials/types";
 
-const SELECT_COLUMNS = "id, quote, name, client_type, published, sort_order, created_at, updated_at";
+const SELECT_COLUMNS =
+  "id, quote, name, client_type, photo_url, published, sort_order, created_at, updated_at";
 
 /** Published testimonials, in display order — for the homepage section. */
 export async function getPublishedTestimonials(): Promise<Testimonial[]> {

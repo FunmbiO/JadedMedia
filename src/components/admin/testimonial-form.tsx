@@ -8,6 +8,7 @@ import {
   updateTestimonial,
   type TestimonialFormPayload,
 } from "@/app/admin/testimonials/actions";
+import { AvatarUploader } from "@/components/admin/avatar-uploader";
 
 const inputClass =
   "rounded border border-paper/20 bg-transparent px-3.5 py-2.5 font-sans text-sm text-paper outline-none focus:border-gold";
@@ -21,6 +22,7 @@ export function TestimonialForm({ testimonial }: { testimonial?: Testimonial }) 
   const [quote, setQuote] = useState(testimonial?.quote ?? "");
   const [name, setName] = useState(testimonial?.name ?? "");
   const [clientType, setClientType] = useState(testimonial?.clientType ?? "");
+  const [photoUrl, setPhotoUrl] = useState(testimonial?.photoUrl ?? "");
   const [sortOrder, setSortOrder] = useState(testimonial?.sortOrder ?? 0);
   const [published, setPublished] = useState(testimonial?.published ?? true);
 
@@ -32,6 +34,7 @@ export function TestimonialForm({ testimonial }: { testimonial?: Testimonial }) 
       quote,
       name,
       clientType,
+      photoUrl,
       sortOrder,
       published,
     };
@@ -92,6 +95,8 @@ export function TestimonialForm({ testimonial }: { testimonial?: Testimonial }) 
           className={inputClass}
         />
       </label>
+
+      <AvatarUploader value={photoUrl} onChange={setPhotoUrl} />
 
       <label className="flex flex-col gap-1.5">
         <span className={labelClass}>Display order (lower shows first)</span>

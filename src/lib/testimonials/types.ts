@@ -3,6 +3,7 @@ export type Testimonial = {
   quote: string;
   name: string;
   clientType: string;
+  photoUrl: string | null;
   published: boolean;
   sortOrder: number;
 };
@@ -13,6 +14,7 @@ export type TestimonialRow = {
   quote: string;
   name: string;
   client_type: string;
+  photo_url: string | null;
   published: boolean;
   sort_order: number;
   created_at: string;
@@ -25,6 +27,7 @@ export function mapTestimonialRow(row: TestimonialRow): Testimonial {
     quote: row.quote,
     name: row.name,
     clientType: row.client_type,
+    photoUrl: row.photo_url,
     published: row.published,
     sortOrder: row.sort_order,
   };
