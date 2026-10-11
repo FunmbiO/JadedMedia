@@ -8,7 +8,7 @@ export async function Philosophy() {
     <section id="about" className="grid grid-cols-1 bg-paper md:grid-cols-2">
       <div className="relative h-64 bg-beige sm:h-96 md:h-[680px]">
         <Image
-          src="/founder.avif"
+          src={pickContent(content, "founder_photo_url")}
           alt="Olufunmbi Olajubu behind the camera"
           fill
           sizes="(min-width: 768px) 50vw, 100vw"

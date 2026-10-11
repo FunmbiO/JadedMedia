@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { CtaBanner } from "@/components/home/cta-banner";
+import { getSiteContent, pickContent } from "@/lib/content/queries";
 
 export const metadata: Metadata = {
   title: "About | Jaded Media",
@@ -26,7 +27,9 @@ const VALUES = [
   },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const content = await getSiteContent();
+
   return (
     <>
       <div className="flex flex-col gap-20 px-6 py-20 md:px-16 md:py-28">
@@ -46,7 +49,7 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-16">
           <div className="relative aspect-[4/3] overflow-hidden bg-beige">
             <Image
-              src="/founder.avif"
+              src={pickContent(content, "founder_photo_url")}
               alt="Olufunmbi Olajubu, founder of Jaded Media"
               fill
               sizes="(min-width: 768px) 50vw, 100vw"
