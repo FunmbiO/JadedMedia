@@ -7,9 +7,11 @@ import { uploadPortfolioImage } from "@/lib/supabase/storage";
 export function CoverImageUploader({
   value,
   onChange,
+  label = "Cover image",
 }: {
   value: string;
   onChange: (url: string) => void;
+  label?: string;
 }) {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +32,7 @@ export function CoverImageUploader({
   return (
     <div className="flex flex-col gap-2">
       <span className="font-sans text-xs font-medium text-muted-on-ink">
-        Cover image
+        {label}
       </span>
 
       {value ? (
