@@ -115,6 +115,9 @@ back a phase.)*
       `/founder.jpg` reference would have 404'd in production even
       though it worked fine locally). Swap the photo any time by
       replacing that same file — no code change needed.
+      **Superseded in phase 19**: "no code change needed" still meant
+      you'd need me (or a code editor) to do the replacing. It's a real
+      admin upload field now — see phase 19.
 
 ## Phase 6 — Services Admin CMS
 
@@ -577,6 +580,45 @@ swipe-paging mechanism added on top of it.)*
       disables on the last page, the previous button correctly
       re-enables after navigating forward, and clicking a dot jumps
       straight to that page.
+
+## Phase 19 — Editable Founder Photo
+
+*(The founder photo on `/about` and the homepage Philosophy section —
+same image, both places — was a hardcoded `public/founder.avif` file
+since phase 5. Asked to make it swappable from the admin.)*
+
+- [x] **New "Founder photo" field on `/admin/content`.** Reused the
+      `site_content` key/value system from phase 15 — one new key,
+      `founder_photo_url`, defaulting to `/founder.avif` so a blank row
+      (or this sandbox's DB-unreachable fallback) renders exactly the
+      photo that's live today. No migration needed: unlike the other
+      content fields, this one didn't need a seeded database row, since
+      its *default* already is the correct current value — missing or
+      blank, `pickContent` falls back to it either way.
+      `CoverImageUploader` (previously only used for a portfolio item's
+      cover image) gained an optional `label` prop so it could say
+      "Founder photo" here instead of a misleading "Cover image," and
+      got reused as-is rather than building a near-duplicate uploader.
+      Uploading replaces the photo on **both** `/about` and the
+      homepage Philosophy section at once, since they both now read the
+      same content key — matching the single real photo you'd actually
+      want to swap in one place, not two separately-tracked copies that
+      could drift out of sync.
+      `/about` was a plain synchronous page before this (no data
+      fetching at all); it's now an async Server Component fetching
+      `site_content` like every other content-driven page.
+- [x] **Verified, not just built.** Typecheck, lint, and a clean
+      production build all pass. Confirmed both pages still render
+      byte-identical to before: with this sandbox's standing
+      `*.supabase.co`-unreachable limitation, `getSiteContent()` returns
+      empty and `founder_photo_url` falls back to its default — so both
+      `/about` and the homepage correctly keep showing the real
+      `/founder.avif` file, screenshotted at 1280px to confirm no visual
+      regression from the refactor.
+      **Couldn't verify from here:** an actual upload replacing the
+      photo end-to-end, same standing limitation as every content-admin
+      feature in this project. Log in, upload a new photo on
+      `/admin/content`, and confirm it shows up updated in both places.
 
 ## Resolved
 
