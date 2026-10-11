@@ -567,6 +567,16 @@ swipe-paging mechanism added on top of it.)*
       17 — a trackpad swipe or a mouse-wheel horizontal scroll on an
       actual desktop browser, versus a simulated `scrollLeft` jump in a
       headless one.
+- [x] **Real bug from that caveat, reported and fixed same-day.** On a
+      desktop with a plain mouse (no trackpad, no shift+scroll habit),
+      scroll-snap alone gave no way to reach page 2 — the dots were
+      indicator-only, not buttons. Added prev/next arrow buttons (same
+      style as the testimonial carousel's) flanking the dots, and made
+      the dots themselves clickable, both calling `scrollTo` on the
+      pager. Verified with Playwright: the next button correctly
+      disables on the last page, the previous button correctly
+      re-enables after navigating forward, and clicking a dot jumps
+      straight to that page.
 
 ## Resolved
 
