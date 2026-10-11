@@ -619,6 +619,19 @@ since phase 5. Asked to make it swappable from the admin.)*
       photo end-to-end, same standing limitation as every content-admin
       feature in this project. Log in, upload a new photo on
       `/admin/content`, and confirm it shows up updated in both places.
+- [x] **Fixed same-day: a real uploaded photo cropped weirdly.** Both
+      spots had a fixed-shape container (`/about`'s `aspect-[4/3]`, the
+      homepage's `h-64`/`h-96`/`h-[680px]` across breakpoints) paired
+      with `object-cover object-top` — fine for the one photo that
+      container was originally sized around, but a replacement with a
+      different aspect ratio got force-cropped and cut off unpredictably.
+      Switched both to `object-contain`: the whole photo always shows,
+      letterboxed against the existing beige background rather than
+      cropped, regardless of what shape gets uploaded next time.
+      Screenshotted `/about` and the homepage at 1280px and 390px —
+      visually unchanged for the current photo (it already matched its
+      container's shape closely), which is the expected result; the fix
+      only changes behavior for a differently-shaped replacement.
 
 ## Resolved
 
