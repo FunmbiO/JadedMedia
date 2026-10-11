@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getAllPortfolioItemsForAdmin } from "@/lib/portfolio/queries";
 import { CATEGORY_LABELS, MEDIUM_LABELS } from "@/lib/portfolio/labels";
 import { DeletePortfolioButton } from "@/components/admin/delete-portfolio-button";
+import { MovePortfolioItemButtons } from "@/components/admin/move-portfolio-item-buttons";
 import { AdminPagination } from "@/components/admin/admin-pagination";
 import { parsePageParam } from "@/lib/pagination";
 
@@ -20,6 +21,7 @@ type PageProps = {
 export default async function AdminDashboardPage({ searchParams }: PageProps) {
   const page = parsePageParam((await searchParams).page);
   const { items, totalCount, pageSize } = await getAllPortfolioItemsForAdmin(page);
+  const firstIndexOnPage = (page - 1) * pageSize;
 
   return (
     <div className="flex flex-col gap-8 px-6 py-10 md:px-10">
@@ -39,8 +41,14 @@ export default async function AdminDashboardPage({ searchParams }: PageProps) {
         </p>
       ) : (
         <div className="flex flex-col divide-y divide-paper/10 border-t border-b border-paper/10">
-          {items.map((item) => (
+          {items.map((item, indexOnPage) => (
             <div key={item.id} className="flex flex-wrap items-center gap-4 py-4">
+              <MovePortfolioItemButtons
+                id={item.id}
+                isFirst={firstIndexOnPage + indexOnPage === 0}
+                isLast={firstIndexOnPage + indexOnPage === totalCount - 1}
+              />
+
               <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded bg-stone">
                 {item.coverImageUrl && (
                   <Image

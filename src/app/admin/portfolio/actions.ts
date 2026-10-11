@@ -141,6 +141,42 @@ export async function updatePortfolioItem(
   return {};
 }
 
+// Reorders by rewriting sort_order for every item as a sequential list —
+// cheap at this site's scale, and it also normalizes rows that still carry
+// the default 0 from before this feature existed, instead of only working
+// once every row already has a distinct value.
+export async function movePortfolioItem(id: string, direction: "up" | "down") {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("portfolio_items")
+    .select("id")
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const ids = data.map((row) => row.id as string);
+  const index = ids.indexOf(id);
+  const swapWith = direction === "up" ? index - 1 : index + 1;
+  if (index === -1 || swapWith < 0 || swapWith >= ids.length) return;
+
+  [ids[index], ids[swapWith]] = [ids[swapWith], ids[index]];
+
+  for (let i = 0; i < ids.length; i++) {
+    const { error: updateError } = await supabase
+      .from("portfolio_items")
+      .update({ sort_order: i })
+      .eq("id", ids[i]);
+    if (updateError) {
+      throw new Error(updateError.message);
+    }
+  }
+
+  revalidatePortfolioPaths();
+}
+
 export async function deletePortfolioItem(id: string) {
   const supabase = await createClient();
 
