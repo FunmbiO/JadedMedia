@@ -14,6 +14,8 @@ export const CONTENT_DEFAULTS = {
   hero_secondary_cta_label: "Book a Call",
   hero_video_url: "",
 
+  founder_photo_url: "/founder.avif",
+
   philosophy_eyebrow: "My Philosophy",
   philosophy_quote:
     "I don't believe in having a niche. If it's worth capturing, I'm there.",

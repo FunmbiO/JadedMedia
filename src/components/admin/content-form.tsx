@@ -5,6 +5,7 @@ import type { SiteContentMap } from "@/lib/content/queries";
 import { CONTENT_DEFAULTS } from "@/lib/content/defaults";
 import { CONTENT_SECTIONS } from "@/components/admin/content-form-sections";
 import { VideoUploader } from "@/components/admin/video-uploader";
+import { CoverImageUploader } from "@/components/admin/cover-image-uploader";
 import { updateSiteContent } from "@/app/admin/content/actions";
 
 const inputClass =
@@ -70,6 +71,21 @@ export function ContentForm({ initial }: { initial: SiteContentMap }) {
             Remove video
           </button>
         )}
+      </details>
+
+      <details open className="group flex flex-col gap-5 border-t border-paper/15 pt-6">
+        <summary className="cursor-pointer font-display text-lg text-paper">
+          Founder photo
+        </summary>
+        <p className="font-sans text-[12.5px] leading-relaxed text-muted-on-ink">
+          Shown on the About page and the homepage Philosophy section — the
+          same photo, both places. Leave empty to keep the original.
+        </p>
+        <CoverImageUploader
+          label="Founder photo"
+          value={values.founder_photo_url}
+          onChange={(url) => setValue("founder_photo_url", url)}
+        />
       </details>
 
       {CONTENT_SECTIONS.map((section) => (
