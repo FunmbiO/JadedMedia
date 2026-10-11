@@ -5,14 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import type { PortfolioItem } from "@/lib/portfolio/types";
 import { CATEGORY_LABELS, MEDIUM_LABELS } from "@/lib/portfolio/labels";
+import { chunk } from "@/lib/chunk";
 
 const PAGE_SIZE = 3;
-
-function chunk<T>(items: T[], size: number): T[][] {
-  const pages: T[][] = [];
-  for (let i = 0; i < items.length; i += size) pages.push(items.slice(i, i + size));
-  return pages;
-}
 
 /**
  * Mobile-only alternative to the desktop grid: up to 3 items stack
