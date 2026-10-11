@@ -33,6 +33,14 @@ export function GalleryImagesUploader({
     onChange(values.filter((_, i) => i !== index));
   }
 
+  function moveAt(index: number, direction: -1 | 1) {
+    const target = index + direction;
+    if (target < 0 || target >= values.length) return;
+    const next = [...values];
+    [next[index], next[target]] = [next[target], next[index]];
+    onChange(next);
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <span className="font-sans text-xs font-medium text-muted-on-ink">
@@ -52,6 +60,26 @@ export function GalleryImagesUploader({
               >
                 &times;
               </button>
+              <div className="absolute bottom-1.5 left-1.5 flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => moveAt(index, -1)}
+                  disabled={index === 0}
+                  className="flex h-6 w-6 items-center justify-center rounded-full bg-ink/80 font-sans text-xs text-paper hover:bg-ink disabled:opacity-30"
+                  aria-label="Move image earlier"
+                >
+                  &uarr;
+                </button>
+                <button
+                  type="button"
+                  onClick={() => moveAt(index, 1)}
+                  disabled={index === values.length - 1}
+                  className="flex h-6 w-6 items-center justify-center rounded-full bg-ink/80 font-sans text-xs text-paper hover:bg-ink disabled:opacity-30"
+                  aria-label="Move image later"
+                >
+                  &darr;
+                </button>
+              </div>
             </div>
           ))}
         </div>
