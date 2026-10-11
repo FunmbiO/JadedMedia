@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type UIEvent } from "react";
+import { useRef, useState, type UIEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import type { PortfolioItem } from "@/lib/portfolio/types";
@@ -20,6 +20,7 @@ const PAGE_SIZE = 3;
 export function FeaturedWorkDesktop({ items }: { items: PortfolioItem[] }) {
   const pages = chunk(items, PAGE_SIZE);
   const [activePage, setActivePage] = useState(0);
+  const scrollerRef = useRef<HTMLDivElement>(null);
 
   function handleScroll(e: UIEvent<HTMLDivElement>) {
     const el = e.currentTarget;
@@ -27,11 +28,18 @@ export function FeaturedWorkDesktop({ items }: { items: PortfolioItem[] }) {
     setActivePage(Math.round(el.scrollLeft / el.clientWidth));
   }
 
+  function goToPage(page: number) {
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.scrollTo({ left: page * el.clientWidth, behavior: "smooth" });
+  }
+
   let runningIndex = 0;
 
   return (
     <div className="hidden sm:block">
       <div
+        ref={scrollerRef}
         onScroll={handleScroll}
         className="flex snap-x snap-mandatory overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
@@ -111,15 +119,40 @@ export function FeaturedWorkDesktop({ items }: { items: PortfolioItem[] }) {
       </div>
 
       {pages.length > 1 && (
-        <div className="mt-10 flex items-center justify-center gap-2">
-          {pages.map((_, i) => (
-            <div
-              key={i}
-              className={`h-1 rounded-full transition-all ${
-                i === activePage ? "w-7 bg-gold" : "w-2 bg-ink/15"
-              }`}
-            />
-          ))}
+        <div className="mt-10 flex items-center justify-center gap-5">
+          <button
+            type="button"
+            onClick={() => goToPage(activePage - 1)}
+            disabled={activePage === 0}
+            aria-label="Previous work"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink/15 text-ink transition-colors hover:border-gold-deep hover:text-gold-deep disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-ink/15 disabled:hover:text-ink"
+          >
+            &larr;
+          </button>
+
+          <div className="flex items-center gap-2">
+            {pages.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => goToPage(i)}
+                aria-label={`Go to work page ${i + 1}`}
+                className={`h-1 rounded-full transition-all ${
+                  i === activePage ? "w-7 bg-gold" : "w-2 bg-ink/15 hover:bg-ink/30"
+                }`}
+              />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => goToPage(activePage + 1)}
+            disabled={activePage === pages.length - 1}
+            aria-label="Next work"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink/15 text-ink transition-colors hover:border-gold-deep hover:text-gold-deep disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-ink/15 disabled:hover:text-ink"
+          >
+            &rarr;
+          </button>
         </div>
       )}
     </div>
