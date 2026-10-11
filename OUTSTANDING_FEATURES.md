@@ -518,6 +518,56 @@ of two of them.)*
       scroll in a headless browser. Worth a quick check on an actual
       device once this is live.
 
+## Phase 18 — Desktop "Work Worth a Second Look" Layout
+
+*(Immediately after the mobile fix: "the grid looks boring" turned out to
+mean desktop this time — the old hero + uniform 3-box grid. Explored four
+desktop directions visually, picked one, then asked for the mobile
+swipe-paging mechanism added on top of it.)*
+
+- [x] **New desktop layout for the homepage Featured Work grid, replacing
+      the old hero + 3-column grid entirely.** Full-width rows alternating
+      image-left/image-right, with a large faded numeral (01, 02, 03&hellip;)
+      behind each caption — the same numbered/alternating language the
+      mobile layout already uses, scaled up to a magazine-editorial size.
+      Grouped into pages of 3 with the same horizontal scroll-snap paging
+      as mobile: 1&ndash;3 show together, swiping (or scrolling sideways
+      with a trackpad/mouse wheel) brings in 4&ndash;5, with a dot row
+      tracking the page. New component:
+      `src/components/home/featured-work-desktop.tsx`, replacing the old
+      1-item/2-item/3+-item special-casing in `featured-work.tsx` — this
+      one layout now handles 1 to 5 items on its own, no branching needed
+      at the `FeaturedWork` level for either breakpoint anymore.
+      **`WorkCard` is now unused and was deleted** (nothing referenced it
+      once the desktop grid stopped using it) rather than left as dead
+      code. Pulled the page-chunking helper both components share into
+      `src/lib/chunk.ts` instead of keeping two copies.
+- [x] **Explored visually before building — same process as the mobile
+      round.** Mocked up four desktop directions (asymmetric bento grid,
+      numbered-with-varied-heights, a staggered overlapping row, and the
+      editorial alternating-rows version) on the same live design canvas,
+      picked the editorial one, then added the mobile's swipe-paging
+      mechanism to it in a follow-up round once asked — all before
+      touching real code.
+- [x] **Verified, not just built.** Typecheck, lint, and a clean
+      production build all pass. Same sandbox limitation as every earlier
+      phase (`*.supabase.co` unreachable from here) — temporarily pointed
+      `getFeaturedPortfolioItems` at 5 fake items again, rebuilt, and
+      drove it with Playwright: page 1 shows items 01&ndash;03, scrolling
+      the pager to page 2 correctly shows 04 (reversed) and 05 (normal) &mdash;
+      confirming the alternation keeps counting correctly across the page
+      boundary rather than resetting &mdash; and unlike the design mockup,
+      there's no fake placeholder box for a nonexistent 6th item, since
+      the real component only ever renders what's actually in the data.
+      Also confirmed the desktop pager's `display` computes to `none` on
+      a 390px viewport and there's zero horizontal overflow at either
+      size. Reverted the stub immediately after (confirmed via `git diff`
+      that the real file came back byte-for-byte unchanged).
+      **Couldn't verify from here:** the same real-device caveat as phase
+      17 — a trackpad swipe or a mouse-wheel horizontal scroll on an
+      actual desktop browser, versus a simulated `scrollLeft` jump in a
+      headless one.
+
 ## Resolved
 
 - [x] **Added the structured-data field Google actually uses for the
