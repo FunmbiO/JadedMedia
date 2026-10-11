@@ -10,7 +10,8 @@ never silently dropped.
       in what's already established on the site (services, quote-based
       pricing, Moncton + travel, the booking flow) — nothing invented.
       Native `<details>/<summary>` accordion, no JS needed. Added to
-      the sitemap.
+      the sitemap. **Superseded in phase 16**: the same eight questions
+      now live in a real database table, editable from `/admin/faqs`.
 - [x] **`/privacy` and `/terms` are real pages now, not 404s** — each a
       simple "Coming soon" placeholder, at your request, rather than me
       drafting actual legal text on my own judgment (that's real
@@ -402,6 +403,76 @@ sentence on every page.)*
       *fallback* path rendering correctly, not a live round-trip with
       real data. Please log in once, edit a content field and add a
       testimonial, and confirm both show up on the live site.
+
+## Phase 16 — Reordering, Testimonial Photos, Carousel & Editable FAQ
+
+*(Five follow-up asks after phase 15: a photo per testimonial, reordering
+within a work gallery, reordering the "Work worth a second look" grid, a
+testimonial carousel instead of a stacked list, and fully editable FAQs.)*
+
+- [x] **Testimonial photo.** `testimonials` gained a `photo_url` column
+      (migration `0014`). The admin form has a small circular-preview
+      uploader (reuses the same Supabase Storage upload used for
+      portfolio images); replacing or removing a photo cleans up the old
+      file from Storage, same pattern as portfolio cover-image swaps. No
+      photo set still shows the original blank circle — never a broken
+      image.
+- [x] **Reorder photos within a work gallery.** Each thumbnail in the
+      admin's gallery-images uploader now has small up/down arrows that
+      swap it with its neighbor before you save — no drag-and-drop
+      library needed for what's a short, infrequently-reordered list.
+- [x] **Reorder the "Work worth a second look" grid.** The admin
+      Portfolio list now has up/down arrows per entry. Moving an item
+      rewrites `sort_order` for every portfolio row as a clean sequential
+      list (not just the two being swapped) — this also quietly fixes
+      any item still sitting on the old default `0`, so ordering works
+      correctly even for entries created before this feature existed.
+      Because the homepage featured grid and the full `/work` page both
+      already sort by this same `sort_order` column, one reorder control
+      drives both at once — no second, separate "homepage order" setting
+      to keep in sync.
+- [x] **Testimonial carousel.** The homepage section is now a small
+      client component (`TestimonialCarousel`) with prev/next arrow
+      buttons and dot indicators, showing one testimonial at a time
+      instead of every published one stacked. Data fetching stayed
+      server-side (`Testimonial` server component fetches, passes the
+      array down) — only the click interaction needed client JS. Hidden
+      arrows/dots when there's only one testimonial, same as before.
+- [x] **Editable FAQ.** New `faqs` table (migration `0014`, same RLS
+      shape as `services`/`testimonials`: public reads published rows,
+      the admin has full CRUD), seeded with the same eight questions
+      that used to be hardcoded in `src/app/faq/page.tsx` so the page
+      doesn't go blank the moment this shipped. New `/admin/faqs` tab:
+      list, **"+ Add Question"** button, edit, delete — same conventions
+      as Services and Testimonials. The two answers that used to embed a
+      real `<Link>` ("the contact form," "take a look here") needed a
+      plain-text-friendly way to still link somewhere once the copy
+      lived in a database column — added a tiny `[link text](/path)`
+      syntax (`src/lib/markdown-links.tsx`) that the admin can type and
+      the public page turns into a real link. Everything else renders as
+      plain text.
+- [x] **Verified, not just built.** Typecheck, lint, and a clean
+      production build all pass. This sandbox still can't reach
+      `*.supabase.co` (the same standing limitation from every earlier
+      phase), so to actually see the new carousel and the FAQ links
+      render with real data — not just confirm they fail gracefully to
+      an empty state — I temporarily pointed both query functions at
+      hardcoded fake rows, rebuilt, and screenshotted: the carousel's
+      next arrow correctly advances between two fake testimonials with
+      the dot indicator updating, and both `[label](/path)`-style FAQ
+      answers rendered as real, correctly-hrefed links. Reverted both
+      query files back to the real Supabase calls immediately after
+      (confirmed via `git diff` that only the intended `photo_url`
+      column addition remained). Also re-confirmed at 390px/1440px:
+      zero horizontal overflow on `/` and `/faq`, and every `/admin/*`
+      route — including the three new `/admin/faqs` ones — still
+      redirects (307) when logged out.
+      **Couldn't verify from here:** a real end-to-end admin round-trip
+      — uploading a testimonial photo, arrow-reordering a live gallery
+      or the live Portfolio list, adding a live FAQ question. Please
+      log in once and try all four; everything above
+      confirms the code path is correct, not that a real Supabase write
+      comes back and renders the way it's supposed to.
 
 ## Resolved
 
