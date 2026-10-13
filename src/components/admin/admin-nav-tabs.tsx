@@ -10,6 +10,7 @@ const TABS = [
   { href: "/admin/faqs", label: "FAQ" },
   { href: "/admin/content", label: "Content" },
   { href: "/admin/leads", label: "Leads" },
+  { href: "/admin/email", label: "Email" },
 ];
 
 export function AdminNavTabs() {
