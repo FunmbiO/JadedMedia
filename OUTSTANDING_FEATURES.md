@@ -733,6 +733,15 @@ templates. Mocked up visually first, approved, then built.)*
       sender avatar: the Google Account profile photo
       (myaccount.google.com → Personal info → Photo) is account-wide,
       not something scoped to one alias.
+- [x] **Email footer now shows `hello@jadedmedia.ca` instead of the
+      personal gmail address.** Changed `SITE_CONFIG.email` — the
+      single source feeding the footer line
+      (`hello@jadedmedia.ca · (506) 588-6081`) on every outgoing email
+      (lead notifications, quote confirmations, Send Email form) and
+      the homepage's Organization JSON-LD. Phone number untouched. The
+      *public website's* own footer/contact page use a separate,
+      admin-editable `contact_email` content key — left alone since you
+      only flagged the email template.
 
 ## Resolved
 
