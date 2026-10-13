@@ -633,6 +633,62 @@ since phase 5. Asked to make it swappable from the admin.)*
       container's shape closely), which is the expected result; the fix
       only changes behavior for a differently-shaped replacement.
 
+## Phase 20 — Admin: Send a Branded Email to Any Client
+
+*(You already had hello@jadedmedia.ca verified with Resend from the custom
+domain email setup — this is the admin UI to actually send a one-off email
+from it, to anyone, instead of only the automatic lead/quote-request
+templates. Mocked up visually first, approved, then built.)*
+
+- [x] **New "Email" tab on `/admin/email`.** Compose To/Subject/Message,
+      with a "Connected" badge confirming the sender address that's
+      actually configured (`RESEND_FROM_EMAIL`) — and an honest red "Not
+      connected" state instead of a fake-looking success badge if that
+      env var isn't set. Framed deliberately as a **one-off send**, not a
+      bulk/mailing-list tool — no "From" picker (always sends as your one
+      connected address), no recipient list.
+- [x] **New `customAdminEmail()` template**
+      (`src/lib/email/templates.ts`), reusing the exact same `emailShell()`
+      wrapper every other email already renders inside — same dark card,
+      gold accent bar, logo, italic heading, footer. Plain text in: a
+      blank line starts a new paragraph, a single newline inside one
+      becomes a line break.
+- [x] **Live preview is the real thing, not a lookalike.** The template
+      file has no `"server-only"` import, so the admin compose form calls
+      `customAdminEmail()` directly and renders its actual HTML output in
+      an `<iframe srcDoc>` — what you see while typing is byte-identical
+      to what Resend actually sends, not a second hand-maintained copy of
+      the styling that could quietly drift out of sync.
+- [x] **Explicit auth check in the Server Action — not just relying on
+      the admin route redirect.** Every other admin write is guarded by
+      Supabase RLS on the table it touches; sending an email through
+      Resend has no such backstop, so `sendAdminEmail()` checks
+      `supabase.auth.getUser()` itself before calling Resend at all.
+- [x] **Found and fixed a real (pre-existing) gap while in this file:**
+      the four existing automatic email templates (lead/quote-request
+      notification + confirmation) interpolated visitor-submitted form
+      fields — name, message, details — straight into the HTML with no
+      escaping. A contact-form submission containing `<` or `&` would
+      have rendered broken or substituted markup in your inbox. Added an
+      `escapeHtml()` helper (now used by the new template too) and
+      applied it to every one of those interpolations.
+- [x] **Verified, not just built.** Typecheck, lint, and a clean
+      production build all pass — including confirming `templates.ts`
+      really is safe to import from a Client Component (if it weren't,
+      the build itself would have failed, not just looked wrong).
+      `/admin/email` correctly redirects (307) when logged out, same as
+      every other admin route. Ran `customAdminEmail()` directly
+      (`npx tsx`, no server needed) with a message containing `<`, `>`
+      and `&` and screenshotted the actual output: paragraphs split
+      correctly on blank lines, and the injected characters render as
+      plain visible text instead of breaking the markup — confirming the
+      escaping actually works, not just that it compiles.
+      **Couldn't verify from here:** an actual send through Resend —
+      same standing `*.supabase.co`/external-API-unreachable limitation
+      as every feature in this project that needs a live connection. Log
+      in, send yourself a test email, and confirm it lands looking like
+      the preview.
+
 ## Resolved
 
 - [x] **Added the structured-data field Google actually uses for the
