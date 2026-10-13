@@ -689,6 +689,36 @@ templates. Mocked up visually first, approved, then built.)*
       in, send yourself a test email, and confirm it lands looking like
       the preview.
 
+## Phase 20 follow-up — Sender Address + Logo Asset
+
+- [x] **`RESEND_FROM_EMAIL` set to `hello@jadedmedia.ca` on Vercel
+      (production).** The env var existed already but Vercel stores
+      "sensitive" values write-only — there's no API to read back what
+      it was actually set to, so rather than guess whether an earlier
+      session's attempt at this had actually landed, I just set it
+      directly to confirm it's correct now. Confirmed via the var's
+      updated timestamp changing, not by reading its value (can't).
+      This is what both the Send Email feature and every automatic
+      lead/quote-request email send from.
+- [x] **Regenerated `public/logo-email.png`.** Checked it first rather
+      than assuming something was wrong: it already was the real Jaded
+      Media mark (120&times;120, matches `public/logo.png`, already live
+      on `main` since phase 9) — not a stale or wrong image. One real
+      technical issue found on inspection, though: it was an
+      **indexed/palette PNG** (`isPalette: true`), a format some email
+      clients (older Outlook in particular) handle poorly. Regenerated
+      it from the source logo via `sharp` as a standard RGB PNG
+      (`isPalette: false`) — same look, same ~120&times;120 size, just a
+      safer file format. If what you actually saw was a broken image
+      icon rather than a wrong one, that was more likely Gmail (or
+      whatever client) blocking remote images by default until you
+      click "show images" — normal behavior, not something code can fix
+      — than a content problem with the file itself.
+      **If neither of those was it** — if you're looking at something
+      that genuinely isn't the JM mark — tell me exactly what you're
+      seeing (a screenshot helps) and I'll chase the real cause instead
+      of guessing further.
+
 ## Resolved
 
 - [x] **Added the structured-data field Google actually uses for the
