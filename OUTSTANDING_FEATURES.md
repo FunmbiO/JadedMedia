@@ -718,6 +718,21 @@ templates. Mocked up visually first, approved, then built.)*
       that genuinely isn't the JM mark — tell me exactly what you're
       seeing (a screenshot helps) and I'll chase the real cause instead
       of guessing further.
+- [x] **Sender display name changed to "Jaded Media."** It was
+      hardcoded as `Funmbi Olajubu <email>` in
+      `formatFromAddress()` — the one place in the codebase that still
+      used a personal name instead of the brand. Now every email the
+      site sends (lead notifications, quote confirmations, and the new
+      Send Email form) shows "Jaded Media" as the sender. Note this
+      only covers emails the *website* sends through Resend — it has
+      no effect on mail you compose by hand in Gmail using the
+      `hello@jadedmedia.ca` alias. That's a separate, Gmail-side
+      setting (Settings → Accounts and Import → Send mail as → edit
+      info → Name), which is what you'd want to change to make manually
+      sent alias mail show "Jaded Media" too. Same story for the
+      sender avatar: the Google Account profile photo
+      (myaccount.google.com → Personal info → Photo) is account-wide,
+      not something scoped to one alias.
 
 ## Resolved
 
