@@ -26,12 +26,21 @@ const LABEL_STYLE =
   "font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #8a8678; margin: 0 0 3px;";
 const VALUE_STYLE = "font-size: 15px; line-height: 1.5; margin: 0; color: #f6f4ef;";
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function row(label: string, value: string): string {
   if (!value) return "";
   return `
     <div style="padding: 14px 0; border-bottom: 1px solid rgba(246,244,239,0.07);">
       <p style="${LABEL_STYLE}">${label}</p>
-      <p style="${VALUE_STYLE}">${value}</p>
+      <p style="${VALUE_STYLE}">${escapeHtml(value)}</p>
     </div>
   `;
 }
@@ -75,7 +84,7 @@ export function teamNotificationEmail(payload: LeadFormPayload) {
     subject: `New inquiry: ${payload.name} (${EVENT_TYPE_LABELS[payload.eventType]})`,
     html: emailShell(
       "New Inquiry",
-      `<h1 style="${HEADING_STYLE}">${payload.name} wants to talk.</h1>`,
+      `<h1 style="${HEADING_STYLE}">${escapeHtml(payload.name)} wants to talk.</h1>`,
       `
         ${row("Name", payload.name)}
         ${row("Email", payload.email)}
@@ -94,7 +103,7 @@ export function clientConfirmationEmail(payload: LeadFormPayload) {
     subject: "I received your message — Jaded Media",
     html: emailShell(
       "Message Received",
-      `<h1 style="${HEADING_STYLE}">Thank you, ${payload.name}.</h1>`,
+      `<h1 style="${HEADING_STYLE}">Thank you, ${escapeHtml(payload.name)}.</h1>`,
       `
         <p style="${INTRO_STYLE}">
           I've received your message and will get back to you shortly.
@@ -115,7 +124,7 @@ export function quoteRequestNotificationEmail(
     subject: `New consultation request: ${payload.name} (${payload.serviceTitle})`,
     html: emailShell(
       "New Consultation Request",
-      `<h1 style="${HEADING_STYLE}">${payload.name} wants a quote.</h1>`,
+      `<h1 style="${HEADING_STYLE}">${escapeHtml(payload.name)} wants a quote.</h1>`,
       `
         ${row("Service", payload.serviceTitle)}
         ${row("Name", payload.name)}
@@ -134,7 +143,7 @@ export function quoteRequestConfirmationEmail(
     subject: "Consultation received — Jaded Media",
     html: emailShell(
       "Consultation Received",
-      `<h1 style="${HEADING_STYLE}">Consultation received, ${payload.name}.</h1>`,
+      `<h1 style="${HEADING_STYLE}">Consultation received, ${escapeHtml(payload.name)}.</h1>`,
       `
         <p style="${INTRO_STYLE}">
           I've received your consultation request and will get back to you
@@ -143,6 +152,35 @@ export function quoteRequestConfirmationEmail(
         ${row("Service", payload.serviceTitle)}
         ${row("Details", payload.details)}
       `,
+    ),
+  };
+}
+
+/**
+ * A free-text, admin-composed email — the "send a one-off branded email to
+ * any address" feature. Plain text in: blank lines split it into
+ * paragraphs, a single newline inside a paragraph becomes a line break.
+ * Isomorphic on purpose (no "server-only" import anywhere in this file) so
+ * the admin compose form can call this directly for a byte-identical live
+ * preview instead of maintaining a second copy of this markup client-side.
+ */
+export function customAdminEmail(subject: string, message: string) {
+  const bodyHtml = message
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map(
+      (block) =>
+        `<p style="${INTRO_STYLE}">${escapeHtml(block).replace(/\n/g, "<br>")}</p>`,
+    )
+    .join("");
+
+  return {
+    subject,
+    html: emailShell(
+      "A Message From Jaded Media",
+      `<h1 style="${HEADING_STYLE}">${escapeHtml(subject)}</h1>`,
+      bodyHtml,
     ),
   };
 }
