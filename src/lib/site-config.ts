@@ -3,7 +3,7 @@
  * banner, contact page) so there's one place to update instead of several.
  */
 export const SITE_CONFIG = {
-  email: "funmbiolajubu@gmail.com",
+  email: "hello@jadedmedia.ca",
   phone: "(506) 588-6081",
   city: "Moncton, New Brunswick, Canada",
   travelNote:
