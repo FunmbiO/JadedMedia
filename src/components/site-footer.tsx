@@ -95,7 +95,7 @@ export async function SiteFooter() {
           <span className="font-sans text-xs text-muted-on-ink/80">
             © {new Date().getFullYear()} Jaded Media. All rights reserved.
           </span>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-6">
             <Link
               href="/privacy"
               className="font-sans text-xs text-muted-on-ink/80 transition-opacity hover:opacity-70"
@@ -107,6 +107,18 @@ export async function SiteFooter() {
               className="font-sans text-xs text-muted-on-ink/80 transition-opacity hover:opacity-70"
             >
               Terms of Service
+            </Link>
+            <Link
+              href="/cookies"
+              className="font-sans text-xs text-muted-on-ink/80 transition-opacity hover:opacity-70"
+            >
+              Cookie Policy
+            </Link>
+            <Link
+              href="/refund-policy"
+              className="font-sans text-xs text-muted-on-ink/80 transition-opacity hover:opacity-70"
+            >
+              Refund Policy
             </Link>
           </div>
         </div>

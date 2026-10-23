@@ -12,8 +12,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_CONFIG.siteUrl}/about`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_CONFIG.siteUrl}/contact`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_CONFIG.siteUrl}/faq`, changeFrequency: "monthly", priority: 0.4 },
-    // /privacy and /terms deliberately left out — still placeholder
-    // "coming soon" pages, nothing worth Google indexing yet.
+    { url: `${SITE_CONFIG.siteUrl}/privacy`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${SITE_CONFIG.siteUrl}/terms`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${SITE_CONFIG.siteUrl}/cookies`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${SITE_CONFIG.siteUrl}/refund-policy`, changeFrequency: "yearly", priority: 0.2 },
   ];
 
   const workRoutes: MetadataRoute.Sitemap = items.map((item) => ({
