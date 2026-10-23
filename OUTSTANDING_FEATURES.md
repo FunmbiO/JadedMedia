@@ -12,13 +12,13 @@ never silently dropped.
       Native `<details>/<summary>` accordion, no JS needed. Added to
       the sitemap. **Superseded in phase 16**: the same eight questions
       now live in a real database table, editable from `/admin/faqs`.
-- [x] **`/privacy` and `/terms` are real pages now, not 404s** — each a
-      simple "Coming soon" placeholder, at your request, rather than me
-      drafting actual legal text on my own judgment (that's real
-      liability for your business, not boilerplate to guess at).
-      Deliberately left out of the sitemap until there's real content.
-      **Still needs you eventually:** the actual privacy policy and
-      terms text, whenever you're ready for that.
+- [x] **`/privacy` and `/terms` are real pages now, not 404s.**
+      Originally shipped as "Coming soon" placeholders, deliberately
+      left out of the sitemap, since drafting real legal text wasn't
+      mine to decide unprompted. **Superseded in phase 21**: real
+      content now, plus a Cookie Policy and Refund Policy — see the
+      phase 21 section for what's covered and what still needs real
+      legal review.
 - [x] **`/press` built — phase 15.** Same "Coming soon" placeholder
       treatment as `/privacy` and `/terms`, so the footer's existing
       link stops 404ing. (`/careers` was removed in phase 7 — doesn't
@@ -742,6 +742,141 @@ templates. Mocked up visually first, approved, then built.)*
       *public website's* own footer/contact page use a separate,
       admin-editable `contact_email` content key — left alone since you
       only flagged the email template.
+
+## Phase 21 — Legal, Privacy & Accessibility Compliance
+
+Full site audit + implementation for privacy, consent, cookies, refunds,
+data minimization, and accessibility, at your request. **I'm not a
+lawyer** — the policy pages below are solid, standard drafts grounded in
+what this site actually does (not boilerplate copy-pasted from a
+template), written for a Canadian sole proprietorship under PIPEDA, but
+you should have an actual lawyer or paralegal glance over them before
+leaning on them in a real dispute.
+
+- [x] **Real Privacy Policy (`/privacy`).** What's collected (name,
+      email, phone/date/budget if offered, message — nothing else),
+      why, which service providers process it on your behalf (Supabase,
+      Resend, Vercel, Cloudflare R2), retention, and PIPEDA access/
+      correction/withdrawal-of-consent rights with your email as the
+      contact point. States plainly that Jaded Media is a sole-
+      proprietorship trade name for Olufunmbi Olajubu — no business
+      registration number exists anywhere in the codebase, so none is
+      claimed in the policy either.
+- [x] **Real Terms of Service (`/terms`).** Booking/payment basics,
+      delivery-timeline disclaimer (6–8 weeks, matches your existing
+      Process copy), copyright/usage-rights clause (you retain
+      copyright, clients get a personal-use licence, you may use
+      session work in your portfolio/marketing unless told otherwise in
+      writing), liability limitation, governing law (New Brunswick,
+      Canada).
+- [x] **New Cookie Policy (`/cookies`).** Discloses the only two things
+      that touch a browser here: the Supabase login-session cookie
+      (admin-only, set only when *you* log in) and Vercel Web
+      Analytics, which is cookie-free by design. No ad pixels, no
+      cross-site tracking, no Google Fonts/YouTube/Maps embeds loading
+      anything external — confirmed by grep across the whole codebase,
+      not assumed.
+- [x] **New Refund & Cancellation Policy (`/refund-policy`).**
+      Non-refundable retainer, balance due before the shoot, one free
+      reschedule with 14+ days' notice, no refund on late cancellation,
+      full refund if you're the one who has to cancel. You confirmed
+      this is the policy you actually want to run — not invented
+      numbers.
+- [x] **Cookie consent banner: deliberately not added**, per your
+      choice. Under PIPEDA, what's legally required is disclosure, not
+      a pop-up — and since there's no tracking/advertising cookie here
+      at all (confirmed above), a banner would add friction without
+      adding any real protection. **If you ever add retargeting ads, a
+      Meta/Google pixel, or anything similar, that changes the legal
+      picture and this decision should be revisited.**
+- [x] **Consent checkbox added to both the contact form and the quote
+      request modal.** Required, linked to `/privacy`, validated
+      server-side (`submitLead`/`submitQuoteRequest` reject the
+      submission if unchecked) — not just a client-side nicety.
+- [x] **`consent_at` column added to `leads`** (migration `0015`,
+      applied live via Supabase MCP) — a timestamp recorded every time
+      someone submits, as evidence of consent per PIPEDA's
+      accountability principle. Rows from before this phase have
+      `consent_at = null`, which is expected.
+- [x] **Fixed the contact-email inconsistency** flagged in the last
+      session: the public-facing `contact_email` content key (footer,
+      `/contact`, `/faq`) was still the personal gmail address even
+      after `SITE_CONFIG.email` was switched to `hello@jadedmedia.ca`.
+      Fixed in the code default **and** the live database row
+      (migration `0016`, applied via Supabase MCP) — confirmed with a
+      follow-up query that the live value is now correct.
+- [x] **Data minimization check.** Read every field the contact form
+      and quote modal actually collect: name + email are the only
+      required fields; phone, event date, and budget range are already
+      optional. Nothing excessive (no ID, no payment details) is or was
+      ever collected. No changes needed — confirmed, not assumed.
+- [x] **Confirmed no payment/checkout code exists anywhere** (grepped
+      for Stripe/PayPal/Square — zero hits). This site never touches
+      card data, so PCI-DSS isn't in scope; the Refund Policy says
+      payment happens directly between you and the client, not through
+      the site.
+- [x] **Confirmed analytics/tracking is minimal.** Only
+      `@vercel/analytics` (cookie-free) is installed — no Google
+      Analytics, Meta Pixel, or similar. No third-party embeds beyond
+      self-hosted `<video>` (R2) and self-hosted fonts (`next/font`) —
+      nothing else loads in a visitor's browser.
+- [x] **Accessibility: quote modal now traps focus and restores it.**
+      It already closed on Escape; now Tab/Shift+Tab loop inside the
+      dialog instead of escaping to the page behind it, and closing it
+      (by any method) returns focus to the "Get a Custom Quote" button
+      that opened it. Verified directly with Playwright: focus lands in
+      the dialog on open, stays inside after 10 Tab presses, and
+      returns to the trigger button after Escape.
+- [x] **Accessibility: `aria-required="true"` added** alongside the
+      existing native `required` attribute on every required field in
+      the contact form and quote modal (belt-and-suspenders for screen
+      readers; native `required` was already sufficient on its own).
+- [x] **Accessibility: audited every `<Image>`/`<img>` in the codebase**
+      for alt text. Every single one already has an explicit `alt`
+      (descriptive or intentionally empty next to visible text, e.g.
+      the logo beside the "JADED MEDIA" wordmark) — nothing was missing
+      an alt attribute. Left the admin portfolio-list thumbnail's
+      `alt=""` as-is on purpose: it sits directly next to the item's
+      visible title text, which already meets WCAG 1.1.1.
+- [x] **Accessibility: color contrast already fixed in phase 9** —
+      re-checked the current token values in `globals.css` against that
+      work; nothing regressed, no further changes needed here.
+- [x] **`/privacy`, `/terms`, `/cookies`, `/refund-policy` added to the
+      sitemap** now that they have real content (previously
+      deliberately excluded as placeholders).
+
+**Risks flagged, not code fixes — worth knowing:**
+
+- **Portfolio/marketing use of client photos.** The Terms say you may
+  feature session work in your portfolio/marketing unless a client
+  opts out in writing — but nothing on this *website* actually captures
+  that opt-out from every client (especially a verbal/in-person
+  booking). That has to be handled in whatever booking paperwork or
+  conversation happens outside the site; the Terms text alone doesn't
+  collect the choice.
+- **CASL and the admin Send Email feature.** Emailing people who've
+  already contacted you (leads, quote requests) is covered by implied
+  consent under CASL. Using that same feature to cold-email people
+  who've never reached out would trigger CASL's stricter rules
+  (identification + a working unsubscribe mechanism), which the feature
+  doesn't currently implement. Recommend only using it for existing
+  inquiries.
+- **PIPEDA breach notification.** Not something to build — just know
+  that if client data is ever breached in a way that creates real risk
+  of significant harm, federal law requires notifying affected people
+  and the Privacy Commissioner of Canada. Nothing in this site needs to
+  change for this; it's a "know before it happens" item.
+- **Focus-ring visibility is subtle sitewide.** Every input already has
+  a visible focus indicator (the border changes to gold), but it's a
+  color-only change with no added outline/shadow, which can be hard to
+  see for low-vision users. Didn't change this sitewide in this phase
+  since it wasn't part of what broke — flagging as worth a dedicated
+  pass if you want to go further than WCAG's minimum.
+- **No street address anywhere**, by your choice — fine for this
+  website and for PIPEDA. Just note that if you ever formally
+  incorporate or register the business, CRA/Canada Post correspondence
+  for that registration will need a real address on file with those
+  agencies — separate from what's shown publicly here.
 
 ## Resolved
 
