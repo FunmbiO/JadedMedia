@@ -12,7 +12,15 @@ export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const tokenHash = searchParams.get("token_hash");
   const type = searchParams.get("type");
-  const next = searchParams.get("next") ?? "/admin/reset-password";
+  const rawNext = searchParams.get("next") ?? "/admin/reset-password";
+  // Always an internal path, never an off-site redirect target — the
+  // `${origin}${next}` construction below already makes an absolute
+  // attacker URL non-exploitable, but this keeps it that way even if a
+  // future refactor drops that prefix.
+  const next =
+    rawNext.startsWith("/") && !rawNext.startsWith("//")
+      ? rawNext
+      : "/admin/reset-password";
 
   if (tokenHash && type === "recovery") {
     const supabase = await createClient();
