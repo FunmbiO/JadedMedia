@@ -48,7 +48,7 @@ export const CONTENT_DEFAULTS = {
   cta_subcopy: "My calendar fills up fast, so reach out early if you want a date.",
   cta_button_label: "Start Your Project",
 
-  contact_email: "funmbiolajubu@gmail.com",
+  contact_email: "hello@jadedmedia.ca",
   contact_phone: "(506) 588-6081",
   contact_city: "Moncton, New Brunswick, Canada",
   contact_travel_note:
