@@ -10,6 +10,8 @@ export type SendAdminEmailPayload = {
   message: string;
 };
 
+const HOURLY_SEND_LIMIT = 20;
+
 /**
  * Sends a one-off branded email to any address. Unlike the DB-backed admin
  * actions elsewhere, there's no RLS policy standing between an unauthenticated
@@ -36,6 +38,22 @@ export async function sendAdminEmail(
     return { error: "Fill in the recipient, subject, and message." };
   }
 
+  // This feature can email any address under the verified sending domain
+  // — the highest-value target in the app if the admin session is ever
+  // compromised. Capped even for a legitimate, already-authenticated
+  // sender.
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const { count: recentSendCount } = await supabase
+    .from("admin_email_log")
+    .select("id", { count: "exact", head: true })
+    .gte("sent_at", oneHourAgo);
+
+  if ((recentSendCount ?? 0) >= HOURLY_SEND_LIMIT) {
+    return {
+      error: `You've hit the hourly limit of ${HOURLY_SEND_LIMIT} emails — try again later.`,
+    };
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
   const fromEmail = process.env.RESEND_FROM_EMAIL;
 
@@ -60,6 +78,8 @@ export async function sendAdminEmail(
   if (error) {
     return { error: error.message };
   }
+
+  await supabase.from("admin_email_log").insert({});
 
   return {};
 }

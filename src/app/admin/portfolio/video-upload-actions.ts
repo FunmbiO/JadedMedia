@@ -7,6 +7,13 @@ import { createClient } from "@/lib/supabase/server";
 
 const PRESIGNED_URL_TTL_SECONDS = 60 * 15; // generous for a large upload to start
 
+const ALLOWED_VIDEO_TYPES = new Set([
+  "video/mp4",
+  "video/quicktime",
+  "video/webm",
+  "video/x-m4v",
+]);
+
 export type CreateVideoUploadUrlResult =
   | { error: string }
   | { uploadUrl: string; publicUrl: string };
@@ -29,6 +36,9 @@ export async function createVideoUploadUrl(
 
   if (!user) {
     return { error: "Not signed in." };
+  }
+  if (!ALLOWED_VIDEO_TYPES.has(contentType)) {
+    return { error: "That file type isn't supported — upload an MP4, MOV, or WebM video." };
   }
 
   const extension = fileName.split(".").pop();
