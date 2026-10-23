@@ -10,6 +10,7 @@ export type QuoteRequestPayload = {
   email: string;
   phone: string;
   details: string;
+  consent: boolean;
 };
 
 // Return a result object rather than calling redirect() here: this action
@@ -21,6 +22,9 @@ export async function submitQuoteRequest(
 ): Promise<{ error?: string }> {
   if (!payload.name.trim() || !payload.email.trim() || !payload.details.trim()) {
     return { error: "Name, email, and details are required." };
+  }
+  if (!payload.consent) {
+    return { error: "Please confirm you agree to the Privacy Policy." };
   }
 
   // getServiceById relies on RLS: anon can only ever see published
@@ -41,6 +45,7 @@ export async function submitQuoteRequest(
     message: payload.details.trim(),
     service_id: service.id,
     source: "quote_popup",
+    consent_at: new Date().toISOString(),
   });
 
   if (error) {
