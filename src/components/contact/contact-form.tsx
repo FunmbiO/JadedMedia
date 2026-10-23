@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition, type FormEvent } from "react";
+import Link from "next/link";
 import {
   submitLead,
   type LeadEventType,
@@ -28,6 +29,7 @@ export function ContactForm({
   const [eventDate, setEventDate] = useState("");
   const [budgetRange, setBudgetRange] = useState("");
   const [message, setMessage] = useState("");
+  const [consent, setConsent] = useState(false);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -41,6 +43,7 @@ export function ContactForm({
       eventDate,
       budgetRange,
       message,
+      consent,
     };
 
     startTransition(async () => {
@@ -80,6 +83,7 @@ export function ContactForm({
           <span className={labelClass}>Name</span>
           <input
             required
+            aria-required="true"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className={inputClass}
@@ -91,6 +95,7 @@ export function ContactForm({
           <input
             type="email"
             required
+            aria-required="true"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className={inputClass}
@@ -157,12 +162,35 @@ export function ContactForm({
         <span className={labelClass}>Message</span>
         <textarea
           required
+          aria-required="true"
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Tell me about your story — date, location, what you're looking for."
           className={inputClass}
         />
+      </label>
+
+      <label className="flex items-start gap-2.5">
+        <input
+          type="checkbox"
+          required
+          aria-required="true"
+          checked={consent}
+          onChange={(e) => setConsent(e.target.checked)}
+          className="mt-0.5 h-4 w-4 shrink-0 accent-gold"
+        />
+        <span className="font-sans text-xs leading-relaxed font-light text-muted-on-ink">
+          I agree to the{" "}
+          <Link
+            href="/privacy"
+            className="text-gold-soft underline underline-offset-2 hover:opacity-75"
+          >
+            Privacy Policy
+          </Link>{" "}
+          and consent to Jaded Media collecting this information to respond
+          to my inquiry.
+        </span>
       </label>
 
       <button

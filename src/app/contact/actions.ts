@@ -13,6 +13,7 @@ export type LeadFormPayload = {
   eventDate: string;
   budgetRange: string;
   message: string;
+  consent: boolean;
 };
 
 export async function submitLead(
@@ -20,6 +21,9 @@ export async function submitLead(
 ): Promise<{ error?: string }> {
   if (!payload.name.trim() || !payload.email.trim() || !payload.message.trim()) {
     return { error: "Name, email, and message are required." };
+  }
+  if (!payload.consent) {
+    return { error: "Please confirm you agree to the Privacy Policy." };
   }
 
   const supabase = await createClient();
@@ -31,6 +35,7 @@ export async function submitLead(
     event_date: payload.eventDate || null,
     budget_range: payload.budgetRange || null,
     message: payload.message.trim(),
+    consent_at: new Date().toISOString(),
   });
 
   if (error) {
