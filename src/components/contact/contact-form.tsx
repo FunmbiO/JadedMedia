@@ -30,6 +30,8 @@ export function ContactForm({
   const [budgetRange, setBudgetRange] = useState("");
   const [message, setMessage] = useState("");
   const [consent, setConsent] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+  const [formRenderedAt] = useState(() => Date.now());
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -44,6 +46,8 @@ export function ContactForm({
       budgetRange,
       message,
       consent,
+      honeypot,
+      formRenderedAt,
     };
 
     startTransition(async () => {
@@ -72,6 +76,20 @@ export function ContactForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      {/* Honeypot — invisible to real visitors, irresistible to basic
+          bots that fill every field they find. Left blank by a human. */}
+      <label className="absolute left-[-9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+        Leave this field blank
+        <input
+          type="text"
+          name="company"
+          tabIndex={-1}
+          autoComplete="off"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+        />
+      </label>
+
       {error && (
         <p className="rounded border border-red-400/30 bg-red-400/10 px-4 py-3 font-sans text-sm text-red-200">
           {error}

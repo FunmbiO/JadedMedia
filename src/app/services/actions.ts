@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { getServiceById } from "@/lib/services/queries";
 import { sendQuoteRequestNotifications } from "@/lib/email/send-quote-request-notifications";
+import { isLikelyBot } from "@/lib/anti-spam";
 
 export type QuoteRequestPayload = {
   serviceId: string;
@@ -11,6 +12,8 @@ export type QuoteRequestPayload = {
   phone: string;
   details: string;
   consent: boolean;
+  honeypot: string;
+  formRenderedAt: number;
 };
 
 // Return a result object rather than calling redirect() here: this action
@@ -20,6 +23,11 @@ export type QuoteRequestPayload = {
 export async function submitQuoteRequest(
   payload: QuoteRequestPayload,
 ): Promise<{ error?: string }> {
+  if (isLikelyBot(payload)) {
+    // Pretend success — never tip off a script that it was caught, and
+    // never insert or email anything on its behalf.
+    return {};
+  }
   if (!payload.name.trim() || !payload.email.trim() || !payload.details.trim()) {
     return { error: "Name, email, and details are required." };
   }

@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { sendLeadNotifications } from "@/lib/email/send-lead-notifications";
+import { isLikelyBot } from "@/lib/anti-spam";
 
 export type LeadEventType = "wedding" | "automotive" | "business" | "other";
 
@@ -14,11 +15,18 @@ export type LeadFormPayload = {
   budgetRange: string;
   message: string;
   consent: boolean;
+  honeypot: string;
+  formRenderedAt: number;
 };
 
 export async function submitLead(
   payload: LeadFormPayload,
 ): Promise<{ error?: string }> {
+  if (isLikelyBot(payload)) {
+    // Pretend success — never tip off a script that it was caught, and
+    // never insert or email anything on its behalf.
+    return {};
+  }
   if (!payload.name.trim() || !payload.email.trim() || !payload.message.trim()) {
     return { error: "Name, email, and message are required." };
   }

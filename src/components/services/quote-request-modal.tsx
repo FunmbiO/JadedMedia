@@ -34,6 +34,8 @@ export function QuoteRequestModal({
   const [phone, setPhone] = useState("");
   const [details, setDetails] = useState("");
   const [consent, setConsent] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+  const [formRenderedAt, setFormRenderedAt] = useState(0);
 
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -78,6 +80,7 @@ export function QuoteRequestModal({
     setPhone("");
     setDetails("");
     setConsent(false);
+    setHoneypot("");
     // Returns focus to whatever opened the dialog, since the dialog
     // itself (and everything in it) is about to leave the DOM.
     triggerRef.current?.focus();
@@ -95,6 +98,8 @@ export function QuoteRequestModal({
         phone,
         details,
         consent,
+        honeypot,
+        formRenderedAt,
       });
 
       if (result.error) {
@@ -111,7 +116,10 @@ export function QuoteRequestModal({
       <button
         ref={triggerRef}
         type="button"
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setFormRenderedAt(Date.now());
+          setIsOpen(true);
+        }}
         className="w-fit rounded-full border border-gold px-6 py-2.5 font-sans text-[12.5px] font-semibold tracking-[0.06em] text-gold-soft uppercase transition-colors hover:bg-gold hover:text-ink"
       >
         Get a Custom Quote &rarr;
@@ -190,6 +198,20 @@ export function QuoteRequestModal({
                 )}
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                  {/* Honeypot — invisible to real visitors, irresistible
+                      to basic bots that fill every field they find. */}
+                  <label className="absolute left-[-9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+                    Leave this field blank
+                    <input
+                      type="text"
+                      name="company"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                    />
+                  </label>
+
                   {error && (
                     <p className="rounded border border-red-400/30 bg-red-400/10 px-4 py-3 font-sans text-sm text-red-200">
                       {error}
