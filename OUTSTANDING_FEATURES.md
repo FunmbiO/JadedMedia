@@ -878,6 +878,133 @@ leaning on them in a real dispute.
   for that registration will need a real address on file with those
   agencies — separate from what's shown publicly here.
 
+## Phase 22 — Security Hardening
+
+A full "force test it" security pass, at your request. Static code
+audit across the whole codebase (SQL injection, RLS, auth, uploads,
+headers, rate limiting, XSS, CSRF, redirects) plus `npm audit` and a
+real dependency fix — no load/flood testing against the live domain,
+which would just be a denial-of-service against your own production
+site for no real benefit over the static review.
+
+- [x] **Fixed a critical, unauthenticated vulnerability in the
+      framework itself.** The Next.js version this site was running
+      (16.3.6) had a public advisory bundle including unauthenticated
+      remote code execution via the Image Optimization API's SVG
+      handling, unauthenticated RCE via `use cache` functions returning
+      typed arrays, and server-side request forgery in Image
+      Optimization. Upgraded to 16.4.3, which patches all of it.
+      `npm audit` now shows **0 vulnerabilities** across every
+      dependency, production and dev alike (it also incidentally fixed
+      a separate high-severity `sharp` CVE and the dev-tooling
+      advisories that showed up alongside it).
+- [x] **Narrowed `images.remotePatterns`** from `*.supabase.co`/
+      `*.r2.dev` wildcards to this project's exact hostnames. Next's
+      `/_next/image` proxy is a public route that fetches whatever URL
+      passes that check, server-side, on your hosting bill — a
+      wildcard let anyone point it at an arbitrary third-party bucket.
+- [x] **Added security headers that didn't exist at all before**:
+      `X-Frame-Options: DENY` (the admin login/dashboard could
+      otherwise be framed by any site for a clickjacking attack),
+      `X-Content-Type-Options: nosniff`, `Referrer-Policy`,
+      `Permissions-Policy`, and `Strict-Transport-Security`. Plus a
+      proper Content-Security-Policy with a fresh nonce generated on
+      every request (the standard pattern for strict CSP with the App
+      Router) — verified with Playwright across every page and several
+      form interactions that it doesn't break hydration or
+      functionality, and that it's actually enforced (confirmed real
+      `Content-Security-Policy` response headers, not just present in
+      code).
+- [x] **Added bot defense to the contact form and quote request modal**
+      — previously zero rate limiting, CAPTCHA, or honeypot of any
+      kind. A script could have submitted either thousands of times,
+      each one inserting a `leads` row **and** firing two Resend
+      emails — one to you, one to whatever attacker-controlled address
+      was typed into the form (meaning this site could've been abused
+      to send unsolicited "Jaded Media received your message" emails,
+      under your real verified domain, to any third party). Added a
+      honeypot field plus a minimum-fill-time check, enforced
+      server-side in both Server Actions (not just hidden in the UI,
+      since a script can call a Server Action directly without ever
+      loading the page).
+- [x] **Added DB-level field validation on `leads`.** The anon INSERT
+      policy had `with check (true)` and no field constraints — the
+      public anon key (inherently public by design) could be used to
+      call Supabase's REST API directly and insert spam that completely
+      bypassed the website's own required-field checks. Added non-empty
+      name/message and basic email-format CHECK constraints (checked
+      all 9 existing rows first — none would have violated them).
+- [x] **Set mime-type and size limits on the Portfolio Images storage
+      bucket** — previously unrestricted; uploads were only validated
+      client-side (an admin-only surface, but cheap to close). Images
+      only, 15 MB cap. Added the same kind of allowlist to the R2 video
+      upload action, which took the client-reported file type verbatim.
+- [x] **Added an explicit sign-in check to 6 admin Server Actions**
+      (content, faqs, leads, portfolio, services, testimonials) that
+      previously relied entirely on Postgres RLS to reject an
+      unauthenticated caller. RLS genuinely does cover this today —
+      every write policy on these tables is scoped to
+      `authenticated`-only, confirmed by reading all 18 migration
+      files — but there was no second check anywhere in the chain, and
+      an unauthenticated direct call got a real round-trip to Postgres
+      with a raw RLS error back. Now matches the pattern already used
+      correctly for the Send Email and video-upload actions, where RLS
+      has no equivalent and the check is load-bearing.
+- [x] **Added an hourly cap to the admin "Send Email" feature.** It can
+      message any address under your verified sending domain — the
+      single highest-value target in the whole app if your admin
+      session or login is ever compromised, since nothing else stood
+      between a working session and emailing anyone. Capped at 20
+      sends/hour even for a legitimate, already-authenticated sender.
+- [x] **Closed two low-severity issues**: admin-authored FAQ/content
+      text could render a `javascript:` link (only an authenticated
+      admin could write that content, but cheap to close — only
+      relative paths and `https:` URLs become real links now), and the
+      password-reset flow's `next=` redirect parameter wasn't validated
+      as an internal-only path (not actually exploitable today because
+      of how it was constructed, but fragile — now explicitly checked).
+- [x] **Confirmed clean, no changes needed**: SQL injection (every
+      query goes through the Supabase client's parameterized builder,
+      zero raw SQL anywhere), secrets exposure (service-role/API keys
+      never reachable from client code), XSS escaping in every email
+      template, CSRF (Next's built-in Server Action origin-checking is
+      active, nothing loosens it), and user enumeration on the
+      forgot-password flow (deliberately doesn't branch on whether the
+      email exists).
+
+**Flagged, not changed — worth knowing:**
+
+- **Admin login has no app-level throttle on password attempts.**
+  Supabase Auth has its own project-level rate limiting server-side,
+  but that's a dashboard setting, not something visible or
+  configurable from this codebase — worth checking Supabase Dashboard
+  → Auth → Rate Limits yourself.
+- **No Vercel Firewall / rate-limiting rules are configured** —
+  checked directly via the Vercel API; none exist on this project.
+  That's a paid-tier feature, not something free to turn on from here.
+  The honeypot/timing defense above covers the two public forms
+  regardless.
+- **RLS-leak-by-ID is a single point of failure, left as-is.** The
+  public lookup functions (`getServiceById`, `getPortfolioItemById`,
+  etc.) don't re-check `published = true` in the query itself — they
+  rely entirely on the matching RLS policy to hide drafts from a
+  logged-out caller. Confirmed this is actually safe today (verified
+  every relevant policy), but if that policy were ever broadened by
+  mistake, these would leak unpublished content with no second check.
+  Not changed in this pass since several of these functions are shared
+  with admin-only call sites that need the unfiltered read — splitting
+  them safely is a small follow-up, not a live hole today.
+
+**One more thing, not a code issue**: partway through this phase, the
+sandbox container this work happens in was reset by the hosting
+platform — something outside anything either of us did — which wiped
+the local, uncommitted copy of this repo (one already-made local
+commit was lost along with everything not yet pushed). Nothing on
+GitHub, in Supabase, or on Vercel was affected; the lost work was
+rebuilt from scratch in this same conversation and is reflected
+accurately in this section. Only mentioning it so you know pushes
+happened more incrementally for the rest of this phase, and why.
+
 ## Resolved
 
 - [x] **Added the structured-data field Google actually uses for the
