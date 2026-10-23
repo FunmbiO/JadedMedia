@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/supabase/require-admin";
 import type { SiteContentMap } from "@/lib/content/queries";
 
 /**
@@ -22,6 +23,10 @@ export async function updateSiteContent(
   if (rows.length === 0) return {};
 
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    return { error: "You need to be signed in." };
+  }
+
   const { error } = await supabase.from("site_content").upsert(rows, { onConflict: "key" });
 
   if (error) {

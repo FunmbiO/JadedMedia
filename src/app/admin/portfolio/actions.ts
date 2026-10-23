@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/supabase/require-admin";
 import { PORTFOLIO_IMAGES_BUCKET } from "@/lib/supabase/storage-bucket";
 import type { PortfolioCategory, PortfolioMedium } from "@/lib/portfolio/types";
 
@@ -94,6 +95,10 @@ export async function createPortfolioItem(
   payload: PortfolioFormPayload,
 ): Promise<{ error?: string }> {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    return { error: "You need to be signed in." };
+  }
+
   const { error } = await supabase.from("portfolio_items").insert(toRow(payload));
 
   if (error) {
@@ -109,6 +114,9 @@ export async function updatePortfolioItem(
   payload: PortfolioFormPayload,
 ): Promise<{ error?: string }> {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    return { error: "You need to be signed in." };
+  }
 
   const { data: previous } = await supabase
     .from("portfolio_items")
@@ -147,6 +155,10 @@ export async function updatePortfolioItem(
 // once every row already has a distinct value.
 export async function movePortfolioItem(id: string, direction: "up" | "down") {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    throw new Error("You need to be signed in.");
+  }
+
   const { data, error } = await supabase
     .from("portfolio_items")
     .select("id")
@@ -179,6 +191,9 @@ export async function movePortfolioItem(id: string, direction: "up" | "down") {
 
 export async function deletePortfolioItem(id: string) {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    throw new Error("You need to be signed in.");
+  }
 
   const { data: item } = await supabase
     .from("portfolio_items")

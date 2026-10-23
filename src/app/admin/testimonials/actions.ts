@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/supabase/require-admin";
 import { PORTFOLIO_IMAGES_BUCKET } from "@/lib/supabase/storage-bucket";
 
 export type TestimonialFormPayload = {
@@ -57,6 +58,10 @@ export async function createTestimonial(
   payload: TestimonialFormPayload,
 ): Promise<{ error?: string }> {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    return { error: "You need to be signed in." };
+  }
+
   const { error } = await supabase.from("testimonials").insert(toRow(payload));
 
   if (error) {
@@ -72,6 +77,9 @@ export async function updateTestimonial(
   payload: TestimonialFormPayload,
 ): Promise<{ error?: string }> {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    return { error: "You need to be signed in." };
+  }
 
   const { data: previous } = await supabase
     .from("testimonials")
@@ -96,6 +104,9 @@ export async function updateTestimonial(
 
 export async function deleteTestimonial(id: string) {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    throw new Error("You need to be signed in.");
+  }
 
   const { data: testimonial } = await supabase
     .from("testimonials")

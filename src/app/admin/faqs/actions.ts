@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/supabase/require-admin";
 
 export type FaqFormPayload = {
   question: string;
@@ -26,6 +27,10 @@ function revalidateFaqPaths() {
 
 export async function createFaq(payload: FaqFormPayload): Promise<{ error?: string }> {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    return { error: "You need to be signed in." };
+  }
+
   const { error } = await supabase.from("faqs").insert(toRow(payload));
 
   if (error) {
@@ -41,6 +46,10 @@ export async function updateFaq(
   payload: FaqFormPayload,
 ): Promise<{ error?: string }> {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    return { error: "You need to be signed in." };
+  }
+
   const { error } = await supabase.from("faqs").update(toRow(payload)).eq("id", id);
 
   if (error) {
@@ -53,6 +62,10 @@ export async function updateFaq(
 
 export async function deleteFaq(id: string) {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    throw new Error("You need to be signed in.");
+  }
+
   const { error } = await supabase.from("faqs").delete().eq("id", id);
 
   if (error) {

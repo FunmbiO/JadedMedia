@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/supabase/require-admin";
 
 const SLUG_UNIQUE_VIOLATION = "23505";
 
@@ -46,6 +47,10 @@ export async function createService(
   payload: ServiceFormPayload,
 ): Promise<{ error?: string }> {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    return { error: "You need to be signed in." };
+  }
+
   const { error } = await supabase.from("services").insert(toRow(payload));
 
   if (error) {
@@ -61,6 +66,10 @@ export async function updateService(
   payload: ServiceFormPayload,
 ): Promise<{ error?: string }> {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    return { error: "You need to be signed in." };
+  }
+
   const { error } = await supabase
     .from("services")
     .update(toRow(payload))
@@ -76,6 +85,10 @@ export async function updateService(
 
 export async function deleteService(id: string) {
   const supabase = await createClient();
+  if (!(await requireAdmin(supabase))) {
+    throw new Error("You need to be signed in.");
+  }
+
   const { error } = await supabase.from("services").delete().eq("id", id);
 
   if (error) {
