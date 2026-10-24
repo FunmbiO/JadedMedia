@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { frameAncestorsFor, shouldSetXFrameOptionsDeny } from "@/lib/security-headers";
 
 const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
   ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
@@ -16,8 +17,12 @@ const r2Hostname =
  * script-src — the standard documented pattern for CSP + nonces with the
  * App Router. 'strict-dynamic' lets scripts *loaded by* a nonce'd script
  * (Next's chunk loading) run too, without widening script-src itself.
+ *
+ * frame-ancestors is the one directive that varies by path — see
+ * src/lib/security-headers.ts for which routes may be framed and by
+ * whom. Everything else here is unconditional, same on every route.
  */
-function buildCsp(nonce: string): string {
+function buildCsp(nonce: string, pathname: string): string {
   const supabaseOrigin = supabaseHostname ? `https://${supabaseHostname}` : "";
   const r2Origin = r2Hostname ? `https://${r2Hostname}` : "";
   return [
@@ -32,7 +37,7 @@ function buildCsp(nonce: string): string {
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "frame-ancestors 'none'",
+    frameAncestorsFor(pathname),
   ].join("; ");
 }
 
@@ -43,17 +48,31 @@ function buildCsp(nonce: string): string {
  * the session would silently go stale without this.
  */
 export async function updateSession(request: NextRequest) {
+  const { pathname } = request.nextUrl;
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
-  const csp = buildCsp(nonce);
+  const csp = buildCsp(nonce, pathname);
+  const denyFraming = shouldSetXFrameOptionsDeny(pathname);
+
+  // X-Frame-Options can only ever be DENY/SAMEORIGIN — it can't
+  // allowlist jaded-works.vercel.app the way frame-ancestors can — so
+  // it comes off entirely on an embeddable path rather than contradict
+  // the CSP there, and stays on (as a second layer, for any browser
+  // that ignores frame-ancestors) everywhere else.
+  function applySecurityHeaders(response: NextResponse): NextResponse {
+    response.headers.set("Content-Security-Policy", csp);
+    if (denyFraming) {
+      response.headers.set("X-Frame-Options", "DENY");
+    }
+    return response;
+  }
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-nonce", nonce);
   requestHeaders.set("Content-Security-Policy", csp);
 
-  let supabaseResponse = NextResponse.next({
-    request: { headers: requestHeaders },
-  });
-  supabaseResponse.headers.set("Content-Security-Policy", csp);
+  let supabaseResponse = applySecurityHeaders(
+    NextResponse.next({ request: { headers: requestHeaders } }),
+  );
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -67,10 +86,9 @@ export async function updateSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value),
           );
-          supabaseResponse = NextResponse.next({
-            request: { headers: requestHeaders },
-          });
-          supabaseResponse.headers.set("Content-Security-Policy", csp);
+          supabaseResponse = applySecurityHeaders(
+            NextResponse.next({ request: { headers: requestHeaders } }),
+          );
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options),
           );
@@ -83,7 +101,6 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { pathname } = request.nextUrl;
   const isAdminRoute = pathname.startsWith("/admin");
   const isLoginRoute = pathname === "/admin/login";
   // The password-reset flow (request → email link → confirm → set new

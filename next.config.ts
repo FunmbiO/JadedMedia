@@ -20,7 +20,6 @@ const r2Hostname =
     : undefined);
 
 const SECURITY_HEADERS = [
-  { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
@@ -28,9 +27,12 @@ const SECURITY_HEADERS = [
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains; preload",
   },
-  // Content-Security-Policy is set per-request in src/proxy.ts instead —
-  // it needs a fresh nonce on every response for Next's own inline
-  // hydration scripts to run under a strict script-src.
+  // Content-Security-Policy and X-Frame-Options are both set per-request
+  // in src/lib/supabase/middleware.ts instead, not here: the CSP needs a
+  // fresh nonce on every response, and both of them now vary by path —
+  // the public marketing pages allow framing by jaded-works.vercel.app
+  // (see src/lib/security-headers.ts), everything else stays locked to
+  // frame-ancestors 'none' / X-Frame-Options: DENY.
 ];
 
 const nextConfig: NextConfig = {
