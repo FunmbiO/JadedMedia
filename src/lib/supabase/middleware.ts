@@ -89,6 +89,13 @@ export async function updateSession(request: NextRequest) {
           supabaseResponse = applySecurityHeaders(
             NextResponse.next({ request: { headers: requestHeaders } }),
           );
+          // `options` here comes straight from @supabase/ssr's own
+          // DEFAULT_COOKIE_OPTIONS, which sets sameSite: "lax" — passed
+          // through unmodified, never overridden. Verified while adding
+          // the iframe-embed allowlist above, since a framed page and a
+          // lenient SameSite cookie are exactly the combination that
+          // matters for CSRF: Lax still blocks the cookie on cross-site
+          // subresource/iframe loads, only top-level navigation sends it.
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options),
           );
