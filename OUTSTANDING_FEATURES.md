@@ -1005,6 +1005,46 @@ rebuilt from scratch in this same conversation and is reflected
 accurately in this section. Only mentioning it so you know pushes
 happened more incrementally for the rest of this phase, and why.
 
+### Phase 22 follow-up — Portfolio Iframe Embedding
+
+The Jaded Works portfolio (`https://jaded-works.vercel.app`) embeds a
+live preview of this site in an iframe. The strict `frame-ancestors
+'none'` / `X-Frame-Options: DENY` from earlier in this phase blocked
+that outright — correct for an admin dashboard, wrong for a public
+marketing site that wants to be shown off.
+
+- **What's embeddable now, and why**: only the public, read-only
+  marketing pages — home, `/work` (including individual project
+  pages), `/services`, `/about`, `/contact`, `/faq`, `/press`,
+  `/privacy`, `/terms`, `/cookies`, `/refund-policy`. These don't
+  mutate anything and don't handle credentials, so there's nothing a
+  framed copy of them can do that a direct visit couldn't already do.
+- **Which origins are allowed**: `https://jaded-works.vercel.app`,
+  plus `'self'` (this site can frame its own public pages). More
+  origins — e.g. once the portfolio moves to a custom domain — are
+  added via the `EMBED_ALLOWED_ORIGINS` env var (comma-separated), not
+  by editing code. See `src/lib/security-headers.ts`.
+- **Sensitive routes stay exactly as locked as before**: `/admin` and
+  everything under it (login, password reset, content/email/upload
+  forms, leads), and anything not explicitly on the public-pages list
+  above. The allowlist defaults to blocked — a brand-new route is
+  locked until someone deliberately adds it to the embeddable list,
+  not the other way around.
+- **Nothing else in the CSP changed.** `script-src` (with its nonce),
+  `style-src`, `img-src`, `connect-src`, and everything else are
+  identical to before this change on every route — only
+  `frame-ancestors` varies by path now, and `X-Frame-Options` is
+  present or absent to match it (it can't allowlist a specific origin
+  the way `frame-ancestors` can, so it would just contradict the CSP
+  if left on an embeddable page).
+- **Auth/session cookie `SameSite` check**: verified, no change made.
+  `@supabase/ssr`'s own default cookie options
+  (`DEFAULT_COOKIE_OPTIONS` in its `utils/constants` module) set
+  `sameSite: "lax"`, and nothing in this codebase overrides it — both
+  `src/lib/supabase/server.ts` and `src/lib/supabase/middleware.ts`
+  pass Supabase's cookie options straight through unmodified. Already
+  compliant; nothing to change here.
+
 ## Resolved
 
 - [x] **Added the structured-data field Google actually uses for the
