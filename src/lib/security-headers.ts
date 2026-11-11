@@ -37,7 +37,7 @@ export function isEmbeddablePath(pathname: string): boolean {
  * portfolio's eventual custom domain — without touching this file.
  */
 export const EMBEDDABLE_ORIGINS: readonly string[] = [
-  "https://jaded-works.vercel.app",
+  "https://olufunmbidev.vercel.app/",
   ...(process.env.EMBED_ALLOWED_ORIGINS
     ? process.env.EMBED_ALLOWED_ORIGINS.split(",")
         .map((origin) => origin.trim())
